@@ -357,13 +357,21 @@ function extrairUsuarios(json) {
     }
   }
   if (!itens) return [];
-  var usuarios = [];
+ var usuarios = [];
   itens.forEach(function (item) {
     var sld = item && item.string_list_data;
-    if (Array.isArray(sld)) {
+    if (Array.isArray(sld) && sld.length > 0) {
       sld.forEach(function (s) {
-        if (s && s.value) usuarios.push(String(s.value));
+        if (!s) return;
+        if (s.value) { usuarios.push(String(s.value)); return; }
+        if (item.title) { usuarios.push(String(item.title)); return; }
+        if (s.href) {
+          var m = String(s.href).match(/instagram\.com\/(?:_u\/)?([A-Za-z0-9._]+)/);
+          if (m) usuarios.push(m[1]);
+        }
       });
+    } else if (item && item.title) {
+      usuarios.push(String(item.title));
     }
   });
   return usuarios;
