@@ -1,9 +1,10 @@
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Quem Saiu — descubra quem deixou de te seguir no Instagram</title>
+<title>Quem Saiu — Saiba quem deixou de te seguir no Instagram</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <style>
   * { box-sizing: border-box; }
   body {
@@ -38,22 +39,66 @@
   .hero p { color: #94a3b8; font-size: 15px; max-width: 480px; margin: 0 auto 24px; }
   .cta {
     display: inline-block; background: #0ea5e9; color: #fff; text-decoration: none;
-    padding: 13px 24px; border-radius: 999px; font-weight: 700; font-size: 14px;
+    border: none; padding: 13px 24px; border-radius: 999px; font-weight: 700; font-size: 14px;
+    cursor: pointer;
   }
+  .cta.desativado { background: #334155; color: #94a3b8; cursor: default; }
+  .hero .alternativa { display: block; margin-top: 12px; color: #64748b; font-size: 12px; }
+  .hero .alternativa a { color: #38bdf8; text-decoration: none; font-weight: 600; cursor: pointer; }
 
   .card { background: #fff; color: #0f172a; border-radius: 14px; padding: 20px; margin-bottom: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.25); }
   .card h3 { margin: 0 0 6px; font-size: 15px; }
-  .card p { margin: 0; font-size: 13px; color: #475569; line-height: 1.5; }
+  .card p, .card li { margin: 0; font-size: 13px; color: #475569; line-height: 1.6; }
+  .card ol { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 6px; }
+  .card .nota { font-size: 11px; color: #94a3b8; margin-top: 10px; }
 
   .faq-item { border-top: 1px solid #e2e8f0; }
   .faq-item:first-child { border-top: none; }
-  .faq-q { width: 100%; text-align: left; background: none; border: none; padding: 16px 0; font-size: 14px; font-weight: 700; cursor: pointer; color: #0f172a; display: flex; justify-content: space-between; align-items: center; }
+  .faq-q { width: 100%; text-align: left; background: none; border: none; padding: 16px 0; font-size: 14px; font-weight: 700; cursor: pointer; color: #0f172a; display: flex; justify-content: space-between; align-items: center; gap: 10px; }
   .faq-a { font-size: 13px; color: #64748b; padding-bottom: 16px; margin: -6px 0 0; line-height: 1.6; }
 
   .badge-em-breve { background: #fffbeb; color: #92400e; border: 1px solid #fde68a; font-size: 11px; font-weight: 700; text-transform: uppercase; padding: 4px 10px; border-radius: 999px; }
   .linha-feature { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
 
-  footer { text-align: center; color: #475569; font-size: 12px; padding: 20px 0 40px; }
+  /* Ferramenta de importação */
+  .botao-importar {
+    width: 100%; border: none; border-radius: 12px; padding: 13px;
+    background: #0ea5e9; color: #fff; font-size: 14px; font-weight: 700; cursor: pointer;
+  }
+  .botao-secundario {
+    width: 100%; border: none; border-radius: 12px; padding: 12px; margin-top: 8px;
+    background: #f1f5f9; color: #334155; font-size: 13px; font-weight: 600; cursor: pointer;
+  }
+  .botao-secundario:disabled { opacity: 0.4; cursor: default; }
+  .aviso-erro { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; border-radius: 10px; padding: 12px; font-size: 12px; line-height: 1.5; margin-top: 10px; }
+  .status-import { font-size: 12px; color: #64748b; margin-top: 10px; text-align: center; }
+
+  .abas-resultado { display: flex; gap: 8px; margin: 4px 0 12px; flex-wrap: wrap; }
+  .aba-res { border: none; border-radius: 999px; padding: 8px 12px; font-size: 12px; font-weight: 700; cursor: pointer; }
+  .aba-res.saiu.ativa { background: #dc2626; color: #fff; }
+  .aba-res.saiu { background: #fef2f2; color: #b91c1c; }
+  .aba-res.entrou.ativa { background: #16a34a; color: #fff; }
+  .aba-res.entrou { background: #f0fdf4; color: #15803d; }
+  .aba-res.naoSegue.ativa { background: #7c3aed; color: #fff; }
+  .aba-res.naoSegue { background: #f5f3ff; color: #6d28d9; }
+
+  .lista-usuarios { list-style: none; margin: 0; padding: 0; max-height: 320px; overflow-y: auto; display: flex; flex-direction: column; gap: 5px; }
+  .item-usuario { display: flex; align-items: center; gap: 9px; padding: 8px 9px; border-radius: 9px; font-size: 13px; }
+  .item-saiu { background: #fef2f2; color: #7f1d1d; }
+  .item-entrou { background: #f0fdf4; color: #14532d; }
+  .item-naoSegue { background: #f5f3ff; color: #4c1d95; }
+  .avatar { width: 26px; height: 26px; border-radius: 50%; background: #94a3b8; flex-shrink: 0; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 10px; font-weight: 800; }
+  .usuario-nome { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .usuario-nome a { color: inherit; text-decoration: none; }
+  .selo { font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 999px; flex-shrink: 0; }
+  .selo-segue { background: #dc2626; color: #fee2e2; }
+  .selo-segue-volta { background: #15803d; color: #dcfce7; }
+  .selo-nao-segue { background: #e2e8f0; color: #475569; }
+
+  .apagar { background: none; border: none; color: #94a3b8; font-size: 11px; text-decoration: underline; cursor: pointer; display: block; margin: 14px auto 0; }
+
+  footer { text-align: center; color: #475569; font-size: 12px; padding: 20px 0 40px; line-height: 1.8; }
+  footer a { color: #64748b; }
 </style>
 </head>
 <body>
@@ -62,6 +107,7 @@
   <div class="container">
     <div class="abas">
       <button data-tab="inicio" class="ativo">Início</button>
+      <button data-tab="celular">Celular</button>
       <button data-tab="ajuda">Ajuda</button>
       <button data-tab="suporte">Suporte</button>
       <button data-tab="assinatura">Assinatura</button>
@@ -71,33 +117,62 @@
 
 <div class="container">
 
+  <!-- ============ INÍCIO ============ -->
   <section id="inicio" class="ativa">
     <div class="hero">
       <h1>Quem Saiu</h1>
-      <p>Descubra quem deixou de te seguir no Instagram — sem informar login, sem senha, sem enviar nada para servidor nenhum. Tudo fica no seu navegador.</p>
-      <a class="cta" href="#" id="linkInstalar">Instalar a extensão</a>
+      <p>Descubra quem deixou de te seguir no Instagram — sem logins ou senhas.</p>
+      <span id="ctaArea"></span>
+      <span class="alternativa" id="ctaAlternativa"></span>
+    </div>
+
+    <div id="cardsComoFunciona"></div>
+  </section>
+
+  <!-- ============ CELULAR (importação) ============ -->
+  <section id="celular">
+    <h1>Usar no celular</h1>
+    <p class="sub">Compare as exportações oficiais do Instagram e veja quem saiu — tudo no seu navegador.</p>
+
+    <div class="card">
+      <h3>Passo 1 — Peça seus dados ao Instagram</h3>
+      <ol>
+        <li>No app do Instagram: Central de Contas → Suas informações e permissões → <b>Exportar suas informações</b></li>
+        <li>Toque em <b>Criar exportação</b> e escolha sua conta</li>
+        <li>Em "Escolher para onde exportar", toque em <b>Exportar para dispositivo</b> — não em "serviço externo"</li>
+        <li>Na tela "Confirmar sua exportação", toque em <b>Personalizar informações</b>, marque só <b>Seguidores e seguindo</b>, toque em <b>Salvar</b> e volte</li>
+        <li>Toque em <b>Formato</b>, escolha <b>JSON</b>, salve e volte; em <b>Intervalo de datas</b>, escolha <b>Desde o início</b>, salve e volte</li>
+        <li>Toque em <b>Iniciar exportação</b></li>
+      </ol>
+      <p class="nota">O arquivo fica pronto em minutos a algumas horas — o Instagram avisa quando der para baixar, e você tem até 4 dias para fazer o download.</p>
     </div>
 
     <div class="card">
-      <h3>1. Capture um snapshot</h3>
-      <p>Abra a lista de seguidores no Instagram e clique em "Capturar" no popup da extensão.</p>
+      <h3>Passo 2 — Importe o arquivo aqui</h3>
+      <p style="margin-bottom:12px;">Selecione o <b>.zip baixado do Instagram</b> (ou os arquivos .json de dentro dele).</p>
+      <input type="file" id="inputArquivo" accept=".zip,.json" multiple style="display:none" />
+      <button class="botao-importar" id="btnImportar">📄 Importar exportação do Instagram</button>
+      <button class="botao-secundario" id="btnComparar" disabled>🔁 Comparar com a exportação anterior</button>
+      <div id="erroImport"></div>
+      <p class="status-import" id="statusImport">Nenhuma exportação importada ainda.</p>
     </div>
-    <div class="card">
-      <h3>2. Volte outro dia</h3>
-      <p>Depois de um tempo, abra a lista de novo e capture outro snapshot.</p>
-    </div>
-    <div class="card">
-      <h3>3. Compare</h3>
-      <p>A extensão mostra na hora quem deixou de te seguir e quem passou a te seguir.</p>
+
+    <div class="card" id="cardResultado" style="display:none;">
+      <h3 id="tituloResultado">Resultado</h3>
+      <div class="abas-resultado" id="abasResultado"></div>
+      <div id="listaResultado"></div>
+      <button class="apagar" id="btnApagar">Apagar meus dados deste navegador</button>
     </div>
   </section>
 
+  <!-- ============ AJUDA ============ -->
   <section id="ajuda">
     <h1>Central de Ajuda</h1>
     <p class="sub">Perguntas frequentes sobre o Quem Saiu.</p>
     <div class="card" style="padding: 0 20px;" id="faqLista"></div>
   </section>
 
+  <!-- ============ SUPORTE ============ -->
   <section id="suporte">
     <h1>Fale com a gente</h1>
     <p class="sub">Dúvidas, problemas ou sugestões — é só chamar.</p>
@@ -108,6 +183,7 @@
     </div>
   </section>
 
+  <!-- ============ ASSINATURA ============ -->
   <section id="assinatura">
     <h1>Assinatura &amp; reembolso</h1>
     <p class="sub">O Quem Saiu ainda é 100% gratuito.</p>
@@ -129,45 +205,201 @@
 
 </div>
 
-<footer>Quem Saiu · não afiliado ao Instagram/Meta ·
-  <a href="privacy-policy.html" style="color:#64748b;">Política de privacidade</a>
+<footer>
+  Quem Saiu · não afiliado ao Instagram/Meta<br />
+  <a href="privacy-policy.html">Política de privacidade</a> · <a href="mailto:suporte.quemsaiu@gmail.com">suporte.quemsaiu@gmail.com</a>
 </footer>
 
 <script>
-  const PERGUNTAS = [
-    { q: "Como a extensão descobre quem deixou de me seguir?", a: "Você captura sua lista de seguidores em dois momentos diferentes. A extensão compara as duas listas, salvas só no seu navegador, e mostra quem saiu de uma para a outra." },
-    { q: "Preciso informar minha senha do Instagram?", a: "Não. A extensão nunca pede login nem senha. Ela lê a lista de seguidores diretamente da página enquanto você já está navegando logado." },
-    { q: "Meus dados ficam salvos em algum servidor?", a: "Não. Todos os snapshots ficam guardados localmente no seu navegador. Não existe backend." },
-    { q: "Usar a extensão pode fazer minha conta ser banida?", a: "É improvável — a extensão só lê o que já aparece na tela durante o uso normal. Ainda assim, use com moderação." },
-    { q: "A lista veio incompleta ou não carregou. O que eu faço?", a: "Role a lista até o fim manualmente antes de capturar, e tente novamente." },
-  ];
+/* =========================================================
+   CONFIGURAÇÃO
+   Quando a extensão for aprovada na Chrome Web Store, cole o
+   link dela entre as aspas abaixo e o botão passa a funcionar.
+========================================================= */
+const LINK_CHROME_STORE = "";
 
-  const faqLista = document.getElementById("faqLista");
-  PERGUNTAS.forEach((item, i) => {
-    const div = document.createElement("div");
-    div.className = "faq-item";
-    div.innerHTML = `
-      <button class="faq-q">${item.q}<span>+</span></button>
-      <p class="faq-a" style="display:none">${item.a}</p>
-    `;
-    const btn = div.querySelector(".faq-q");
-    const resp = div.querySelector(".faq-a");
-    btn.addEventListener("click", () => {
-      resp.style.display = resp.style.display === "none" ? "block" : "none";
-    });
-    faqLista.appendChild(div);
+/* ---------- Detecção de aparelho ---------- */
+const ehCelular = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+/* ---------- Navegação por abas ---------- */
+function irParaAba(id) {
+  document.querySelectorAll("nav button").forEach(function (b) { b.classList.toggle("ativo", b.dataset.tab === id); });
+  document.querySelectorAll("section").forEach(function (s) { s.classList.toggle("ativa", s.id === id); });
+  window.scrollTo(0, 0);
+}
+document.querySelectorAll("nav button").forEach(function (btn) {
+  btn.addEventListener("click", function () { irParaAba(btn.dataset.tab); });
+});
+
+/* ---------- Hero adaptado ao aparelho ---------- */
+var ctaArea = document.getElementById("ctaArea");
+var ctaAlt = document.getElementById("ctaAlternativa");
+
+if (ehCelular) {
+  var botaoCelular = document.createElement("button");
+  botaoCelular.className = "cta";
+  botaoCelular.textContent = "Usar no celular — sem instalar nada";
+  botaoCelular.addEventListener("click", function () { irParaAba("celular"); });
+  ctaArea.appendChild(botaoCelular);
+  ctaAlt.textContent = "Num computador? Lá o Quem Saiu funciona como extensão do Chrome.";
+} else {
+  if (LINK_CHROME_STORE) {
+    var linkLoja = document.createElement("a");
+    linkLoja.className = "cta";
+    linkLoja.href = LINK_CHROME_STORE;
+    linkLoja.target = "_blank";
+    linkLoja.rel = "noopener";
+    linkLoja.textContent = "Instalar a extensão no Chrome";
+    ctaArea.appendChild(linkLoja);
+  } else {
+    var botaoBreve = document.createElement("button");
+    botaoBreve.className = "cta desativado";
+    botaoBreve.textContent = "Em breve na Chrome Web Store";
+    ctaArea.appendChild(botaoBreve);
+  }
+  ctaAlt.innerHTML = 'Prefere sem instalar? <a id="linkImportDesktop">Use a importação de dados</a> — funciona aqui também.';
+  var linkImport = document.getElementById("linkImportDesktop");
+  if (linkImport) linkImport.addEventListener("click", function () { irParaAba("celular"); });
+}
+
+/* ---------- Cards "como funciona" adaptados ---------- */
+var cards = document.getElementById("cardsComoFunciona");
+if (ehCelular) {
+  cards.innerHTML =
+    '<div class="card"><h3>1. Peça seus dados ao Instagram</h3><p>Central de Contas → Suas informações e permissões → Exportar suas informações. Na hora de escolher o destino, toque em "Exportar para dispositivo" — não em "serviço externo".</p></div>' +
+    '<div class="card"><h3>2. Importe o arquivo aqui</h3><p>Quando o Instagram enviar o arquivo, importe nesta página.</p></div>' +
+    '<div class="card"><h3>3. Mudança nos seguidores?</h3><p>Compare aqui e veja quem saiu — e quem entrou também.</p></div>';
+} else {
+  cards.innerHTML =
+    '<div class="card"><h3>1. Capture um snapshot</h3><p>Abra a lista de seguidores no Instagram, role até o final e clique em "Capturar" no popup da extensão.</p></div>' +
+    '<div class="card"><h3>2. Notou diferença?</h3><p>Quando seu número de seguidores mudar, role a lista de novo e capture outro snapshot.</p></div>' +
+    '<div class="card"><h3>3. Compare</h3><p>A extensão mostra na hora quem deixou de te seguir e quem passou a te seguir.</p></div>';
+}
+
+/* ---------- FAQ ---------- */
+var PERGUNTAS = [
+  { q: "Como o Quem Saiu descobre quem deixou de me seguir?", a: "Comparando a sua lista de seguidores em dois momentos diferentes. No computador, a extensão captura a lista na própria página do Instagram. No celular, você importa duas exportações oficiais dos seus dados. Em ambos os casos, quem estava numa lista e não está mais na outra, saiu." },
+  { q: "Preciso informar minha senha do Instagram?", a: "Não. O Quem Saiu nunca pede login nem senha — nem na extensão, nem na importação pelo celular." },
+  { q: "Meus dados ficam salvos em algum servidor?", a: "Não. Tudo fica guardado localmente no seu próprio navegador. Não existe backend, nem envio de dados para fora do seu aparelho." },
+  { q: "Usar o Quem Saiu pode fazer minha conta ser banida?", a: "É muito improvável. A extensão só lê o que já aparece na tela durante o uso normal, e a versão do celular usa a exportação oficial do próprio Instagram. Ainda assim, use com moderação." },
+  { q: "No celular: o Instagram deu erro na hora de exportar. O que eu faço?", a: "Acontece — a Central de Contas do Instagram é instável às vezes. Toque em 'Recarregar página'; se não resolver, feche e refaça o caminho desde 'Exportar suas informações'; se ainda assim falhar, tente pelo navegador em accountscenter.instagram.com ou aguarde algumas horas." },
+  { q: "No celular: escolhi o formato HTML em vez de JSON. E agora?", a: "Refaça a exportação escolhendo JSON no campo 'Formato'. O arquivo HTML não funciona para a comparação." },
+  { q: "Quanto tempo a exportação demora, e por quanto tempo posso baixar?", a: "Costuma ficar pronta em minutos a algumas horas — o Instagram avisa por notificação e e-mail. Depois de pronta, você tem até 4 dias para baixar." },
+  { q: "Na extensão: a lista veio incompleta ou não carregou. O que eu faço?", a: "Role a lista até realmente chegar ao fim antes de capturar. Se mesmo assim não funcionar, avise o suporte para a gente atualizar a extensão." },
+  { q: "Como sei se eu ainda sigo quem me deixou de seguir?", a: "No celular, isso vem automático: a exportação inclui sua lista de 'seguindo'. Na extensão, capture também a lista de 'seguindo' pelo botão dedicado — aí os resultados mostram os selos 'Você segue' e 'Você não segue'." },
+];
+var faqLista = document.getElementById("faqLista");
+PERGUNTAS.forEach(function (item) {
+  var div = document.createElement("div");
+  div.className = "faq-item";
+  var btn = document.createElement("button");
+  btn.className = "faq-q";
+  btn.innerHTML = item.q + "<span>+</span>";
+  var resp = document.createElement("p");
+  resp.className = "faq-a";
+  resp.textContent = item.a;
+  resp.style.display = "none";
+  btn.addEventListener("click", function () {
+    resp.style.display = resp.style.display === "none" ? "block" : "none";
   });
+  div.appendChild(btn);
+  div.appendChild(resp);
+  faqLista.appendChild(div);
+});
 
-  document.querySelectorAll("nav button").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      document.querySelectorAll("nav button").forEach((b) => b.classList.remove("ativo"));
-      document.querySelectorAll("section").forEach((s) => s.classList.remove("ativa"));
-      btn.classList.add("ativo");
-      document.getElementById(btn.dataset.tab).classList.add("ativa");
-      window.scrollTo(0,0);
-    });
+/* =========================================================
+   FERRAMENTA DE IMPORTAÇÃO (celular e computador)
+========================================================= */
+var CHAVE = "quemsaiu_exportacoes";
+
+/* armazenamento com tolerância a falhas (modo privado etc.) */
+var memoria = {};
+function lerDados() {
+  try { return JSON.parse(localStorage.getItem(CHAVE)) || []; }
+  catch (e) { return memoria[CHAVE] || []; }
+}
+function gravarDados(v) {
+  try { localStorage.setItem(CHAVE, JSON.stringify(v)); }
+  catch (e) { memoria[CHAVE] = v; }
+}
+function apagarDadosLocais() {
+  try { localStorage.removeItem(CHAVE); } catch (e) {}
+  delete memoria[CHAVE];
+}
+
+var inputArquivo = document.getElementById("inputArquivo");
+var btnImportar = document.getElementById("btnImportar");
+var btnComparar = document.getElementById("btnComparar");
+var erroImport = document.getElementById("erroImport");
+var statusImport = document.getElementById("statusImport");
+var cardResultado = document.getElementById("cardResultado");
+var tituloResultado = document.getElementById("tituloResultado");
+var abasResultado = document.getElementById("abasResultado");
+var listaResultado = document.getElementById("listaResultado");
+
+var abaAtual = "saiu";
+
+function formatarData(iso) {
+  return new Date(iso).toLocaleString("pt-BR", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
+}
+
+function mostrarErro(msg) {
+  erroImport.innerHTML = '<div class="aviso-erro">' + msg + "</div>";
+}
+function limparErro() { erroImport.innerHTML = ""; }
+
+/* extrai usernames de um JSON no formato da exportação do Instagram */
+function extrairUsuarios(json) {
+  var itens = null;
+  if (Array.isArray(json)) itens = json;
+  else if (json && typeof json === "object") {
+    var chaves = Object.keys(json);
+    for (var i = 0; i < chaves.length; i++) {
+      if (Array.isArray(json[chaves[i]])) { itens = json[chaves[i]]; break; }
+    }
+  }
+  if (!itens) return [];
+  var usuarios = [];
+  itens.forEach(function (item) {
+    var sld = item && item.string_list_data;
+    if (Array.isArray(sld)) {
+      sld.forEach(function (s) {
+        if (s && s.value) usuarios.push(String(s.value));
+      });
+    }
   });
-</script>
+  return usuarios;
+}
 
-</body>
-</html>
+function ehArquivoSeguidores(nomeBase) { return /^followers(_\d+)?\.json$/i.test(nomeBase); }
+function ehArquivoSeguindo(nomeBase) { return /^following\.json$/i.test(nomeBase); }
+
+async function processarArquivos(arquivos) {
+  var seguidores = [];
+  var seguindo = [];
+  var achouAlgo = false;
+  var temHtml = false;
+
+  for (var a = 0; a < arquivos.length; a++) {
+    var arquivo = arquivos[a];
+    var nome = arquivo.name.toLowerCase();
+
+    if (nome.endsWith(".zip")) {
+      var zip = await JSZip.loadAsync(arquivo);
+      var entradas = Object.keys(zip.files);
+      for (var e = 0; e < entradas.length; e++) {
+        var caminho = entradas[e];
+        var base = caminho.split("/").pop().toLowerCase();
+        if (ehArquivoSeguidores(base)) {
+          var textoSeg = await zip.files[caminho].async("string");
+          seguidores = seguidores.concat(extrairUsuarios(JSON.parse(textoSeg)));
+          achouAlgo = true;
+        } else if (ehArquivoSeguindo(base)) {
+          var textoSgd = await zip.files[caminho].async("string");
+          seguindo = seguindo.concat(extrairUsuarios(JSON.parse(textoSgd)));
+          achouAlgo = true;
+        } else if (/^followers.*\.html$|^following\.html$/i.test(base)) {
+          temHtml = true;
+        }
+      }
+    } else if
