@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<title>Política de Privacidade — Quem Saiu</title>
+<style>
+  body { font-family: -apple-system, sans-serif; max-width: 640px; margin: 40px auto; padding: 0 20px; color: #0f172a; line-height: 1.6; }
+  h1 { font-size: 22px; }
+  h2 { font-size: 16px; margin-top: 28px; }
+  p, li { font-size: 14px; color: #334155; }
+</style>
+</head>
+<body>
+  <h1>Política de Privacidade — Quem Saiu</h1>
+  <p>Última atualização: 15 de agosto de 2026.</p>
+
+  <h2>O que a extensão faz</h2>
+  <p>
+    A extensão "Quem Saiu" lê, na própria página do Instagram já aberta no seu navegador,
+    a lista de contas exibida em um modal de "seguidores" ou "seguindo" (nomes de usuário
+    visíveis na tela), e salva essa lista localmente para comparar com uma captura futura.
+  </p>
+
+  <h2>O que NÃO fazemos</h2>
+  <ul>
+    <li>Não pedimos nem armazenamos login, senha ou qualquer credencial do Instagram.</li>
+    <li>Não enviamos nenhum dado para servidores externos — não existe backend.</li>
+    <li>Não rastreamos sua navegação fora das páginas do instagram.com.</li>
+    <li>Não compartilhamos, vendemos ou usamos os dados capturados para qualquer outra finalidade.</li>
+  </ul>
+
+  <h2>Onde os dados ficam guardados</h2>
+  <p>
+    Os snapshots (listas de nomes de usuário e a data da captura) ficam salvos apenas no
+    armazenamento local do seu navegador (<code>chrome.storage.local</code>), vinculado ao seu
+    perfil de navegador neste dispositivo. Desinstalar a extensão apaga esses dados.
+  </p>
+
+  <h2>Permissões solicitadas</h2>
+  <ul>
+    <li><b>storage</b> — para guardar os snapshots localmente.</li>
+    <li><b>activeTab / scripting</b> — para ler a lista de contas na aba ativa do Instagram quando você aciona a captura.</li>
+    <li><b>host_permissions para instagram.com</b> — necessário para o content script funcionar apenas nesse domínio.</li>
+  </ul>
+
+  <h2>Aviso sobre os Termos de Uso do Instagram</h2>
