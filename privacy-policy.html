@@ -2,6 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Política de Privacidade — Quem Saiu</title>
 <style>
   body { font-family: -apple-system, sans-serif; max-width: 640px; margin: 40px auto; padding: 0 20px; color: #0f172a; line-height: 1.6; }
@@ -12,42 +13,58 @@
 </head>
 <body>
   <h1>Política de Privacidade — Quem Saiu</h1>
-  <p>Última atualização: 15 de agosto de 2026.</p>
+  <p>Última atualização: 16 de agosto de 2026.</p>
 
-  <h2>O que a extensão faz</h2>
+  <p>O Quem Saiu tem duas formas de uso: a <b>extensão para Chrome</b> (no computador) e a
+  <b>ferramenta de importação deste site</b> (no celular ou no computador). Esta política cobre as duas.</p>
+
+  <h2>1. Extensão para Chrome</h2>
   <p>
-    A extensão "Quem Saiu" lê, na própria página do Instagram já aberta no seu navegador,
-    a lista de contas exibida em um modal de "seguidores" ou "seguindo" (nomes de usuário
-    visíveis na tela), e salva essa lista localmente para comparar com uma captura futura.
+    A extensão lê, na própria página do Instagram já aberta no seu navegador, a lista de contas
+    exibida em um modal de "seguidores" ou "seguindo" (nomes de usuário visíveis na tela), e salva
+    essa lista localmente para comparar com uma captura futura.
+  </p>
+  <p><b>Permissões solicitadas:</b></p>
+  <ul>
+    <li><b>storage</b> — para guardar os snapshots localmente no navegador (<code>chrome.storage.local</code>).</li>
+    <li><b>Acesso a instagram.com</b> (host_permissions) — necessário para ler a lista exibida na página, apenas nesse domínio.</li>
+  </ul>
+  <p>Desinstalar a extensão apaga os dados guardados por ela.</p>
+
+  <h2>2. Ferramenta de importação do site (celular)</h2>
+  <p>
+    Nessa modalidade, você mesmo baixa a exportação oficial dos seus dados pelo Instagram
+    (Central de Contas → Exportar suas informações) e seleciona o arquivo aqui no site. A leitura do
+    arquivo e a comparação acontecem inteiramente no seu navegador; as listas ficam salvas apenas no
+    armazenamento local do próprio navegador (localStorage) para permitir comparações futuras.
+  </p>
+  <p>
+    O botão "Apagar meus dados deste navegador", na própria ferramenta, remove tudo o que foi guardado.
+    Limpar os dados de navegação do site tem o mesmo efeito.
   </p>
 
-  <h2>O que NÃO fazemos</h2>
+  <h2>O que NÃO fazemos (em nenhuma das duas formas)</h2>
   <ul>
     <li>Não pedimos nem armazenamos login, senha ou qualquer credencial do Instagram.</li>
-    <li>Não enviamos nenhum dado para servidores externos — não existe backend.</li>
-    <li>Não rastreamos sua navegação fora das páginas do instagram.com.</li>
-    <li>Não compartilhamos, vendemos ou usamos os dados capturados para qualquer outra finalidade.</li>
+    <li>Não enviamos suas listas ou arquivos para servidores — não existe backend do Quem Saiu.</li>
+    <li>Não rastreamos sua navegação nem usamos os dados para qualquer outra finalidade.</li>
+    <li>Não compartilhamos nem vendemos dados.</li>
   </ul>
 
-  <h2>Onde os dados ficam guardados</h2>
+  <h2>Hospedagem e recursos de terceiros</h2>
   <p>
-    Os snapshots (listas de nomes de usuário e a data da captura) ficam salvos apenas no
-    armazenamento local do seu navegador (<code>chrome.storage.local</code>), vinculado ao seu
-    perfil de navegador neste dispositivo. Desinstalar a extensão apaga esses dados.
+    Este site é hospedado no GitHub Pages e carrega uma biblioteca de leitura de arquivos (JSZip) a
+    partir de um CDN público (cdnjs/Cloudflare). Como em qualquer site, esses provedores podem registrar
+    dados técnicos de acesso (como endereço IP) em seus próprios servidores, conforme as políticas deles.
+    Nenhum conteúdo das suas listas ou arquivos é enviado a eles pelo Quem Saiu.
   </p>
-
-  <h2>Permissões solicitadas</h2>
-  <ul>
-    <li><b>storage</b> — para guardar os snapshots localmente.</li>
-    <li><b>activeTab / scripting</b> — para ler a lista de contas na aba ativa do Instagram quando você aciona a captura.</li>
-    <li><b>host_permissions para instagram.com</b> — necessário para o content script funcionar apenas nesse domínio.</li>
-  </ul>
 
   <h2>Aviso sobre os Termos de Uso do Instagram</h2>
   <p>
-    Esta extensão lê apenas conteúdo que já é exibido na tela durante o uso normal e manual do site,
-    sem automação de login nem acesso a APIs privadas. Ainda assim, o uso é por sua conta e risco
-    em relação aos Termos de Uso do Instagram/Meta, que podem restringir esse tipo de leitura.
+    A extensão lê apenas conteúdo já exibido na tela durante o uso normal e manual do site, sem automação
+    de login nem acesso a APIs privadas; ainda assim, o uso é por sua conta e risco em relação aos Termos
+    de Uso do Instagram/Meta. A ferramenta de importação usa a exportação oficial de dados fornecida pelo
+    próprio Instagram ao titular da conta.
   </p>
 
   <h2>Contato</h2>
