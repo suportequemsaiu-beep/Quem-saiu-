@@ -60,7 +60,6 @@
   .badge-em-breve { background: #fffbeb; color: #92400e; border: 1px solid #fde68a; font-size: 11px; font-weight: 700; text-transform: uppercase; padding: 4px 10px; border-radius: 999px; }
   .linha-feature { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
 
-  /* Ferramenta de importação */
   .botao-importar {
     width: 100%; border: none; border-radius: 12px; padding: 13px;
     background: #0ea5e9; color: #fff; font-size: 14px; font-weight: 700; cursor: pointer;
@@ -305,9 +304,7 @@ PERGUNTAS.forEach(function (item) {
   div.appendChild(btn);
   div.appendChild(resp);
   faqLista.appendChild(div);
-});
-
-/* =========================================================
+}); /* =========================================================
    FERRAMENTA DE IMPORTAÇÃO (celular e computador)
 ========================================================= */
 var CHAVE = "quemsaiu_exportacoes";
@@ -402,4 +399,180 @@ async function processarArquivos(arquivos) {
           temHtml = true;
         }
       }
-    } else if
+    } else if (nome.endsWith(".json")) {
+      var texto = await arquivo.text();
+      var baseSolta = nome.split("/").pop();
+      if (ehArquivoSeguidores(baseSolta)) {
+        seguidores = seguidores.concat(extrairUsuarios(JSON.parse(texto)));
+        achouAlgo = true;
+      } else if (ehArquivoSeguindo(baseSolta)) {
+        seguindo = seguindo.concat(extrairUsuarios(JSON.parse(texto)));
+        achouAlgo = true;
+      } else {
+        var extraidos = extrairUsuarios(JSON.parse(texto));
+        if (extraidos.length > 0) { seguidores = seguidores.concat(extraidos); achouAlgo = true; }
+      }
+    }
+  }
+
+  if (!achouAlgo && temHtml) {
+    throw new Error("Esta exportação está em HTML. Refaça a exportação no Instagram escolhendo o formato JSON.");
+  }
+  if (!achouAlgo) {
+    throw new Error('Não encontrei os arquivos de seguidores. Selecione o .zip baixado do Instagram, ou os arquivos "followers_1.json" e "following.json" de dentro dele.');
+  }
+
+  function unicos(lista) {
+    var vistos = {};
+    return lista.filter(function (u) {
+      if (vistos[u]) return false;
+      vistos[u] = true;
+      return true;
+    });
+  }
+
+  return {
+    data: new Date().toISOString(),
+    seguidores: unicos(seguidores),
+    seguindo: unicos(seguindo),
+  };
+}
+
+function atualizarStatus() {
+  var dados = lerDados();
+  if (dados.length === 0) {
+    statusImport.textContent = "Nenhuma exportação importada ainda.";
+    btnComparar.disabled = true;
+    return;
+  }
+  var ultima = dados[dados.length - 1];
+  statusImport.textContent =
+    dados.length + (dados.length === 1 ? " exportação importada" : " exportações importadas") +
+    " · última: " + formatarData(ultima.data) + " (" + ultima.seguidores.length + " seguidores)";
+  btnComparar.disabled = dados.length < 2;
+}
+
+function seloPara(usuario, seguindoSet, tipo) {
+  if (!seguindoSet || seguindoSet.size === 0) return "";
+  if (tipo === "saiu") {
+    return seguindoSet.has(usuario)
+      ? '<span class="selo selo-segue">Você segue</span>'
+      : '<span class="selo selo-nao-segue">Você não segue</span>';
+  }
+  if (tipo === "entrou") {
+    return seguindoSet.has(usuario)
+      ? '<span class="selo selo-segue-volta">Você segue de volta</span>'
+      : '<span class="selo selo-nao-segue">Você não segue</span>';
+  }
+  return "";
+}
+
+function renderizarLista(usuarios, tipo, seguindoSet, textoVazio) {
+  if (usuarios.length === 0) {
+    listaResultado.innerHTML = '<p style="text-align:center; font-size:12px; color:#94a3b8; padding:14px 0;">' + textoVazio + "</p>";
+    return;
+  }
+  listaResultado.innerHTML =
+    '<ul class="lista-usuarios">' +
+    usuarios.map(function (u) {
+      var iniciais = u.slice(0, 2).toUpperCase();
+      return (
+        '<li class="item-usuario item-' + tipo + '">' +
+        '<span class="avatar">' + iniciais + "</span>" +
+        '<span class="usuario-nome"><a href="https://www.instagram.com/' + encodeURIComponent(u) + '/" target="_blank" rel="noopener">@' + u + "</a></span>" +
+        seloPara(u, seguindoSet, tipo) +
+        "</li>"
+      );
+    }).join("") +
+    "</ul>";
+}
+
+function renderizarResultado() {
+  var dados = lerDados();
+  if (dados.length === 0) { cardResultado.style.display = "none"; return; }
+
+  var atual = dados[dados.length - 1];
+  var anterior = dados.length >= 2 ? dados[dados.length - 2] : null;
+  var seguindoSet = new Set(atual.seguindo || []);
+  var seguidoresSet = new Set(atual.seguidores || []);
+
+  var saiu = anterior ? anterior.seguidores.filter(function (u) { return !seguidoresSet.has(u); }) : [];
+  var entrou = anterior ? atual.seguidores.filter(function (u) { return anterior.seguidores.indexOf(u) === -1; }) : [];
+  var naoSeguemVolta = (atual.seguindo || []).filter(function (u) { return !seguidoresSet.has(u); });
+
+  cardResultado.style.display = "block";
+
+  var abas = [];
+  if (anterior) {
+    abas.push({ id: "saiu", rotulo: "Saíram · " + saiu.length });
+    abas.push({ id: "entrou", rotulo: "Entraram · " + entrou.length });
+  }
+  if (seguindoSet.size > 0) {
+    abas.push({ id: "naoSegue", rotulo: "Não te seguem de volta · " + naoSeguemVolta.length });
+  }
+
+  if (!anterior) {
+    tituloResultado.textContent = "Sua primeira exportação está guardada";
+    if (abaAtual === "saiu" || abaAtual === "entrou") abaAtual = "naoSegue";
+  } else {
+    tituloResultado.textContent = "Comparando " + formatarData(anterior.data) + " → " + formatarData(atual.data);
+  }
+  var existeAbaAtual = abas.some(function (x) { return x.id === abaAtual; });
+  if (abas.length > 0 && !existeAbaAtual) abaAtual = abas[0].id;
+
+  abasResultado.innerHTML = abas.map(function (x) {
+    return '<button class="aba-res ' + x.id + (x.id === abaAtual ? " ativa" : "") + '" data-res="' + x.id + '">' + x.rotulo + "</button>";
+  }).join("");
+  abasResultado.querySelectorAll("button").forEach(function (b) {
+    b.addEventListener("click", function () { abaAtual = b.dataset.res; renderizarResultado(); });
+  });
+
+  if (abas.length === 0) {
+    listaResultado.innerHTML = '<p style="text-align:center; font-size:12px; color:#94a3b8; padding:14px 0;">Exportação guardada. Quando notar mudança nos seguidores, peça uma nova exportação ao Instagram e importe aqui para comparar.</p>';
+    return;
+  }
+
+  if (abaAtual === "saiu") renderizarLista(saiu, "saiu", seguindoSet, "Ninguém deixou de te seguir entre as duas exportações.");
+  else if (abaAtual === "entrou") renderizarLista(entrou, "entrou", seguindoSet, "Nenhum seguidor novo entre as duas exportações.");
+  else renderizarLista(naoSeguemVolta, "naoSegue", null, "Todo mundo que você segue também te segue.");
+}
+
+btnImportar.addEventListener("click", function () { inputArquivo.click(); });
+
+inputArquivo.addEventListener("change", async function () {
+  limparErro();
+  var arquivos = Array.prototype.slice.call(inputArquivo.files || []);
+  if (arquivos.length === 0) return;
+
+  btnImportar.disabled = true;
+  btnImportar.textContent = "Lendo arquivo…";
+  try {
+    var nova = await processarArquivos(arquivos);
+    var dados = lerDados();
+    dados.push(nova);
+    gravarDados(dados.slice(-10));
+    atualizarStatus();
+    renderizarResultado();
+  } catch (erro) {
+    mostrarErro(erro && erro.message ? erro.message : "Não consegui ler este arquivo. Confira se é a exportação do Instagram em JSON.");
+  } finally {
+    btnImportar.disabled = false;
+    btnImportar.textContent = "📄 Importar exportação do Instagram";
+    inputArquivo.value = "";
+  }
+});
+
+btnComparar.addEventListener("click", function () { abaAtual = "saiu"; renderizarResultado(); });
+
+document.getElementById("btnApagar").addEventListener("click", function () {
+  apagarDadosLocais();
+  atualizarStatus();
+  cardResultado.style.display = "none";
+});
+
+atualizarStatus();
+renderizarResultado();
+</script>
+
+</body>
+</html>
