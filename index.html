@@ -273,334 +273,56 @@
       <div class="card" id="cardResultado" style="display:none;">
         <h3 id="tituloResultado">Resultado</h3>
         <div class="abas-resultado" id="abasResultado"></div>
-        <div id="listaResultado"></d
-<script>
-/* ===== FERRAMENTA DE IMPORTAÇÃO ===== */
-var CHAVE = "quemsaiu_exportacoes";
-var CHAVE_IGNORADAS = "quemsaiu_ignoradas";
+        <div id="listaResultado"></div>
+        <button class="apagar" id="btnApagar">Apagar meus dados deste navegador</button>
+      </div>
+    </div>
+  </section>
 
-var memoria = {};
-function lerDados() {
-  try { return JSON.parse(localStorage.getItem(CHAVE)) || []; }
-  catch (e) { return memoria[CHAVE] || []; }
-}
-function gravarDados(v) {
-  try { localStorage.setItem(CHAVE, JSON.stringify(v)); }
-  catch (e) { memoria[CHAVE] = v; }
-}
-function apagarDadosLocais() {
-  try { localStorage.removeItem(CHAVE); localStorage.removeItem(CHAVE_IGNORADAS); } catch (e) {}
-  delete memoria[CHAVE];
-  delete memoria[CHAVE_IGNORADAS];
-}
-function lerIgnoradas() {
-  try { return JSON.parse(localStorage.getItem(CHAVE_IGNORADAS)) || []; }
-  catch (e) { return memoria[CHAVE_IGNORADAS] || []; }
-}
-function gravarIgnoradas(v) {
-  try { localStorage.setItem(CHAVE_IGNORADAS, JSON.stringify(v)); }
-  catch (e) { memoria[CHAVE_IGNORADAS] = v; }
-}
-function ignorarConta(u) {
-  var a = lerIgnoradas();
-  if (a.indexOf(u) === -1) { a.push(u); gravarIgnoradas(a); }
-}
-function restaurarIgnoradas() { gravarIgnoradas([]); }
-function restaurarConta(u) {
-  gravarIgnoradas(lerIgnoradas().filter(function (x) { return x !== u; }));
-}
-var painelEscondidasAberto = false;
+  <section id="ajuda">
+    <div class="topo-secao">
+      <h1>Central de Ajuda</h1>
+      <p class="sub">Perguntas frequentes sobre o Quem Saiu.</p>
+      <div class="card" style="padding: 0 20px;" id="faqLista"></div>
+    </div>
+  </section>
 
-var inputArquivo = document.getElementById("inputArquivo");
-var btnImportar = document.getElementById("btnImportar");
-var btnComparar = document.getElementById("btnComparar");
-var erroImport = document.getElementById("erroImport");
-var statusImport = document.getElementById("statusImport");
-var cardResultado = document.getElementById("cardResultado");
-var tituloResultado = document.getElementById("tituloResultado");
-var abasResultado = document.getElementById("abasResultado");
-var listaResultado = document.getElementById("listaResultado");
+  <section id="suporte">
+    <div class="topo-secao">
+      <h1>Fale com a gente</h1>
+      <p class="sub">Dúvidas, problemas ou sugestões — é só chamar.</p>
+      <div class="card">
+        <h3>E-mail de suporte</h3>
+        <p><a href="mailto:suporte.quemsaiu@gmail.com" style="color:#0ea5e9; font-weight:700;">suporte.quemsaiu@gmail.com</a></p>
+        <p>Respondemos em até 2 dias úteis.</p>
+      </div>
+    </div>
+  </section>
 
-var abaAtual = "saiu";
+  <section id="assinatura">
+    <div class="topo-secao">
+      <h1>Assinatura &amp; reembolso</h1>
+      <p class="sub">O Quem Saiu ainda é 100% gratuito.</p>
+      <div class="card linha-feature">
+        <div>
+          <h3>Planos pagos</h3>
+          <p>Quando lançarmos planos, os detalhes de preço aparecem aqui.</p>
+        </div>
+        <span class="badge-em-breve">Em breve</span>
+      </div>
+      <div class="card linha-feature">
+        <div>
+          <h3>Política de reembolso</h3>
+          <p>Publicaremos as condições assim que houver planos pagos.</p>
+        </div>
+        <span class="badge-em-breve">Em breve</span>
+      </div>
+    </div>
+  </section>
 
-function formatarData(iso) {
-  return new Date(iso).toLocaleString("pt-BR", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
-}
-function mostrarErro(msg) { erroImport.innerHTML = '<div class="aviso-erro">' + msg + "</div>"; }
-function limparErro() { erroImport.innerHTML = ""; }
+</div>
 
-function extrairUsuarios(json) {
-  var itens = null;
-  if (Array.isArray(json)) itens = json;
-  else if (json && typeof json === "object") {
-    var chaves = Object.keys(json);
-    for (var i = 0; i < chaves.length; i++) {
-      if (Array.isArray(json[chaves[i]])) { itens = json[chaves[i]]; break; }
-    }
-  }
-  if (!itens) return [];
-  var usuarios = [];
-  itens.forEach(function (item) {
-    var sld = item && item.string_list_data;
-    if (Array.isArray(sld) && sld.length > 0) {
-      sld.forEach(function (s) {
-        if (!s) return;
-        if (s.value) { usuarios.push(String(s.value)); return; }
-        if (item.title) { usuarios.push(String(item.title)); return; }
-        if (s.href) {
-          var m = String(s.href).match(/instagram\.com\/(?:_u\/)?([A-Za-z0-9._]+)/);
-          if (m) usuarios.push(m[1]);
-        }
-      });
-    } else if (item && item.title) {
-      usuarios.push(String(item.title));
-    }
-  });
-  return usuarios;
-}
-
-function ehArquivoSeguidores(n) { return /^followers(_\d+)?\.json$/i.test(n); }
-function ehArquivoSeguindo(n) { return /^following\.json$/i.test(n); }
-
-async function processarArquivos(arquivos) {
-  var seguidores = [], seguindo = [], achouAlgo = false, temHtml = false;
-
-  for (var a = 0; a < arquivos.length; a++) {
-    var arquivo = arquivos[a];
-    var nome = arquivo.name.toLowerCase();
-
-    if (nome.endsWith(".zip")) {
-      var zip = await JSZip.loadAsync(arquivo);
-      var entradas = Object.keys(zip.files);
-      for (var e = 0; e < entradas.length; e++) {
-        var caminho = entradas[e];
-        var base = caminho.split("/").pop().toLowerCase();
-        if (ehArquivoSeguidores(base)) {
-          var t1 = await zip.files[caminho].async("string");
-          seguidores = seguidores.concat(extrairUsuarios(JSON.parse(t1)));
-          achouAlgo = true;
-        } else if (ehArquivoSeguindo(base)) {
-          var t2 = await zip.files[caminho].async("string");
-          seguindo = seguindo.concat(extrairUsuarios(JSON.parse(t2)));
-          achouAlgo = true;
-        } else if (/^followers.*\.html$|^following\.html$/i.test(base)) {
-          temHtml = true;
-        }
-      }
-    } else if (nome.endsWith(".json")) {
-      var texto = await arquivo.text();
-      var b = nome.split("/").pop();
-      if (ehArquivoSeguidores(b)) {
-        seguidores = seguidores.concat(extrairUsuarios(JSON.parse(texto)));
-        achouAlgo = true;
-      } else if (ehArquivoSeguindo(b)) {
-        seguindo = seguindo.concat(extrairUsuarios(JSON.parse(texto)));
-        achouAlgo = true;
-      } else {
-        var ex = extrairUsuarios(JSON.parse(texto));
-        if (ex.length > 0) { seguidores = seguidores.concat(ex); achouAlgo = true; }
-      }
-    }
-  }
-
-  if (!achouAlgo && temHtml) throw new Error("Esta exportação está em HTML. Refaça a exportação no Instagram escolhendo o formato JSON.");
-  if (!achouAlgo) throw new Error('Não encontrei os arquivos de seguidores. Selecione o .zip baixado do Instagram, ou os arquivos "followers_1.json" e "following.json" de dentro dele.');
-
-  function unicos(l) {
-    var v = {};
-    return l.filter(function (u) { if (v[u]) return false; v[u] = true; return true; });
-  }
-  return { data: new Date().toISOString(), seguidores: unicos(seguidores), seguindo: unicos(seguindo) };
-}
-
-function atualizarStatus() {
-  var dados = lerDados();
-  if (dados.length === 0) {
-    statusImport.textContent = "Nenhuma exportação importada ainda.";
-    btnComparar.disabled = true;
-    return;
-  }
-  var u = dados[dados.length - 1];
-  statusImport.textContent = dados.length + (dados.length === 1 ? " exportação importada" : " exportações importadas") +
-    " · última: " + formatarData(u.data) + " (" + u.seguidores.length + " seguidores)";
-  btnComparar.disabled = dados.length < 2;
-}
-
-var PALETA_AVATAR = ["#0ea5e9","#f97316","#10b981","#8b5cf6","#ec4899","#f59e0b","#14b8a6","#6366f1","#ef4444","#84cc16"];
-function corDoUsuario(u) {
-  var s = 0;
-  for (var i = 0; i < u.length; i++) s = (s + u.charCodeAt(i) * (i + 1)) % 9973;
-  return PALETA_AVATAR[s % PALETA_AVATAR.length];
-}
-
-function seloPara(u, seguindoSet, tipo) {
-  if (!seguindoSet || seguindoSet.size === 0) return "";
-  if (tipo === "saiu") {
-    return seguindoSet.has(u) ? '<span class="selo selo-segue">Você segue</span>' : '<span class="selo selo-nao-segue">Você não segue</span>';
-  }
-  if (tipo === "entrou") {
-    return seguindoSet.has(u) ? '<span class="selo selo-segue-volta">Você segue de volta</span>' : '<span class="selo selo-nao-segue">Você não segue</span>';
-  }
-  return "";
-}
-
-function renderizarLista(usuarios, tipo, seguindoSet, textoVazio) {
-  var ignoradas = lerIgnoradas();
-  var visiveis = usuarios.filter(function (u) { return ignoradas.indexOf(u) === -1; });
-  var escondidas = usuarios.length - visiveis.length;
-  var podeIgnorar = tipo === "naoSegue";
-
-  var rodape = "";
-  if (podeIgnorar && escondidas > 0) {
-    var nomesEscondidos = usuarios.filter(function (u) { return ignoradas.indexOf(u) !== -1; });
-    rodape = '<div class="rodape-lista">' +
-      '<button class="link-escondidas" id="btnVerEscondidas">' + escondidas +
-      (escondidas === 1 ? " conta escondida" : " contas escondidas") +
-      (painelEscondidasAberto ? " ▲" : " ▼") + "</button>" +
-      '<button class="link-restaurar" id="btnRestaurar">Mostrar todas</button></div>';
-    if (painelEscondidasAberto) {
-      rodape += '<div class="painel-escondidas">' + nomesEscondidos.map(function (u) {
-        return '<div class="item-escondido">' +
-          '<span class="avatar" style="background:' + corDoUsuario(u) + '">' + u.slice(0, 2).toUpperCase() + "</span>" +
-          '<span class="usuario-nome">@' + u + "</span>" +
-          '<button class="btn-restaurar-um" data-restaurar="' + u + '">Restaurar</button></div>';
-      }).join("") + "</div>";
-    }
-  }
-
-  if (visiveis.length === 0) {
-    listaResultado.innerHTML = '<p style="text-align:center; font-size:12px; color:#94a3b8; padding:14px 0;">' + textoVazio + "</p>" + rodape;
-    ligarBotoesLista();
-    return;
-  }
-
-  listaResultado.innerHTML = '<ul class="lista-usuarios">' + visiveis.map(function (u) {
-    return '<li class="item-usuario item-' + tipo + '">' +
-      '<span class="avatar" style="background:' + corDoUsuario(u) + '">' + u.slice(0, 2).toUpperCase() + "</span>" +
-      '<span class="usuario-nome"><a href="https://www.instagram.com/' + encodeURIComponent(u) + '/" target="_blank" rel="noopener">@' + u + "</a></span>" +
-      seloPara(u, seguindoSet, tipo) +
-      (podeIgnorar ? '<button class="btn-ignorar" data-ignorar="' + u + '" title="Esconder esta conta da lista">&times;</button>' : "") +
-      "</li>";
-  }).join("") + "</ul>" + rodape;
-
-  ligarBotoesLista();
-}
-
-function ligarBotoesLista() {
-  listaResultado.querySelectorAll("[data-ignorar]").forEach(function (b) {
-    b.addEventListener("click", function () {
-      var linha = b.closest("li");
-      if (linha) linha.classList.add("saindo");
-      setTimeout(function () { ignorarConta(b.dataset.ignorar); renderizarResultado(); }, 180);
-    });
-  });
-  var btnRest = document.getElementById("btnRestaurar");
-  if (btnRest) btnRest.addEventListener("click", function () {
-    restaurarIgnoradas(); painelEscondidasAberto = false; renderizarResultado();
-  });
-  var btnVer = document.getElementById("btnVerEscondidas");
-  if (btnVer) btnVer.addEventListener("click", function () {
-    painelEscondidasAberto = !painelEscondidasAberto; renderizarResultado();
-  });
-  listaResultado.querySelectorAll("[data-restaurar]").forEach(function (b) {
-    b.addEventListener("click", function () { restaurarConta(b.dataset.restaurar); renderizarResultado(); });
-  });
-}
-
-function renderizarResultado() {
-  var dados = lerDados();
-  if (dados.length === 0) { cardResultado.style.display = "none"; return; }
-
-  var atual = dados[dados.length - 1];
-  var anterior = dados.length >= 2 ? dados[dados.length - 2] : null;
-  var seguindoSet = new Set(atual.seguindo || []);
-  var seguidoresSet = new Set(atual.seguidores || []);
-
-  var saiu = anterior ? anterior.seguidores.filter(function (u) { return !seguidoresSet.has(u); }) : [];
-  var entrou = anterior ? atual.seguidores.filter(function (u) { return anterior.seguidores.indexOf(u) === -1; }) : [];
-  var naoSeguemVolta = (atual.seguindo || []).filter(function (u) { return !seguidoresSet.has(u); });
-
-  cardResultado.style.display = "block";
-
-  var abas = [];
-  if (anterior) {
-    abas.push({ id: "saiu", rotulo: "Deixaram de te seguir · " + saiu.length });
-    abas.push({ id: "entrou", rotulo: "Começaram a te seguir · " + entrou.length });
-  }
-  if (seguindoSet.size > 0) {
-    abas.push({ id: "naoSegue", rotulo: "Não te seguem de volta · " + naoSeguemVolta.length });
-  }
-
-  if (!anterior) {
-    tituloResultado.textContent = "Seu ponto de partida está guardado";
-    if (abaAtual === "saiu" || abaAtual === "entrou") abaAtual = "naoSegue";
-  } else {
-    tituloResultado.textContent = "Comparando " + formatarData(anterior.data) + " → " + formatarData(atual.data);
-  }
-  var existe = abas.some(function (x) { return x.id === abaAtual; });
-  if (abas.length > 0 && !existe) abaAtual = abas[0].id;
-
-  abasResultado.innerHTML = abas.map(function (x) {
-    return '<button class="aba-res ' + x.id + (x.id === abaAtual ? " ativa" : "") + '" data-res="' + x.id + '">' + x.rotulo + "</button>";
-  }).join("");
-  abasResultado.querySelectorAll("button").forEach(function (b) {
-    b.addEventListener("click", function () { abaAtual = b.dataset.res; renderizarResultado(); });
-  });
-
-  if (abas.length === 0) {
-    listaResultado.innerHTML = '<p style="text-align:center; font-size:12px; color:#94a3b8; padding:14px 0;">Ponto de partida guardado. Quando notar mudança nos seguidores, peça uma nova exportação e importe aqui para comparar.</p>';
-    return;
-  }
-
-  if (abaAtual === "saiu") renderizarLista(saiu, "saiu", seguindoSet, "Ninguém deixou de te seguir entre as duas exportações.");
-  else if (abaAtual === "entrou") renderizarLista(entrou, "entrou", seguindoSet, "Nenhum seguidor novo entre as duas exportações.");
-  else {
-    renderizarLista(naoSeguemVolta, "naoSegue", null, "Todo mundo que você segue também te segue.");
-    var dica = document.createElement("p");
-    dica.style.cssText = "font-size:11px; color:#94a3b8; margin:10px 0 0; line-height:1.5;";
-    dica.innerHTML = 'Toque no nome para abrir o perfil. Se abrir uma página em branco, a conta não existe mais — use o <b>&times;</b> para escondê-la desta lista.';
-    listaResultado.appendChild(dica);
-  }
-}
-
-btnImportar.addEventListener("click", function () { inputArquivo.click(); });
-
-inputArquivo.addEventListener("change", async function () {
-  limparErro();
-  var arquivos = Array.prototype.slice.call(inputArquivo.files || []);
-  if (arquivos.length === 0) return;
-  btnImportar.disabled = true;
-  btnImportar.textContent = "Lendo arquivo…";
-  try {
-    var nova = await processarArquivos(arquivos);
-    var dados = lerDados();
-    dados.push(nova);
-    gravarDados(dados.slice(-10));
-    atualizarStatus();
-    renderizarResultado();
-  } catch (erro) {
-    mostrarErro(erro && erro.message ? erro.message : "Não consegui ler este arquivo. Confira se é a exportação do Instagram em JSON.");
-  } finally {
-    btnImportar.disabled = false;
-    btnImportar.textContent = "📄 Importar exportação do Instagram";
-    inputArquivo.value = "";
-  }
-});
-
-btnComparar.addEventListener("click", function () { abaAtual = "saiu"; renderizarResultado(); });
-
-document.getElementById("btnApagar").addEventListener("click", function () {
-  apagarDadosLocais();
-  atualizarStatus();
-  cardResultado.style.display = "none";
-});
-
-if (lerDados().length > 0) {
-  document.getElementById("ferramenta").style.display = "block";
-}
-atualizarStatus();
-renderizarResultado();
-</script>
-
-</body>
-        </html>
+<footer>
+  Quem Saiu · não afiliado ao Instagram/Meta<br />
+  <a href="privacy-policy.html">Política de privacidade</a> · <a href="mailto:suporte.quemsaiu@gmail.com">suporte.quemsaiu@gmail.com</a>
+</footer>
