@@ -7,71 +7,109 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <style>
   * { box-sizing: border-box; }
-  body {
-    margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    background: #0f172a;
-    color: #f1f5f9;
-  }
-  .container { max-width: 720px; margin: 0 auto; padding: 0 20px; }
+  body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #0f172a; color: #f1f5f9; overflow-x: hidden; }
+  .container { max-width: 560px; margin: 0 auto; padding: 0 22px; }
 
-  nav {
-    position: sticky; top: 0; z-index: 10;
-    background: #0f172a; border-bottom: 1px solid #1e293b;
-    padding: 16px 0 12px;
-  }
-  nav .abas { display: flex; gap: 8px; overflow-x: auto; }
-  nav button {
-    border: none; border-radius: 999px; padding: 9px 16px;
-    font-size: 13px; font-weight: 600; cursor: pointer; white-space: nowrap;
-    background: #1e293b; color: #cbd5e1;
-  }
-  nav button.ativo { background: #0ea5e9; color: #fff; }
+  nav { position: sticky; top: 0; z-index: 20; background: rgba(15,23,42,.94); backdrop-filter: blur(8px); border-bottom: 1px solid #1e293b; padding: 12px 0 11px; }
+  .marca { display: flex; align-items: center; gap: 9px; margin-bottom: 11px; cursor: pointer; }
+  .marca-icone { width: 26px; height: 26px; border-radius: 7px; background: linear-gradient(160deg,#0ea5e9,#0369a1); position: relative; flex-shrink: 0; }
+  .marca-icone::before { content: ""; position: absolute; left: 6px; top: 5px; width: 9px; height: 16px; border: 2px solid #fff; border-radius: 2px; }
+  .marca-icone::after { content: ""; position: absolute; right: 5px; top: 9px; width: 6px; height: 6px; border-radius: 50%; background: #fff; }
+  .marca-nome { font-size: 16px; font-weight: 800; letter-spacing: -.3px; color: #f1f5f9; }
+  nav .abas { display: flex; gap: 7px; overflow-x: auto; }
+  nav .abas button { border: none; border-radius: 999px; padding: 8px 15px; font-size: 12px; font-weight: 600; background: #1e293b; color: #cbd5e1; white-space: nowrap; cursor: pointer; }
+  nav .abas button.ativo { background: #0ea5e9; color: #fff; }
 
-  section { display: none; padding: 32px 0 60px; }
+  section { display: none; }
   section.ativa { display: block; }
 
   h1 { font-size: 26px; margin: 0 0 8px; }
-  .sub { color: #94a3b8; font-size: 14px; margin: 0 0 28px; }
+  .sub { color: #94a3b8; font-size: 14px; margin: 0 0 24px; }
+  .topo-secao { padding-top: 30px; }
 
-  .hero { text-align: center; padding: 30px 0 10px; }
-  .hero h1 { font-size: 30px; }
-  .hero p { color: #94a3b8; font-size: 15px; max-width: 480px; margin: 0 auto 24px; }
-  .cta {
-    display: inline-block; background: #0ea5e9; color: #fff; text-decoration: none;
-    border: none; padding: 13px 24px; border-radius: 999px; font-weight: 700; font-size: 14px;
-    cursor: pointer;
-  }
-  .cta.desativado { background: #334155; color: #94a3b8; cursor: default; }
-  .hero .alternativa { display: block; margin-top: 12px; color: #64748b; font-size: 12px; }
-  .hero .alternativa a { color: #38bdf8; text-decoration: none; font-weight: 600; cursor: pointer; }
+  .gancho { text-align: center; padding: 44px 0 38px; }
+  .cena { position: relative; width: 170px; height: 132px; margin: 0 auto 30px; perspective: 620px; }
+  .moldura { position: absolute; left: 8px; top: 4px; width: 84px; height: 122px; border: 7px solid #38bdf8; border-radius: 9px; }
+  .vao { position: absolute; left: 0; top: 0; right: 0; bottom: 0; background: #060c17; border-radius: 3px; overflow: hidden; }
+  .folha { position: absolute; left: 0; top: 0; width: 100%; height: 100%; background: linear-gradient(90deg,#1e3a5f,#16304f); border-right: 3px solid #7dd3fc; border-radius: 3px; transform-origin: left center; transform-style: preserve-3d; animation: abrirFechar 5.2s ease-in-out infinite; }
+  .macaneta { position: absolute; right: 7px; top: 50%; width: 7px; height: 7px; border-radius: 50%; background: #7dd3fc; }
+  .figura { position: absolute; left: 30px; top: 38px; opacity: 0; animation: andar 5.2s ease-in-out infinite; }
+  .cabeca { width: 25px; height: 25px; border-radius: 50%; background: #e2e8f0; margin: 0 auto 4px; }
+  .corpo { width: 42px; height: 24px; border-radius: 24px 24px 0 0; background: #e2e8f0; }
+  @keyframes abrirFechar { 0%,10% { transform: rotateY(0); } 24%,54% { transform: rotateY(-74deg); } 68%,100% { transform: rotateY(0); } }
+  @keyframes andar { 0%,22% { opacity:0; transform: translateX(0);} 30% { opacity:.95; transform: translateX(18px);} 54% { opacity:.95; transform: translateX(62px);} 70% { opacity:.95; transform: translateX(82px);} 86%,100% { opacity:0; transform: translateX(96px);} }
+  @media (prefers-reduced-motion: reduce) { .folha { animation:none; transform: rotateY(-74deg);} .figura { animation:none; opacity:.95; transform: translateX(70px);} }
 
-  .card { background: #fff; color: #0f172a; border-radius: 14px; padding: 20px; margin-bottom: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.25); }
+  .gancho h2 { font-size: 35px; line-height: 1.12; margin: 0 0 14px; letter-spacing: -.8px; font-weight: 800; }
+  .gancho h2 em { font-style: normal; color: #38bdf8; }
+  .gancho p { color: #94a3b8; font-size: 15px; line-height: 1.55; margin: 0 auto 28px; max-width: 330px; }
+  .cta-principal { border: none; border-radius: 999px; padding: 16px 34px; background: #0ea5e9; color: #fff; font-size: 15px; font-weight: 800; cursor: pointer; box-shadow: 0 8px 24px rgba(14,165,233,.3); }
+  .cta-principal:active { transform: scale(.97); }
+  .selo-gratis { display: block; font-size: 12px; color: #475569; margin-top: 14px; }
+
+  .revelado { display: none; }
+  .revelado.on { display: block; animation: surgir .45s ease both; }
+  @keyframes surgir { from { opacity:0; transform: translateY(18px);} to { opacity:1; transform:none;} }
+  .rotulo-secao { font-size: 11px; letter-spacing: 1.6px; text-transform: uppercase; color: #64748b; text-align: center; margin: 0 0 14px; }
+  .prova { background: #fff; border-radius: 18px; padding: 18px; box-shadow: 0 18px 46px rgba(0,0,0,.45); position: relative; overflow: hidden; }
+  .etiqueta-exemplo { position: absolute; top: 14px; right: 14px; font-size: 10px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; color: #94a3b8; }
+  .abas-prova { display: flex; gap: 6px; margin-bottom: 13px; flex-wrap: wrap; }
+  .aba-prova { font-size: 11px; font-weight: 800; padding: 6px 11px; border-radius: 999px; white-space: nowrap; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; border: none; font-family: inherit; transition: transform .1s ease; }
+  .aba-prova:active { transform: scale(.94); }
+  .revelado.on .aba-prova:not(.ativa) { animation: convite 1.5s ease-in-out .6s 2; }
+  @keyframes convite { 0%,100% { transform:none;} 35% { transform: translateY(-3px);} 60% { transform:none;} }
+  @media (prefers-reduced-motion: reduce) { .revelado.on .aba-prova:not(.ativa) { animation:none; } }
+  .bolinha { width: 7px; height: 7px; border-radius: 50%; background: #cbd5e1; flex-shrink: 0; transition: background .2s ease, transform .2s ease; }
+  .aba-prova.ativa .bolinha { background: #fff; transform: scale(1.25); }
+  .aba-prova.ativa { background: #dc2626; color: #fff; }
+  .aba-prova.ativa.ativa-verde { background: #16a34a; color: #fff; }
+  .aba-prova.ativa.ativa-roxa { background: #7c3aed; color: #fff; }
+  .aba-prova.verde { background: #f0fdf4; color: #15803d; }
+  .aba-prova.roxa { background: #f5f3ff; color: #6d28d9; }
+  .explica { font-size: 13px; font-weight: 700; color: #0f172a; line-height: 1.5; margin: 0 0 12px; min-height: 36px; }
+  .linha { display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 10px; background: #fef2f2; margin-bottom: 6px; }
+  .av { width: 30px; height: 30px; border-radius: 50%; flex-shrink: 0; }
+  .nome-claro { flex: 1; font-size: 13px; font-weight: 700; color: #7f1d1d; }
+  .nome-borrado { flex: 1; height: 11px; border-radius: 4px; background: linear-gradient(90deg,#fca5a5,#fecaca); filter: blur(2.6px); }
+  .selo-fake { font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 999px; background: #dc2626; color: #fee2e2; flex-shrink: 0; }
+  .selo-verde { background: #15803d; color: #dcfce7; }
+  .linha.entrou { background: #f0fdf4; }
+  .linha.entrou .nome-claro { color: #14532d; }
+  .linha.entrou .nome-borrado { background: linear-gradient(90deg,#86efac,#bbf7d0); }
+  .linha.naoSegue { background: #f8fafc; }
+  .linha.naoSegue .nome-claro { color: #1e293b; }
+  .linha.naoSegue .nome-borrado { background: linear-gradient(90deg,#cbd5e1,#e2e8f0); }
+  .fade { position: absolute; left: 0; right: 0; bottom: 0; height: 58px; background: linear-gradient(180deg, rgba(255,255,255,0), #fff 72%); }
+
+  .mecanica { margin-top: 34px; }
+  .etapa { display: flex; gap: 14px; padding: 16px 0; border-top: 1px solid #1e293b; }
+  .etapa:first-of-type { border-top: none; }
+  .marca-num { width: 30px; height: 30px; border-radius: 9px; background: #1e293b; color: #38bdf8; font-size: 13px; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .etapa h4 { margin: 2px 0 5px; font-size: 14px; color: #f1f5f9; }
+  .etapa p { margin: 0; font-size: 13px; color: #94a3b8; line-height: 1.55; }
+  .etapa .destaque { color: #38bdf8; font-weight: 600; }
+  .bonus { background: #142033; border: 1px solid #1e3a5f; border-radius: 14px; padding: 16px; margin-top: 22px; }
+  .bonus h4 { margin: 0 0 6px; font-size: 13px; color: #a5b4fc; }
+  .bonus p { margin: 0; font-size: 13px; color: #94a3b8; line-height: 1.55; }
+  .cta-final { width: 100%; border: none; border-radius: 14px; padding: 17px; background: #0ea5e9; color: #fff; font-size: 15px; font-weight: 800; margin-top: 26px; cursor: pointer; }
+  .privacidade { text-align: center; font-size: 12px; color: #475569; margin-top: 14px; line-height: 1.6; }
+  .extensao { text-align: center; font-size: 12px; color: #64748b; margin: 26px 0 0; }
+  .extensao a { color: #38bdf8; text-decoration: none; font-weight: 600; cursor: pointer; }
+
+  .card { background: #fff; color: #0f172a; border-radius: 16px; padding: 20px; margin-bottom: 12px; box-shadow: 0 10px 30px rgba(0,0,0,.25); }
   .card h3 { margin: 0 0 6px; font-size: 15px; }
   .card p, .card li { margin: 0; font-size: 13px; color: #475569; line-height: 1.6; }
-  .card ol { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 6px; }
-  .card .nota { font-size: 11px; color: #94a3b8; margin-top: 10px; }
-
-  .faq-item { border-top: 1px solid #e2e8f0; }
-  .faq-item:first-child { border-top: none; }
-  .faq-q { width: 100%; text-align: left; background: none; border: none; padding: 16px 0; font-size: 14px; font-weight: 700; cursor: pointer; color: #0f172a; display: flex; justify-content: space-between; align-items: center; gap: 10px; }
-  .faq-a { font-size: 13px; color: #64748b; padding-bottom: 16px; margin: -6px 0 0; line-height: 1.6; }
-
-  .badge-em-breve { background: #fffbeb; color: #92400e; border: 1px solid #fde68a; font-size: 11px; font-weight: 700; text-transform: uppercase; padding: 4px 10px; border-radius: 999px; }
-  .linha-feature { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
-
-  .botao-importar {
-    width: 100%; border: none; border-radius: 12px; padding: 13px;
-    background: #0ea5e9; color: #fff; font-size: 14px; font-weight: 700; cursor: pointer;
-  }
-  .botao-secundario {
-    width: 100%; border: none; border-radius: 12px; padding: 12px; margin-top: 8px;
-    background: #f1f5f9; color: #334155; font-size: 13px; font-weight: 600; cursor: pointer;
-  }
-  .botao-secundario:disabled { opacity: 0.4; cursor: default; }
-  .aviso-atencao { background: #fffbeb; color: #92400e; border: 1px solid #fde68a; border-radius: 10px; padding: 12px; font-size: 12px; line-height: 1.5; margin-bottom: 12px; }
+  .card ol { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 7px; }
+  .card .nota { font-size: 11px; color: #94a3b8; margin-top: 12px; }
+  .botao-importar { width: 100%; border: none; border-radius: 12px; padding: 15px; background: #0ea5e9; color: #fff; font-size: 15px; font-weight: 700; cursor: pointer; }
+  .botao-secundario { width: 100%; border: none; border-radius: 12px; padding: 12px; margin-top: 8px; background: #f1f5f9; color: #334155; font-size: 13px; font-weight: 600; cursor: pointer; }
+  .botao-secundario:disabled { opacity: .4; cursor: default; }
   .aviso-erro { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; border-radius: 10px; padding: 12px; font-size: 12px; line-height: 1.5; margin-top: 10px; }
   .status-import { font-size: 12px; color: #64748b; margin-top: 10px; text-align: center; }
+  .expansivel { border: 1px solid #e2e8f0; border-radius: 12px; margin-top: 12px; overflow: hidden; }
+  .expansivel-topo { width: 100%; background: #f8fafc; border: none; padding: 14px; text-align: left; font-size: 13px; font-weight: 700; color: #0f172a; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 10px; font-family: inherit; }
+  .expansivel-corpo { padding: 0 16px 16px; }
+  .expansivel-corpo ol { margin: 12px 0 0; }
 
   .abas-resultado { display: flex; gap: 8px; margin: 4px 0 12px; flex-wrap: wrap; }
   .aba-res { border: none; border-radius: 999px; padding: 8px 12px; font-size: 12px; font-weight: 700; cursor: pointer; }
@@ -81,7 +119,6 @@
   .aba-res.entrou { background: #f0fdf4; color: #15803d; }
   .aba-res.naoSegue.ativa { background: #7c3aed; color: #fff; }
   .aba-res.naoSegue { background: #f5f3ff; color: #6d28d9; }
-
   .lista-usuarios { list-style: none; margin: 0; padding: 0; max-height: 320px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; }
   .item-usuario { display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 10px; font-size: 13px; }
   .item-saiu { background: #fef2f2; color: #7f1d1d; }
@@ -94,10 +131,8 @@
   .selo-segue { background: #dc2626; color: #fee2e2; }
   .selo-segue-volta { background: #15803d; color: #dcfce7; }
   .selo-nao-segue { background: #e2e8f0; color: #475569; }
-
-  .btn-ignorar { background: #ffffff; border: 1px solid #e2e8f0; color: #64748b; font-size: 14px; line-height: 1; padding: 5px 9px; border-radius: 8px; cursor: pointer; flex-shrink: 0; transition: background .12s ease, color .12s ease, border-color .12s ease, transform .12s ease; }
-  .btn-ignorar:hover { background: #f1f5f9; color: #334155; }
-  .btn-ignorar:active { background: #7c3aed; border-color: #7c3aed; color: #ffffff; transform: scale(.9); }
+  .btn-ignorar { background: #fff; border: 1px solid #e2e8f0; color: #64748b; font-size: 14px; line-height: 1; padding: 5px 9px; border-radius: 8px; cursor: pointer; flex-shrink: 0; transition: background .12s ease, color .12s ease, border-color .12s ease, transform .12s ease; }
+  .btn-ignorar:active { background: #7c3aed; border-color: #7c3aed; color: #fff; transform: scale(.9); }
   .item-usuario.saindo { opacity: 0; transform: translateX(14px); transition: opacity .18s ease, transform .18s ease; }
   .rodape-lista { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-top: 10px; font-size: 11px; color: #94a3b8; }
   .link-escondidas { background: none; border: none; color: #64748b; font-size: 11px; font-weight: 600; cursor: pointer; padding: 0; text-decoration: underline; }
@@ -106,21 +141,31 @@
   .item-escondido { display: flex; align-items: center; gap: 10px; padding: 7px 10px; border-radius: 10px; font-size: 13px; background: #f8fafc; color: #94a3b8; margin-bottom: 5px; }
   .item-escondido .usuario-nome { text-decoration: line-through; font-weight: 500; }
   .item-escondido .avatar { filter: grayscale(1); opacity: .65; }
-  .btn-restaurar-um { background: #fff; border: 1px solid #bae6fd; color: #0369a1; font-size: 11px; font-weight: 700; padding: 5px 10px; border-radius: 8px; cursor: pointer; flex-shrink: 0; transition: background .12s ease, color .12s ease, transform .12s ease; }
+  .btn-restaurar-um { background: #fff; border: 1px solid #bae6fd; color: #0369a1; font-size: 11px; font-weight: 700; padding: 5px 10px; border-radius: 8px; cursor: pointer; flex-shrink: 0; }
   .btn-restaurar-um:active { background: #0ea5e9; border-color: #0ea5e9; color: #fff; transform: scale(.92); }
   .apagar { background: none; border: none; color: #94a3b8; font-size: 11px; text-decoration: underline; cursor: pointer; display: block; margin: 14px auto 0; }
 
-  footer { text-align: center; color: #475569; font-size: 12px; padding: 20px 0 40px; line-height: 1.8; }
-  footer a { color: #64748b; }
+  .faq-item { border-top: 1px solid #e2e8f0; }
+  .faq-item:first-child { border-top: none; }
+  .faq-q { width: 100%; text-align: left; background: none; border: none; padding: 16px 0; font-size: 14px; font-weight: 700; cursor: pointer; color: #0f172a; display: flex; justify-content: space-between; align-items: center; gap: 10px; font-family: inherit; }
+  .faq-a { font-size: 13px; color: #64748b; padding-bottom: 16px; margin: -6px 0 0; line-height: 1.6; }
+  .badge-em-breve { background: #fffbeb; color: #92400e; border: 1px solid #fde68a; font-size: 11px; font-weight: 700; text-transform: uppercase; padding: 4px 10px; border-radius: 999px; }
+  .linha-feature { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+
+  footer { text-align: center; color: #334155; font-size: 11px; padding: 34px 0 44px; line-height: 1.8; }
+  footer a { color: #475569; }
 </style>
 </head>
 <body>
 
 <nav>
   <div class="container">
+    <div class="marca" id="marca">
+      <span class="marca-icone"></span>
+      <span class="marca-nome">Quem Saiu</span>
+    </div>
     <div class="abas">
       <button data-tab="inicio" class="ativo">Início</button>
-      <button data-tab="celular">Celular</button>
       <button data-tab="ajuda">Ajuda</button>
       <button data-tab="suporte">Suporte</button>
       <button data-tab="assinatura">Assinatura</button>
@@ -131,557 +176,101 @@
 <div class="container">
 
   <section id="inicio" class="ativa">
-    <div class="hero">
-      <h1>Quem Saiu</h1>
-      <p>Descubra quem deixou de te seguir no Instagram — sem logins ou senhas.</p>
-      <span id="ctaArea"></span>
-      <span class="alternativa" id="ctaAlternativa"></span>
-    </div>
 
-    <div id="cardsComoFunciona"></div>
-  </section>
-
-  <section id="celular">
-    <h1>Usar no celular</h1>
-    <p class="sub">Compare as exportações oficiais do Instagram e veja quem saiu — tudo no seu navegador.</p>
-
-    <div class="card">
-      <h3>Passo 1 — Peça seus dados ao Instagram</h3>
-      <ol>
-        <li>No app do Instagram: Central de Contas → Suas informações e permissões → <b>Exportar suas informações</b></li>
-        <li>Toque em <b>Criar exportação</b> e escolha sua conta</li>
-        <li>Em "Escolher para onde exportar", toque em <b>Exportar para dispositivo</b> — não em "serviço externo"</li>
-        <li>Na tela "Confirmar sua exportação", toque em <b>Personalizar informações</b>, marque só <b>Seguidores e seguindo</b>, toque em <b>Salvar</b> e volte</li>
-        <li>Toque em <b>Formato</b>, escolha <b>JSON</b>, salve e volte; em <b>Intervalo de datas</b>, escolha <b>Desde o início</b>, salve e volte</li>
-        <li>Toque em <b>Iniciar exportação</b></li>
-      </ol>
-      <p class="nota">O arquivo fica pronto em minutos a algumas horas — o Instagram avisa quando der para baixar, e você tem até 4 dias para fazer o download.</p>
-    </div>
-
-    <div class="card">
-      <h3>Passo 2 — Importe o arquivo aqui</h3>
-      <p style="margin-bottom:12px;">Selecione o <b>.zip baixado do Instagram</b> (ou os arquivos .json de dentro dele). O nome dele começa com <b>instagram-</b> e o seu nome de usuário — e costuma ser o arquivo mais recente da sua pasta Downloads.</p>
-      <input type="file" id="inputArquivo" accept=".zip,.json" multiple style="display:none" />
-      <button class="botao-importar" id="btnImportar">📄 Importar exportação do Instagram</button>
-      <button class="botao-secundario" id="btnComparar" disabled>🔁 Comparar com a exportação anterior</button>
-      <div id="erroImport"></div>
-      <p class="status-import" id="statusImport">Nenhuma exportação importada ainda.</p>
-    </div>
-
-    <div class="card" id="cardResultado" style="display:none;">
-      <h3 id="tituloResultado">Resultado</h3>
-      <div id="avisoRecorte"></div>
-      <div class="abas-resultado" id="abasResultado"></div>
-      <div id="listaResultado"></div>
-      <button class="apagar" id="btnApagar">Apagar meus dados deste navegador</button>
-    </div>
-  </section>
-
-  <section id="ajuda">
-    <h1>Central de Ajuda</h1>
-    <p class="sub">Perguntas frequentes sobre o Quem Saiu.</p>
-    <div class="card" style="padding: 0 20px;" id="faqLista"></div>
-  </section>
-
-  <section id="suporte">
-    <h1>Fale com a gente</h1>
-    <p class="sub">Dúvidas, problemas ou sugestões — é só chamar.</p>
-    <div class="card">
-      <h3>E-mail de suporte</h3>
-      <p><a href="mailto:suporte.quemsaiu@gmail.com" style="color:#0ea5e9; font-weight:700;">suporte.quemsaiu@gmail.com</a></p>
-      <p>Respondemos em até 2 dias úteis.</p>
-    </div>
-  </section>
-
-  <section id="assinatura">
-    <h1>Assinatura &amp; reembolso</h1>
-    <p class="sub">O Quem Saiu ainda é 100% gratuito.</p>
-    <div class="card linha-feature">
-      <div>
-        <h3>Planos pagos</h3>
-        <p>Quando lançarmos planos, os detalhes de preço aparecem aqui.</p>
+    <div class="gancho">
+      <div class="cena">
+        <div class="moldura">
+          <div class="vao"><div class="folha"><span class="macaneta"></span></div></div>
+        </div>
+        <div class="figura"><div class="cabeca"></div><div class="corpo"></div></div>
       </div>
-      <span class="badge-em-breve">Em breve</span>
+      <h2>Alguém <em>saiu</em><br>sem avisar.</h2>
+      <p>O Instagram nunca conta quando alguém deixa de te seguir. O Quem Saiu conta.</p>
+      <button class="cta-principal" id="btnDescobrir">Quero descobrir</button>
+      <span class="selo-gratis">Gratuito · sem login, sem senha</span>
     </div>
-    <div class="card linha-feature">
-      <div>
-        <h3>Política de reembolso</h3>
-        <p>Publicaremos as condições assim que houver planos pagos.</p>
+
+    <div class="revelado" id="revelado">
+
+      <p class="rotulo-secao">Uma amostra do que te espera</p>
+      <div class="prova">
+        <span class="etiqueta-exemplo">Exemplo</span>
+        <div class="abas-prova">
+          <button class="aba-prova ativa" data-lista="saiu"><span class="bolinha"></span>Deixaram de te seguir · 3</button>
+          <button class="aba-prova verde" data-lista="entrou"><span class="bolinha"></span>Começaram a te seguir · 5</button>
+          <button class="aba-prova roxa" data-lista="naoSegue"><span class="bolinha"></span>Não te seguem de volta · 18</button>
+        </div>
+        <p class="explica" id="explica">Quem te seguia antes e não te segue mais.</p>
+        <div id="listaProva"></div>
+        <div class="fade"></div>
       </div>
-      <span class="badge-em-breve">Em breve</span>
+
+      <div class="mecanica">
+        <div class="etapa">
+          <span class="marca-num">1</span>
+          <div>
+            <h4>Marque seu ponto de partida</h4>
+            <p>Você importa sua lista de seguidores uma primeira vez. É a foto de como ela está hoje.</p>
+          </div>
+        </div>
+        <div class="etapa">
+          <span class="marca-num">2</span>
+          <div>
+            <h4>Viu o número mudar?</h4>
+            <p>Perdeu um seguidor e ficou naquela dúvida? <span class="destaque">É a hora de voltar aqui.</span> Importe sua lista de novo.</p>
+          </div>
+        </div>
+        <div class="etapa">
+          <span class="marca-num">3</span>
+          <div>
+            <h4>Descubra quem foi</h4>
+            <p>O Quem Saiu compara as duas listas e mostra exatamente quem deixou de te seguir — e quem começou.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bonus">
+        <h4>Já na primeira vez</h4>
+        <p>Antes mesmo de comparar, você descobre quem você segue e não te segue de volta.</p>
+      </div>
+
+      <button class="cta-final" id="btnComecar">Começar agora</button>
+      <p class="privacidade">Seus dados são lidos aqui no seu navegador.<br>Nada é enviado para servidor nenhum.</p>
+
+      <p class="extensao">Está no computador? Existe também uma <a id="linkExtensao">extensão para o Chrome</a>.</p>
     </div>
-  </section>
 
-</div>
+    <div id="ferramenta" style="display:none; padding-top:26px;">
+      <h1>Sua lista</h1>
+      <p class="sub">Importe a exportação oficial do Instagram — a leitura acontece aqui no seu navegador.</p>
 
-<footer>
-  Quem Saiu · não afiliado ao Instagram/Meta<br />
-  <a href="privacy-policy.html">Política de privacidade</a> · <a href="mailto:suporte.quemsaiu@gmail.com">suporte.quemsaiu@gmail.com</a>
-</footer>
+      <div class="card">
+        <button class="botao-importar" id="btnImportar">📄 Importar exportação do Instagram</button>
+        <button class="botao-secundario" id="btnComparar" disabled>🔁 Comparar com a exportação anterior</button>
+        <input type="file" id="inputArquivo" accept=".zip,.json" multiple style="display:none" />
+        <div id="erroImport"></div>
+        <p class="status-import" id="statusImport">Nenhuma exportação importada ainda.</p>
 
-<script>
-const LINK_CHROME_STORE = "";
+        <div class="expansivel">
+          <button class="expansivel-topo" id="togglePasso">
+            <span>Ainda não tenho o arquivo — como peço?</span>
+            <span id="setaPasso">▼</span>
+          </button>
+          <div class="expansivel-corpo" id="corpoPasso" style="display:none">
+            <ol>
+              <li>No app do Instagram: Central de Contas → Suas informações e permissões → <b>Exportar suas informações</b></li>
+              <li>Toque em <b>Criar exportação</b> e escolha sua conta</li>
+              <li>Em "Escolher para onde exportar", toque em <b>Exportar para dispositivo</b> — não em "serviço externo"</li>
+              <li>Em <b>Personalizar informações</b>, marque só <b>Seguidores e seguindo</b>, toque em <b>Salvar</b> e volte</li>
+              <li>Em <b>Formato</b>, escolha <b>JSON</b>, salve e volte</li>
+              <li>Toque em <b>Iniciar exportação</b></li>
+            </ol>
+            <p class="nota">O Instagram avisa assim que o arquivo estiver pronto para baixar. Quando ele chegar, volte aqui e toque em Importar. O link para baixar fica disponível por 4 dias.</p>
+          </div>
+        </div>
+      </div>
 
-const ehCelular = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-
-function irParaAba(id) {
-  document.querySelectorAll("nav button").forEach(function (b) { b.classList.toggle("ativo", b.dataset.tab === id); });
-  document.querySelectorAll("section").forEach(function (s) { s.classList.toggle("ativa", s.id === id); });
-  window.scrollTo(0, 0);
-}
-document.querySelectorAll("nav button").forEach(function (btn) {
-  btn.addEventListener("click", function () { irParaAba(btn.dataset.tab); });
-});
-
-var ctaArea = document.getElementById("ctaArea");
-var ctaAlt = document.getElementById("ctaAlternativa");
-
-if (ehCelular) {
-  var botaoCelular = document.createElement("button");
-  botaoCelular.className = "cta";
-  botaoCelular.textContent = "Usar no celular — sem instalar nada";
-  botaoCelular.addEventListener("click", function () { irParaAba("celular"); });
-  ctaArea.appendChild(botaoCelular);
-  ctaAlt.textContent = "Num computador? Lá o Quem Saiu funciona como extensão do Chrome.";
-} else {
-  if (LINK_CHROME_STORE) {
-    var linkLoja = document.createElement("a");
-    linkLoja.className = "cta";
-    linkLoja.href = LINK_CHROME_STORE;
-    linkLoja.target = "_blank";
-    linkLoja.rel = "noopener";
-    linkLoja.textContent = "Instalar a extensão no Chrome";
-    ctaArea.appendChild(linkLoja);
-  } else {
-    var botaoBreve = document.createElement("button");
-    botaoBreve.className = "cta desativado";
-    botaoBreve.textContent = "Em breve na Chrome Web Store";
-    ctaArea.appendChild(botaoBreve);
-  }
-  ctaAlt.innerHTML = 'Prefere sem instalar? <a id="linkImportDesktop">Use a importação de dados</a> — funciona aqui também.';
-  var linkImport = document.getElementById("linkImportDesktop");
-  if (linkImport) linkImport.addEventListener("click", function () { irParaAba("celular"); });
-}
-
-var cards = document.getElementById("cardsComoFunciona");
-if (ehCelular) {
-  cards.innerHTML =
-    '<div class="card"><h3>1. Peça seus dados ao Instagram</h3><p>Central de Contas → Suas informações e permissões → Exportar suas informações. Na hora de escolher o destino, toque em "Exportar para dispositivo" — não em "serviço externo".</p></div>' +
-    '<div class="card"><h3>2. Importe o arquivo aqui</h3><p>Quando o Instagram enviar o arquivo, importe nesta página.</p></div>' +
-    '<div class="card"><h3>3. Mudança nos seguidores?</h3><p>Compare aqui e veja quem saiu — e quem entrou também.</p></div>';
-} else {
-  cards.innerHTML =
-    '<div class="card"><h3>1. Capture um snapshot</h3><p>Abra a lista de seguidores no Instagram, role até o final e clique em "Capturar" no popup da extensão.</p></div>' +
-    '<div class="card"><h3>2. Notou diferença?</h3><p>Quando seu número de seguidores mudar, role a lista de novo e capture outro snapshot.</p></div>' +
-    '<div class="card"><h3>3. Compare</h3><p>A extensão mostra na hora quem deixou de te seguir e quem passou a te seguir.</p></div>';
-}
-
-var PERGUNTAS = [
-  { q: "Como o Quem Saiu descobre quem deixou de me seguir?", a: "Comparando a sua lista de seguidores em dois momentos diferentes. No computador, a extensão captura a lista na própria página do Instagram. No celular, você importa duas exportações oficiais dos seus dados. Em ambos os casos, quem estava numa lista e não está mais na outra, saiu." },
-  { q: "Preciso informar minha senha do Instagram?", a: "Não. O Quem Saiu nunca pede login nem senha — nem na extensão, nem na importação pelo celular." },
-  { q: "Meus dados ficam salvos em algum servidor?", a: "Não. Tudo fica guardado localmente no seu próprio navegador. Não existe backend, nem envio de dados para fora do seu aparelho." },
-  { q: "Apareceu alguém que na verdade me segue. Por quê?", a: "A exportação do Instagram é um retrato do momento em que foi gerada e, de vez em quando, deixa alguém de fora da lista de seguidores. Nesses casos, use o × para esconder a conta da lista." },
-  { q: "Aparecem contas que não existem mais. Dá para esconder?", a: "Sim. A exportação não informa quais contas foram desativadas ou excluídas, então o Quem Saiu não tem como saber sozinho. Toque no nome para conferir o perfil e, se ele não existir mais, use o × ao lado. Depois dá para revisar tudo em 'contas escondidas' e restaurar o que quiser." },
-  { q: "Por que não aparecem as fotos de perfil?", a: "A exportação do Instagram traz apenas os nomes de usuário, sem fotos. Por isso mostramos as iniciais de cada conta, com uma cor fixa para ajudar a reconhecê-las." },
-  { q: "No celular: o Instagram deu erro na hora de exportar. O que eu faço?", a: "Acontece — a Central de Contas do Instagram é instável às vezes. Toque em 'Recarregar página'; se não resolver, feche e refaça o caminho desde 'Exportar suas informações'; se ainda assim falhar, tente pelo navegador em accountscenter.instagram.com ou aguarde algumas horas." },
-  { q: "No celular: escolhi o formato HTML em vez de JSON. E agora?", a: "Refaça a exportação escolhendo JSON no campo 'Formato'. O arquivo HTML não funciona para a comparação." },
-  { q: "Quanto tempo a exportação demora, e por quanto tempo posso baixar?", a: "Costuma ficar pronta em minutos a algumas horas — o Instagram avisa por notificação e e-mail. Depois de pronta, você tem até 4 dias para baixar." },
-  { q: "Na extensão: a lista veio incompleta ou não carregou. O que eu faço?", a: "Role a lista até realmente chegar ao fim antes de capturar. Se mesmo assim não funcionar, avise o suporte para a gente atualizar a extensão." },
-  { q: "Como sei se eu ainda sigo quem me deixou de seguir?", a: "No celular, isso vem automático: a exportação inclui sua lista de 'seguindo'. Na extensão, capture também a lista de 'seguindo' pelo botão dedicado — aí os resultados mostram os selos 'Você segue' e 'Você não segue'." },
-];
-var faqLista = document.getElementById("faqLista");
-PERGUNTAS.forEach(function (item) {
-  var div = document.createElement("div");
-  div.className = "faq-item";
-  var btn = document.createElement("button");
-  btn.className = "faq-q";
-  btn.innerHTML = item.q + "<span>+</span>";
-  var resp = document.createElement("p");
-  resp.className = "faq-a";
-  resp.textContent = item.a;
-  resp.style.display = "none";
-  btn.addEventListener("click", function () {
-    resp.style.display = resp.style.display === "none" ? "block" : "none";
-  });
-  div.appendChild(btn);
-  div.appendChild(resp);
-  faqLista.appendChild(div);
-});
-/* ===== FERRAMENTA DE IMPORTAÇÃO ===== */
-var CHAVE = "quemsaiu_exportacoes";
-var CHAVE_IGNORADAS = "quemsaiu_ignoradas";
-
-var memoria = {};
-function lerDados() {
-  try { return JSON.parse(localStorage.getItem(CHAVE)) || []; }
-  catch (e) { return memoria[CHAVE] || []; }
-}
-function gravarDados(v) {
-  try { localStorage.setItem(CHAVE, JSON.stringify(v)); }
-  catch (e) { memoria[CHAVE] = v; }
-}
-function apagarDadosLocais() {
-  try { localStorage.removeItem(CHAVE); localStorage.removeItem(CHAVE_IGNORADAS); } catch (e) {}
-  delete memoria[CHAVE];
-  delete memoria[CHAVE_IGNORADAS];
-}
-
-function lerIgnoradas() {
-  try { return JSON.parse(localStorage.getItem(CHAVE_IGNORADAS)) || []; }
-  catch (e) { return memoria[CHAVE_IGNORADAS] || []; }
-}
-function gravarIgnoradas(v) {
-  try { localStorage.setItem(CHAVE_IGNORADAS, JSON.stringify(v)); }
-  catch (e) { memoria[CHAVE_IGNORADAS] = v; }
-}
-function ignorarConta(usuario) {
-  var atuais = lerIgnoradas();
-  if (atuais.indexOf(usuario) === -1) { atuais.push(usuario); gravarIgnoradas(atuais); }
-}
-function restaurarIgnoradas() { gravarIgnoradas([]); }
-function restaurarConta(usuario) {
-  gravarIgnoradas(lerIgnoradas().filter(function (u) { return u !== usuario; }));
-}
-var painelEscondidasAberto = false;
-
-var inputArquivo = document.getElementById("inputArquivo");
-var btnImportar = document.getElementById("btnImportar");
-var btnComparar = document.getElementById("btnComparar");
-var erroImport = document.getElementById("erroImport");
-var statusImport = document.getElementById("statusImport");
-var cardResultado = document.getElementById("cardResultado");
-var tituloResultado = document.getElementById("tituloResultado");
-var abasResultado = document.getElementById("abasResultado");
-var listaResultado = document.getElementById("listaResultado");
-var avisoRecorte = document.getElementById("avisoRecorte");
-
-var abaAtual = "saiu";
-
-function formatarData(iso) {
-  return new Date(iso).toLocaleString("pt-BR", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
-}
-
-function mostrarErro(msg) {
-  erroImport.innerHTML = '<div class="aviso-erro">' + msg + "</div>";
-}
-function limparErro() { erroImport.innerHTML = ""; }
-
-function extrairUsuarios(json) {
-  var itens = null;
-  if (Array.isArray(json)) itens = json;
-  else if (json && typeof json === "object") {
-    var chaves = Object.keys(json);
-    for (var i = 0; i < chaves.length; i++) {
-      if (Array.isArray(json[chaves[i]])) { itens = json[chaves[i]]; break; }
-    }
-  }
-  if (!itens) return [];
-  var usuarios = [];
-  itens.forEach(function (item) {
-    var sld = item && item.string_list_data;
-    if (Array.isArray(sld) && sld.length > 0) {
-      sld.forEach(function (s) {
-        if (!s) return;
-        if (s.value) { usuarios.push(String(s.value)); return; }
-        if (item.title) { usuarios.push(String(item.title)); return; }
-        if (s.href) {
-          var m = String(s.href).match(/instagram\.com\/(?:_u\/)?([A-Za-z0-9._]+)/);
-          if (m) usuarios.push(m[1]);
-        }
-      });
-    } else if (item && item.title) {
-      usuarios.push(String(item.title));
-    }
-  });
-  return usuarios;
-}
-
-function ehArquivoSeguidores(nomeBase) { return /^followers(_\d+)?\.json$/i.test(nomeBase); }
-function ehArquivoSeguindo(nomeBase) { return /^following\.json$/i.test(nomeBase); }
-
-async function processarArquivos(arquivos) {
-  var seguidores = [];
-  var seguindo = [];
-  var achouAlgo = false;
-  var temHtml = false;
-
-  for (var a = 0; a < arquivos.length; a++) {
-    var arquivo = arquivos[a];
-    var nome = arquivo.name.toLowerCase();
-
-    if (nome.endsWith(".zip")) {
-      var zip = await JSZip.loadAsync(arquivo);
-      var entradas = Object.keys(zip.files);
-      for (var e = 0; e < entradas.length; e++) {
-        var caminho = entradas[e];
-        var base = caminho.split("/").pop().toLowerCase();
-        if (ehArquivoSeguidores(base)) {
-          var textoSeg = await zip.files[caminho].async("string");
-          seguidores = seguidores.concat(extrairUsuarios(JSON.parse(textoSeg)));
-          achouAlgo = true;
-        } else if (ehArquivoSeguindo(base)) {
-          var textoSgd = await zip.files[caminho].async("string");
-          seguindo = seguindo.concat(extrairUsuarios(JSON.parse(textoSgd)));
-          achouAlgo = true;
-        } else if (/^followers.*\.html$|^following\.html$/i.test(base)) {
-          temHtml = true;
-        }
-      }
-    } else if (nome.endsWith(".json")) {
-      var texto = await arquivo.text();
-      var baseSolta = nome.split("/").pop();
-      if (ehArquivoSeguidores(baseSolta)) {
-        seguidores = seguidores.concat(extrairUsuarios(JSON.parse(texto)));
-        achouAlgo = true;
-      } else if (ehArquivoSeguindo(baseSolta)) {
-        seguindo = seguindo.concat(extrairUsuarios(JSON.parse(texto)));
-        achouAlgo = true;
-      } else {
-        var extraidos = extrairUsuarios(JSON.parse(texto));
-        if (extraidos.length > 0) { seguidores = seguidores.concat(extraidos); achouAlgo = true; }
-      }
-    }
-  }
-
-  if (!achouAlgo && temHtml) {
-    throw new Error("Esta exportação está em HTML. Refaça a exportação no Instagram escolhendo o formato JSON.");
-  }
-  if (!achouAlgo) {
-    throw new Error('Não encontrei os arquivos de seguidores. Selecione o .zip baixado do Instagram, ou os arquivos "followers_1.json" e "following.json" de dentro dele.');
-  }
-
-  function unicos(lista) {
-    var vistos = {};
-    return lista.filter(function (u) {
-      if (vistos[u]) return false;
-      vistos[u] = true;
-      return true;
-    });
-  }
-
-  return {
-    data: new Date().toISOString(),
-    seguidores: unicos(seguidores),
-    seguindo: unicos(seguindo),
-  };
-}
-
-function atualizarStatus() {
-  var dados = lerDados();
-  if (dados.length === 0) {
-    statusImport.textContent = "Nenhuma exportação importada ainda.";
-    btnComparar.disabled = true;
-    return;
-  }
-  var ultima = dados[dados.length - 1];
-  statusImport.textContent =
-    dados.length + (dados.length === 1 ? " exportação importada" : " exportações importadas") +
-    " · última: " + formatarData(ultima.data) + " (" + ultima.seguidores.length + " seguidores)";
-  btnComparar.disabled = dados.length < 2;
-}
-
-var PALETA_AVATAR = ["#0ea5e9","#f97316","#10b981","#8b5cf6","#ec4899","#f59e0b","#14b8a6","#6366f1","#ef4444","#84cc16"];
-function corDoUsuario(u) {
-  var soma = 0;
-  for (var i = 0; i < u.length; i++) soma = (soma + u.charCodeAt(i) * (i + 1)) % 9973;
-  return PALETA_AVATAR[soma % PALETA_AVATAR.length];
-}
-
-function seloPara(usuario, seguindoSet, tipo) {
-  if (!seguindoSet || seguindoSet.size === 0) return "";
-  if (tipo === "saiu") {
-    return seguindoSet.has(usuario)
-      ? '<span class="selo selo-segue">Você segue</span>'
-      : '<span class="selo selo-nao-segue">Você não segue</span>';
-  }
-  if (tipo === "entrou") {
-    return seguindoSet.has(usuario)
-      ? '<span class="selo selo-segue-volta">Você segue de volta</span>'
-      : '<span class="selo selo-nao-segue">Você não segue</span>';
-  }
-  return "";
-}
-
-function renderizarLista(usuarios, tipo, seguindoSet, textoVazio) {
-  var ignoradas = lerIgnoradas();
-  var visiveis = usuarios.filter(function (u) { return ignoradas.indexOf(u) === -1; });
-  var escondidas = usuarios.length - visiveis.length;
-  var podeIgnorar = tipo === "naoSegue";
-
-  var rodape = "";
-  if (podeIgnorar && escondidas > 0) {
-    var nomesEscondidos = usuarios.filter(function (u) { return ignoradas.indexOf(u) !== -1; });
-    rodape =
-      '<div class="rodape-lista">' +
-      '<button class="link-escondidas" id="btnVerEscondidas">' + escondidas +
-        (escondidas === 1 ? " conta escondida" : " contas escondidas") +
-        (painelEscondidasAberto ? " ▲" : " ▼") + "</button>" +
-      '<button class="link-restaurar" id="btnRestaurar">Mostrar todas</button></div>';
-
-    if (painelEscondidasAberto) {
-      rodape +=
-        '<div class="painel-escondidas">' +
-        nomesEscondidos.map(function (u) {
-          return '<div class="item-escondido">' +
-            '<span class="avatar" style="background:' + corDoUsuario(u) + '">' + u.slice(0, 2).toUpperCase() + "</span>" +
-            '<span class="usuario-nome">@' + u + "</span>" +
-            '<button class="btn-restaurar-um" data-restaurar="' + u + '">Restaurar</button></div>';
-        }).join("") +
-        "</div>";
-    }
-  }
-
-  if (visiveis.length === 0) {
-    listaResultado.innerHTML =
-      '<p style="text-align:center; font-size:12px; color:#94a3b8; padding:14px 0;">' + textoVazio + "</p>" + rodape;
-    ligarBotoesLista();
-    return;
-  }
-
-  listaResultado.innerHTML =
-    '<ul class="lista-usuarios">' +
-    visiveis.map(function (u) {
-      var iniciais = u.slice(0, 2).toUpperCase();
-      return (
-        '<li class="item-usuario item-' + tipo + '">' +
-        '<span class="avatar" style="background:' + corDoUsuario(u) + '">' + iniciais + "</span>" +
-        '<span class="usuario-nome"><a href="https://www.instagram.com/' + encodeURIComponent(u) + '/" target="_blank" rel="noopener">@' + u + "</a></span>" +
-        seloPara(u, seguindoSet, tipo) +
-        (podeIgnorar ? '<button class="btn-ignorar" data-ignorar="' + u + '" title="Esconder esta conta da lista">&times;</button>' : "") +
-        "</li>"
-      );
-    }).join("") +
-    "</ul>" + rodape;
-
-  ligarBotoesLista();
-}
-
-function ligarBotoesLista() {
-  listaResultado.querySelectorAll("[data-ignorar]").forEach(function (b) {
-    b.addEventListener("click", function () {
-      var linha = b.closest("li");
-      if (linha) linha.classList.add("saindo");
-      setTimeout(function () {
-        ignorarConta(b.dataset.ignorar);
-        renderizarResultado();
-      }, 180);
-    });
-  });
-
-  var btnRest = document.getElementById("btnRestaurar");
-  if (btnRest) btnRest.addEventListener("click", function () {
-    restaurarIgnoradas();
-    painelEscondidasAberto = false;
-    renderizarResultado();
-  });
-
-  var btnVer = document.getElementById("btnVerEscondidas");
-  if (btnVer) btnVer.addEventListener("click", function () {
-    painelEscondidasAberto = !painelEscondidasAberto;
-    renderizarResultado();
-  });
-
-  listaResultado.querySelectorAll("[data-restaurar]").forEach(function (b) {
-    b.addEventListener("click", function () {
-      restaurarConta(b.dataset.restaurar);
-      renderizarResultado();
-    });
-  });
-}
-
-function renderizarResultado() {
-  var dados = lerDados();
-  if (dados.length === 0) { cardResultado.style.display = "none"; return; }
-
-  var atual = dados[dados.length - 1];
-  var anterior = dados.length >= 2 ? dados[dados.length - 2] : null;
-  var seguindoSet = new Set(atual.seguindo || []);
-  var seguidoresSet = new Set(atual.seguidores || []);
-
-  var saiu = anterior ? anterior.seguidores.filter(function (u) { return !seguidoresSet.has(u); }) : [];
-  var entrou = anterior ? atual.seguidores.filter(function (u) { return anterior.seguidores.indexOf(u) === -1; }) : [];
-  var naoSeguemVolta = (atual.seguindo || []).filter(function (u) { return !seguidoresSet.has(u); });
-
-  cardResultado.style.display = "block";
-  avisoRecorte.innerHTML = "";
-
-  var abas = [];
-  if (anterior) {
-    abas.push({ id: "saiu", rotulo: "Saíram · " + saiu.length });
-    abas.push({ id: "entrou", rotulo: "Entraram · " + entrou.length });
-  }
-  if (seguindoSet.size > 0) {
-    abas.push({ id: "naoSegue", rotulo: "Não te seguem de volta · " + naoSeguemVolta.length });
-  }
-
-  if (!anterior) {
-    tituloResultado.textContent = "Sua primeira exportação está guardada";
-    if (abaAtual === "saiu" || abaAtual === "entrou") abaAtual = "naoSegue";
-  } else {
-    tituloResultado.textContent = "Comparando " + formatarData(anterior.data) + " → " + formatarData(atual.data);
-  }
-  var existeAbaAtual = abas.some(function (x) { return x.id === abaAtual; });
-  if (abas.length > 0 && !existeAbaAtual) abaAtual = abas[0].id;
-
-  abasResultado.innerHTML = abas.map(function (x) {
-    return '<button class="aba-res ' + x.id + (x.id === abaAtual ? " ativa" : "") + '" data-res="' + x.id + '">' + x.rotulo + "</button>";
-  }).join("");
-  abasResultado.querySelectorAll("button").forEach(function (b) {
-    b.addEventListener("click", function () { abaAtual = b.dataset.res; renderizarResultado(); });
-  });
-
-  if (abas.length === 0) {
-    listaResultado.innerHTML = '<p style="text-align:center; font-size:12px; color:#94a3b8; padding:14px 0;">Exportação guardada. Quando notar mudança nos seguidores, peça uma nova exportação ao Instagram e importe aqui para comparar.</p>';
-    return;
-  }
-
-  if (abaAtual === "saiu") renderizarLista(saiu, "saiu", seguindoSet, "Ninguém deixou de te seguir entre as duas exportações.");
-  else if (abaAtual === "entrou") renderizarLista(entrou, "entrou", seguindoSet, "Nenhum seguidor novo entre as duas exportações.");
-  else {
-    renderizarLista(naoSeguemVolta, "naoSegue", null, "Todo mundo que você segue também te segue.");
-    var dica = document.createElement("p");
-    dica.style.cssText = "font-size:11px; color:#94a3b8; margin:10px 0 0; line-height:1.5;";
-    dica.innerHTML = 'Toque no nome para abrir o perfil. Se abrir uma página em branco, a conta não existe mais — use o <b>&times;</b> para escondê-la desta lista.';
-    listaResultado.appendChild(dica);
-  }
-}
-
-btnImportar.addEventListener("click", function () { inputArquivo.click(); });
-
-inputArquivo.addEventListener("change", async function () {
-  limparErro();
-  var arquivos = Array.prototype.slice.call(inputArquivo.files || []);
-  if (arquivos.length === 0) return;
-
-  btnImportar.disabled = true;
-  btnImportar.textContent = "Lendo arquivo…";
-  try {
-    var nova = await processarArquivos(arquivos);
-    var dados = lerDados();
-    dados.push(nova);
-    gravarDados(dados.slice(-10));
-    atualizarStatus();
-    renderizarResultado();
-  } catch (erro) {
-    mostrarErro(erro && erro.message ? erro.message : "Não consegui ler este arquivo. Confira se é a exportação do Instagram em JSON.");
-  } finally {
-    btnImportar.disabled = false;
-    btnImportar.textContent = "📄 Importar exportação do Instagram";
-    inputArquivo.value = "";
-  }
-});
-
-btnComparar.addEventListener("click", function () { abaAtual = "saiu"; renderizarResultado(); });
-
-document.getElementById("btnApagar").addEventListener("click", function () {
-  apagarDadosLocais();
-  atualizarStatus();
-  cardResultado.style.display = "none";
-});
-
-atualizarStatus();
-renderizarResultado();
-</script>
-
-</body>
-</html>
+      <div class="card" id="cardResultado" style="display:none;">
+        <h3 id="tituloResultado">Resultado</h3>
+        <div class="abas-resultado" id="abasResultado"></div>
+        <div id="listaResultado"></d
