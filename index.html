@@ -82,23 +82,32 @@
   .aba-res.naoSegue.ativa { background: #7c3aed; color: #fff; }
   .aba-res.naoSegue { background: #f5f3ff; color: #6d28d9; }
 
-  .lista-usuarios { list-style: none; margin: 0; padding: 0; max-height: 320px; overflow-y: auto; display: flex; flex-direction: column; gap: 5px; }
-  .item-usuario { display: flex; align-items: center; gap: 9px; padding: 8px 9px; border-radius: 9px; font-size: 13px; }
+  .lista-usuarios { list-style: none; margin: 0; padding: 0; max-height: 320px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; }
+  .item-usuario { display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 10px; font-size: 13px; }
   .item-saiu { background: #fef2f2; color: #7f1d1d; }
   .item-entrou { background: #f0fdf4; color: #14532d; }
-  .item-naoSegue { background: #f5f3ff; color: #4c1d95; }
-  .avatar { width: 26px; height: 26px; border-radius: 50%; background: #94a3b8; flex-shrink: 0; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 10px; font-weight: 800; }
-  .usuario-nome { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .item-naoSegue { background: #f8fafc; color: #1e293b; }
+  .avatar { width: 30px; height: 30px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 11px; font-weight: 800; letter-spacing: .3px; }
+  .usuario-nome { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; }
   .usuario-nome a { color: inherit; text-decoration: none; }
   .selo { font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 999px; flex-shrink: 0; }
   .selo-segue { background: #dc2626; color: #fee2e2; }
   .selo-segue-volta { background: #15803d; color: #dcfce7; }
   .selo-nao-segue { background: #e2e8f0; color: #475569; }
 
-  .btn-ignorar { background: none; border: none; color: #94a3b8; font-size: 15px; line-height: 1; padding: 4px 6px; cursor: pointer; flex-shrink: 0; }
-  .btn-ignorar:hover { color: #dc2626; }
+  .btn-ignorar { background: #ffffff; border: 1px solid #e2e8f0; color: #64748b; font-size: 14px; line-height: 1; padding: 5px 9px; border-radius: 8px; cursor: pointer; flex-shrink: 0; transition: background .12s ease, color .12s ease, border-color .12s ease, transform .12s ease; }
+  .btn-ignorar:hover { background: #f1f5f9; color: #334155; }
+  .btn-ignorar:active { background: #7c3aed; border-color: #7c3aed; color: #ffffff; transform: scale(.9); }
+  .item-usuario.saindo { opacity: 0; transform: translateX(14px); transition: opacity .18s ease, transform .18s ease; }
   .rodape-lista { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-top: 10px; font-size: 11px; color: #94a3b8; }
+  .link-escondidas { background: none; border: none; color: #64748b; font-size: 11px; font-weight: 600; cursor: pointer; padding: 0; text-decoration: underline; }
   .link-restaurar { background: none; border: none; color: #0ea5e9; font-size: 11px; text-decoration: underline; cursor: pointer; padding: 0; }
+  .painel-escondidas { margin-top: 8px; border-top: 1px dashed #e2e8f0; padding-top: 8px; }
+  .item-escondido { display: flex; align-items: center; gap: 10px; padding: 7px 10px; border-radius: 10px; font-size: 13px; background: #f8fafc; color: #94a3b8; margin-bottom: 5px; }
+  .item-escondido .usuario-nome { text-decoration: line-through; font-weight: 500; }
+  .item-escondido .avatar { filter: grayscale(1); opacity: .65; }
+  .btn-restaurar-um { background: #fff; border: 1px solid #bae6fd; color: #0369a1; font-size: 11px; font-weight: 700; padding: 5px 10px; border-radius: 8px; cursor: pointer; flex-shrink: 0; transition: background .12s ease, color .12s ease, transform .12s ease; }
+  .btn-restaurar-um:active { background: #0ea5e9; border-color: #0ea5e9; color: #fff; transform: scale(.92); }
   .apagar { background: none; border: none; color: #94a3b8; font-size: 11px; text-decoration: underline; cursor: pointer; display: block; margin: 14px auto 0; }
 
   footer { text-align: center; color: #475569; font-size: 12px; padding: 20px 0 40px; line-height: 1.8; }
@@ -144,7 +153,7 @@
         <li>Em "Escolher para onde exportar", toque em <b>Exportar para dispositivo</b> — não em "serviço externo"</li>
         <li>Na tela "Confirmar sua exportação", toque em <b>Personalizar informações</b>, marque só <b>Seguidores e seguindo</b>, toque em <b>Salvar</b> e volte</li>
         <li>Toque em <b>Formato</b>, escolha <b>JSON</b>, salve e volte; em <b>Intervalo de datas</b>, escolha <b>Desde o início</b>, salve e volte</li>
-        <li>Confira na tela final se o intervalo ficou mesmo em <b>Desde o início</b> e toque em <b>Iniciar exportação</b></li>
+        <li>Toque em <b>Iniciar exportação</b></li>
       </ol>
       <p class="nota">O arquivo fica pronto em minutos a algumas horas — o Instagram avisa quando der para baixar, e você tem até 4 dias para fazer o download.</p>
     </div>
@@ -271,9 +280,9 @@ var PERGUNTAS = [
   { q: "Como o Quem Saiu descobre quem deixou de me seguir?", a: "Comparando a sua lista de seguidores em dois momentos diferentes. No computador, a extensão captura a lista na própria página do Instagram. No celular, você importa duas exportações oficiais dos seus dados. Em ambos os casos, quem estava numa lista e não está mais na outra, saiu." },
   { q: "Preciso informar minha senha do Instagram?", a: "Não. O Quem Saiu nunca pede login nem senha — nem na extensão, nem na importação pelo celular." },
   { q: "Meus dados ficam salvos em algum servidor?", a: "Não. Tudo fica guardado localmente no seu próprio navegador. Não existe backend, nem envio de dados para fora do seu aparelho." },
-  { q: "Aparecem pessoas que na verdade me seguem. Por quê?", a: "Quase sempre é porque a exportação veio recortada por data. Se o campo 'Intervalo de datas' não estiver em 'Desde o início', o Instagram só inclui seguidores recentes e todo o resto aparece como se não te seguisse. Refaça a exportação conferindo esse campo na tela final antes de iniciar." },
-  { q: "Aparecem contas que não existem mais. Dá para esconder?", a: "Sim. A exportação não informa quais contas foram desativadas ou excluídas, então o Quem Saiu não tem como saber sozinho. Toque no nome para conferir o perfil e, se ele não existir mais, use o × ao lado para esconder a conta da lista." },
-  { q: "Por que não aparecem as fotos de perfil?", a: "A exportação do Instagram traz apenas os nomes de usuário, sem fotos. Por isso mostramos as iniciais de cada conta." },
+  { q: "Apareceu alguém que na verdade me segue. Por quê?", a: "A exportação do Instagram é um retrato do momento em que foi gerada e, de vez em quando, deixa alguém de fora da lista de seguidores. Nesses casos, use o × para esconder a conta da lista." },
+  { q: "Aparecem contas que não existem mais. Dá para esconder?", a: "Sim. A exportação não informa quais contas foram desativadas ou excluídas, então o Quem Saiu não tem como saber sozinho. Toque no nome para conferir o perfil e, se ele não existir mais, use o × ao lado. Depois dá para revisar tudo em 'contas escondidas' e restaurar o que quiser." },
+  { q: "Por que não aparecem as fotos de perfil?", a: "A exportação do Instagram traz apenas os nomes de usuário, sem fotos. Por isso mostramos as iniciais de cada conta, com uma cor fixa para ajudar a reconhecê-las." },
   { q: "No celular: o Instagram deu erro na hora de exportar. O que eu faço?", a: "Acontece — a Central de Contas do Instagram é instável às vezes. Toque em 'Recarregar página'; se não resolver, feche e refaça o caminho desde 'Exportar suas informações'; se ainda assim falhar, tente pelo navegador em accountscenter.instagram.com ou aguarde algumas horas." },
   { q: "No celular: escolhi o formato HTML em vez de JSON. E agora?", a: "Refaça a exportação escolhendo JSON no campo 'Formato'. O arquivo HTML não funciona para a comparação." },
   { q: "Quanto tempo a exportação demora, e por quanto tempo posso baixar?", a: "Costuma ficar pronta em minutos a algumas horas — o Instagram avisa por notificação e e-mail. Depois de pronta, você tem até 4 dias para baixar." },
@@ -298,377 +307,3 @@ PERGUNTAS.forEach(function (item) {
   div.appendChild(resp);
   faqLista.appendChild(div);
 });
-/* ===== FERRAMENTA DE IMPORTAÇÃO ===== */
-var CHAVE = "quemsaiu_exportacoes";
-var CHAVE_IGNORADAS = "quemsaiu_ignoradas";
-
-var memoria = {};
-function lerDados() {
-  try { return JSON.parse(localStorage.getItem(CHAVE)) || []; }
-  catch (e) { return memoria[CHAVE] || []; }
-}
-function gravarDados(v) {
-  try { localStorage.setItem(CHAVE, JSON.stringify(v)); }
-  catch (e) { memoria[CHAVE] = v; }
-}
-function apagarDadosLocais() {
-  try { localStorage.removeItem(CHAVE); localStorage.removeItem(CHAVE_IGNORADAS); } catch (e) {}
-  delete memoria[CHAVE];
-  delete memoria[CHAVE_IGNORADAS];
-}
-
-function lerIgnoradas() {
-  try { return JSON.parse(localStorage.getItem(CHAVE_IGNORADAS)) || []; }
-  catch (e) { return memoria[CHAVE_IGNORADAS] || []; }
-}
-function gravarIgnoradas(v) {
-  try { localStorage.setItem(CHAVE_IGNORADAS, JSON.stringify(v)); }
-  catch (e) { memoria[CHAVE_IGNORADAS] = v; }
-}
-function ignorarConta(usuario) {
-  var atuais = lerIgnoradas();
-  if (atuais.indexOf(usuario) === -1) { atuais.push(usuario); gravarIgnoradas(atuais); }
-}
-function restaurarIgnoradas() { gravarIgnoradas([]); }
-
-var inputArquivo = document.getElementById("inputArquivo");
-var btnImportar = document.getElementById("btnImportar");
-var btnComparar = document.getElementById("btnComparar");
-var erroImport = document.getElementById("erroImport");
-var statusImport = document.getElementById("statusImport");
-var cardResultado = document.getElementById("cardResultado");
-var tituloResultado = document.getElementById("tituloResultado");
-var abasResultado = document.getElementById("abasResultado");
-var listaResultado = document.getElementById("listaResultado");
-var avisoRecorte = document.getElementById("avisoRecorte");
-
-var abaAtual = "saiu";
-
-function formatarData(iso) {
-  return new Date(iso).toLocaleString("pt-BR", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
-}
-
-function mostrarErro(msg) {
-  erroImport.innerHTML = '<div class="aviso-erro">' + msg + "</div>";
-}
-function limparErro() { erroImport.innerHTML = ""; }
-
-function extrairUsuarios(json) {
-  var itens = null;
-  if (Array.isArray(json)) itens = json;
-  else if (json && typeof json === "object") {
-    var chaves = Object.keys(json);
-    for (var i = 0; i < chaves.length; i++) {
-      if (Array.isArray(json[chaves[i]])) { itens = json[chaves[i]]; break; }
-    }
-  }
-  if (!itens) return [];
-  var usuarios = [];
-  itens.forEach(function (item) {
-    var sld = item && item.string_list_data;
-    if (Array.isArray(sld) && sld.length > 0) {
-      sld.forEach(function (s) {
-        if (!s) return;
-        if (s.value) { usuarios.push(String(s.value)); return; }
-        if (item.title) { usuarios.push(String(item.title)); return; }
-        if (s.href) {
-          var m = String(s.href).match(/instagram\.com\/(?:_u\/)?([A-Za-z0-9._]+)/);
-          if (m) usuarios.push(m[1]);
-        }
-      });
-    } else if (item && item.title) {
-      usuarios.push(String(item.title));
-    }
-  });
-  return usuarios;
-}
-
-function extrairTimestamps(json) {
-  var itens = null;
-  if (Array.isArray(json)) itens = json;
-  else if (json && typeof json === "object") {
-    var chaves = Object.keys(json);
-    for (var i = 0; i < chaves.length; i++) {
-      if (Array.isArray(json[chaves[i]])) { itens = json[chaves[i]]; break; }
-    }
-  }
-  if (!itens) return [];
-  var ts = [];
-  itens.forEach(function (item) {
-    var sld = item && item.string_list_data;
-    if (Array.isArray(sld)) {
-      sld.forEach(function (s) {
-        if (s && typeof s.timestamp === "number" && s.timestamp > 0) ts.push(s.timestamp);
-      });
-    }
-  });
-  return ts;
-}
-
-function ehArquivoSeguidores(nomeBase) { return /^followers(_\d+)?\.json$/i.test(nomeBase); }
-function ehArquivoSeguindo(nomeBase) { return /^following\.json$/i.test(nomeBase); }
-
-async function processarArquivos(arquivos) {
-  var seguidores = [];
-  var seguindo = [];
-  var tsSeguidores = [];
-  var tsSeguindo = [];
-  var achouAlgo = false;
-  var temHtml = false;
-
-  for (var a = 0; a < arquivos.length; a++) {
-    var arquivo = arquivos[a];
-    var nome = arquivo.name.toLowerCase();
-
-    if (nome.endsWith(".zip")) {
-      var zip = await JSZip.loadAsync(arquivo);
-      var entradas = Object.keys(zip.files);
-      for (var e = 0; e < entradas.length; e++) {
-        var caminho = entradas[e];
-        var base = caminho.split("/").pop().toLowerCase();
-        if (ehArquivoSeguidores(base)) {
-          var textoSeg = await zip.files[caminho].async("string");
-          var jsonSeg = JSON.parse(textoSeg);
-          seguidores = seguidores.concat(extrairUsuarios(jsonSeg));
-          tsSeguidores = tsSeguidores.concat(extrairTimestamps(jsonSeg));
-          achouAlgo = true;
-        } else if (ehArquivoSeguindo(base)) {
-          var textoSgd = await zip.files[caminho].async("string");
-          var jsonSgd = JSON.parse(textoSgd);
-          seguindo = seguindo.concat(extrairUsuarios(jsonSgd));
-          tsSeguindo = tsSeguindo.concat(extrairTimestamps(jsonSgd));
-          achouAlgo = true;
-        } else if (/^followers.*\.html$|^following\.html$/i.test(base)) {
-          temHtml = true;
-        }
-      }
-    } else if (nome.endsWith(".json")) {
-      var texto = await arquivo.text();
-      var baseSolta = nome.split("/").pop();
-      if (ehArquivoSeguidores(baseSolta)) {
-        var jsonSegSolto = JSON.parse(texto);
-        seguidores = seguidores.concat(extrairUsuarios(jsonSegSolto));
-        tsSeguidores = tsSeguidores.concat(extrairTimestamps(jsonSegSolto));
-        achouAlgo = true;
-      } else if (ehArquivoSeguindo(baseSolta)) {
-        var jsonSgdSolto = JSON.parse(texto);
-        seguindo = seguindo.concat(extrairUsuarios(jsonSgdSolto));
-        tsSeguindo = tsSeguindo.concat(extrairTimestamps(jsonSgdSolto));
-        achouAlgo = true;
-      } else {
-        var extraidos = extrairUsuarios(JSON.parse(texto));
-        if (extraidos.length > 0) { seguidores = seguidores.concat(extraidos); achouAlgo = true; }
-      }
-    }
-  }
-
-  if (!achouAlgo && temHtml) {
-    throw new Error("Esta exportação está em HTML. Refaça a exportação no Instagram escolhendo o formato JSON.");
-  }
-  if (!achouAlgo) {
-    throw new Error('Não encontrei os arquivos de seguidores. Selecione o .zip baixado do Instagram, ou os arquivos "followers_1.json" e "following.json" de dentro dele.');
-  }
-
-  function unicos(lista) {
-    var vistos = {};
-    return lista.filter(function (u) {
-      if (vistos[u]) return false;
-      vistos[u] = true;
-      return true;
-    });
-  }
-
-  return {
-    data: new Date().toISOString(),
-    seguidores: unicos(seguidores),
-    seguindo: unicos(seguindo),
-    maisAntigoSeguidores: tsSeguidores.length ? Math.min.apply(null, tsSeguidores) : null,
-    maisAntigoSeguindo: tsSeguindo.length ? Math.min.apply(null, tsSeguindo) : null,
-  };
-}
-
-function atualizarStatus() {
-  var dados = lerDados();
-  if (dados.length === 0) {
-    statusImport.textContent = "Nenhuma exportação importada ainda.";
-    btnComparar.disabled = true;
-    return;
-  }
-  var ultima = dados[dados.length - 1];
-  statusImport.textContent =
-    dados.length + (dados.length === 1 ? " exportação importada" : " exportações importadas") +
-    " · última: " + formatarData(ultima.data) + " (" + ultima.seguidores.length + " seguidores)";
-  btnComparar.disabled = dados.length < 2;
-}
-
-function seloPara(usuario, seguindoSet, tipo) {
-  if (!seguindoSet || seguindoSet.size === 0) return "";
-  if (tipo === "saiu") {
-    return seguindoSet.has(usuario)
-      ? '<span class="selo selo-segue">Você segue</span>'
-      : '<span class="selo selo-nao-segue">Você não segue</span>';
-  }
-  if (tipo === "entrou") {
-    return seguindoSet.has(usuario)
-      ? '<span class="selo selo-segue-volta">Você segue de volta</span>'
-      : '<span class="selo selo-nao-segue">Você não segue</span>';
-  }
-  return "";
-}
-
-function renderizarLista(usuarios, tipo, seguindoSet, textoVazio) {
-  var ignoradas = lerIgnoradas();
-  var visiveis = usuarios.filter(function (u) { return ignoradas.indexOf(u) === -1; });
-  var escondidas = usuarios.length - visiveis.length;
-  var podeIgnorar = tipo === "naoSegue";
-
-  var rodape = "";
-  if (podeIgnorar && escondidas > 0) {
-    rodape =
-      '<div class="rodape-lista"><span>' + escondidas + (escondidas === 1 ? " conta escondida" : " contas escondidas") + "</span>" +
-      '<button class="link-restaurar" id="btnRestaurar">Mostrar de novo</button></div>';
-  }
-
-  if (visiveis.length === 0) {
-    listaResultado.innerHTML =
-      '<p style="text-align:center; font-size:12px; color:#94a3b8; padding:14px 0;">' + textoVazio + "</p>" + rodape;
-    ligarBotoesLista();
-    return;
-  }
-
-  listaResultado.innerHTML =
-    '<ul class="lista-usuarios">' +
-    visiveis.map(function (u) {
-      var iniciais = u.slice(0, 2).toUpperCase();
-      return (
-        '<li class="item-usuario item-' + tipo + '">' +
-        '<span class="avatar">' + iniciais + "</span>" +
-        '<span class="usuario-nome"><a href="https://www.instagram.com/' + encodeURIComponent(u) + '/" target="_blank" rel="noopener">@' + u + "</a></span>" +
-        seloPara(u, seguindoSet, tipo) +
-        (podeIgnorar ? '<button class="btn-ignorar" data-ignorar="' + u + '" title="Esconder esta conta da lista">&times;</button>' : "") +
-        "</li>"
-      );
-    }).join("") +
-    "</ul>" + rodape;
-
-  ligarBotoesLista();
-}
-
-function ligarBotoesLista() {
-  listaResultado.querySelectorAll("[data-ignorar]").forEach(function (b) {
-    b.addEventListener("click", function () {
-      ignorarConta(b.dataset.ignorar);
-      renderizarResultado();
-    });
-  });
-  var btnRest = document.getElementById("btnRestaurar");
-  if (btnRest) btnRest.addEventListener("click", function () { restaurarIgnoradas(); renderizarResultado(); });
-}
-
-function renderizarResultado() {
-  var dados = lerDados();
-  if (dados.length === 0) { cardResultado.style.display = "none"; return; }
-
-  var atual = dados[dados.length - 1];
-  var anterior = dados.length >= 2 ? dados[dados.length - 2] : null;
-  var seguindoSet = new Set(atual.seguindo || []);
-  var seguidoresSet = new Set(atual.seguidores || []);
-
-  var saiu = anterior ? anterior.seguidores.filter(function (u) { return !seguidoresSet.has(u); }) : [];
-  var entrou = anterior ? atual.seguidores.filter(function (u) { return anterior.seguidores.indexOf(u) === -1; }) : [];
-  var naoSeguemVolta = (atual.seguindo || []).filter(function (u) { return !seguidoresSet.has(u); });
-
-  cardResultado.style.display = "block";
-
-  avisoRecorte.innerHTML = "";
-  var aSeg = atual.maisAntigoSeguidores;
-  var aSgd = atual.maisAntigoSeguindo;
-  if (aSeg && aSgd && (aSeg - aSgd) > 60 * 60 * 24 * 120) {
-    var dataSeg = new Date(aSeg * 1000).toLocaleDateString("pt-BR", { month: "long", year: "numeric" });
-    avisoRecorte.innerHTML =
-      '<div class="aviso-atencao"><b>Atenção: esta exportação parece recortada por data.</b><br>' +
-      'Sua lista de seguidores só tem registros a partir de ' + dataSeg + ', então quem te segue desde antes disso ficou de fora — ' +
-      'e aparece aqui como se não te seguisse. Refaça a exportação no Instagram escolhendo <b>Intervalo de datas → Desde o início</b>, ' +
-      'e confira na tela final se ficou marcado assim antes de iniciar.</div>';
-  }
-
-  var abas = [];
-  if (anterior) {
-    abas.push({ id: "saiu", rotulo: "Saíram · " + saiu.length });
-    abas.push({ id: "entrou", rotulo: "Entraram · " + entrou.length });
-  }
-  if (seguindoSet.size > 0) {
-    abas.push({ id: "naoSegue", rotulo: "Não te seguem de volta · " + naoSeguemVolta.length });
-  }
-
-  if (!anterior) {
-    tituloResultado.textContent = "Sua primeira exportação está guardada";
-    if (abaAtual === "saiu" || abaAtual === "entrou") abaAtual = "naoSegue";
-  } else {
-    tituloResultado.textContent = "Comparando " + formatarData(anterior.data) + " → " + formatarData(atual.data);
-  }
-  var existeAbaAtual = abas.some(function (x) { return x.id === abaAtual; });
-  if (abas.length > 0 && !existeAbaAtual) abaAtual = abas[0].id;
-
-  abasResultado.innerHTML = abas.map(function (x) {
-    return '<button class="aba-res ' + x.id + (x.id === abaAtual ? " ativa" : "") + '" data-res="' + x.id + '">' + x.rotulo + "</button>";
-  }).join("");
-  abasResultado.querySelectorAll("button").forEach(function (b) {
-    b.addEventListener("click", function () { abaAtual = b.dataset.res; renderizarResultado(); });
-  });
-
-  if (abas.length === 0) {
-    listaResultado.innerHTML = '<p style="text-align:center; font-size:12px; color:#94a3b8; padding:14px 0;">Exportação guardada. Quando notar mudança nos seguidores, peça uma nova exportação ao Instagram e importe aqui para comparar.</p>';
-    return;
-  }
-
-  if (abaAtual === "saiu") renderizarLista(saiu, "saiu", seguindoSet, "Ninguém deixou de te seguir entre as duas exportações.");
-  else if (abaAtual === "entrou") renderizarLista(entrou, "entrou", seguindoSet, "Nenhum seguidor novo entre as duas exportações.");
-  else {
-    renderizarLista(naoSeguemVolta, "naoSegue", null, "Todo mundo que você segue também te segue.");
-    var dica = document.createElement("p");
-    dica.style.cssText = "font-size:11px; color:#94a3b8; margin:10px 0 0; line-height:1.5;";
-    dica.innerHTML = 'Toque no nome para abrir o perfil. Se a conta não existir mais, use o <b>&times;</b> para escondê-la desta lista.';
-    listaResultado.appendChild(dica);
-  }
-}
-
-btnImportar.addEventListener("click", function () { inputArquivo.click(); });
-
-inputArquivo.addEventListener("change", async function () {
-  limparErro();
-  var arquivos = Array.prototype.slice.call(inputArquivo.files || []);
-  if (arquivos.length === 0) return;
-
-  btnImportar.disabled = true;
-  btnImportar.textContent = "Lendo arquivo…";
-  try {
-    var nova = await processarArquivos(arquivos);
-    var dados = lerDados();
-    dados.push(nova);
-    gravarDados(dados.slice(-10));
-    atualizarStatus();
-    renderizarResultado();
-  } catch (erro) {
-    mostrarErro(erro && erro.message ? erro.message : "Não consegui ler este arquivo. Confira se é a exportação do Instagram em JSON.");
-  } finally {
-    btnImportar.disabled = false;
-    btnImportar.textContent = "📄 Importar exportação do Instagram";
-    inputArquivo.value = "";
-  }
-});
-
-btnComparar.addEventListener("click", function () { abaAtual = "saiu"; renderizarResultado(); });
-
-document.getElementById("btnApagar").addEventListener("click", function () {
-  apagarDadosLocais();
-  atualizarStatus();
-  cardResultado.style.display = "none";
-});
-
-atualizarStatus();
-renderizarResultado();
-</script>
-
-</body>
-</html>
