@@ -326,3 +326,137 @@
   Quem Saiu · não afiliado ao Instagram/Meta<br />
   <a href="privacy-policy.html">Política de privacidade</a> · <a href="mailto:suporte.quemsaiu@gmail.com">suporte.quemsaiu@gmail.com</a>
 </footer>
+<script>
+/* ===== configuração ===== */
+var LINK_CHROME_STORE = "";
+
+/* ===== navegação ===== */
+function irParaAba(id) {
+  document.querySelectorAll("nav .abas button").forEach(function (b) { b.classList.toggle("ativo", b.dataset.tab === id); });
+  document.querySelectorAll("section").forEach(function (s) { s.classList.toggle("ativa", s.id === id); });
+  window.scrollTo(0, 0);
+}
+document.querySelectorAll("nav .abas button").forEach(function (btn) {
+  btn.addEventListener("click", function () { irParaAba(btn.dataset.tab); });
+});
+document.getElementById("marca").addEventListener("click", function () { irParaAba("inicio"); });
+
+/* ===== gancho -> prova ===== */
+document.getElementById("btnDescobrir").addEventListener("click", function () {
+  var r = document.getElementById("revelado");
+  r.classList.add("on");
+  setTimeout(function () { r.scrollIntoView({ behavior: "smooth", block: "start" }); }, 60);
+});
+
+/* ===== prova interativa ===== */
+var LISTAS = {
+  saiu: {
+    explica: "Quem te seguia antes e não te segue mais.",
+    classe: "",
+    itens: [
+      { cor: "#f97316", nome: "@bruno_costa", selo: "Você segue", seloClasse: "selo-fake" },
+      { cor: "#8b5cf6" }, { cor: "#10b981" }
+    ]
+  },
+  entrou: {
+    explica: "Quem passou a te seguir desde a sua última lista.",
+    classe: "entrou",
+    itens: [
+      { cor: "#0ea5e9", nome: "@paula.mendes", selo: "Você segue de volta", seloClasse: "selo-fake selo-verde" },
+      { cor: "#ec4899" }, { cor: "#14b8a6" }
+    ]
+  },
+  naoSegue: {
+    explica: "Quem você segue e não te segue de volta.",
+    classe: "naoSegue",
+    itens: [
+      { cor: "#6366f1", nome: "@adamsandler" },
+      { cor: "#f59e0b" }, { cor: "#84cc16" }
+    ]
+  }
+};
+
+function pintarLista(chave) {
+  var d = LISTAS[chave];
+  document.getElementById("explica").textContent = d.explica;
+  document.getElementById("listaProva").innerHTML = d.itens.map(function (i) {
+    return '<div class="linha ' + d.classe + '">' +
+      '<span class="av" style="background:' + i.cor + '"></span>' +
+      (i.nome ? '<span class="nome-claro">' + i.nome + "</span>" : '<span class="nome-borrado"></span>') +
+      (i.selo ? '<span class="' + i.seloClasse + '">' + i.selo + "</span>" : "") +
+      "</div>";
+  }).join("");
+}
+
+function trocarAbaProva(chave) {
+  document.querySelectorAll(".aba-prova").forEach(function (x) {
+    x.classList.remove("ativa", "ativa-verde", "ativa-roxa");
+    if (x.dataset.lista === "entrou") x.classList.add("verde");
+    if (x.dataset.lista === "naoSegue") x.classList.add("roxa");
+  });
+  var alvo = document.querySelector('.aba-prova[data-lista="' + chave + '"]');
+  alvo.classList.remove("verde", "roxa");
+  alvo.classList.add("ativa");
+  if (chave === "entrou") alvo.classList.add("ativa-verde");
+  if (chave === "naoSegue") alvo.classList.add("ativa-roxa");
+  pintarLista(chave);
+}
+
+document.querySelectorAll(".aba-prova").forEach(function (b) {
+  b.addEventListener("click", function () { trocarAbaProva(b.dataset.lista); });
+});
+pintarLista("saiu");
+
+/* ===== abrir a ferramenta ===== */
+document.getElementById("btnComecar").addEventListener("click", function () {
+  var f = document.getElementById("ferramenta");
+  f.style.display = "block";
+  setTimeout(function () { f.scrollIntoView({ behavior: "smooth", block: "start" }); }, 60);
+});
+
+document.getElementById("linkExtensao").addEventListener("click", function () {
+  if (LINK_CHROME_STORE) window.open(LINK_CHROME_STORE, "_blank");
+  else alert("A extensão para Chrome ainda está a caminho da loja.");
+});
+
+/* ===== passo a passo expansível ===== */
+document.getElementById("togglePasso").addEventListener("click", function () {
+  var c = document.getElementById("corpoPasso");
+  var aberto = c.style.display !== "none";
+  c.style.display = aberto ? "none" : "block";
+  document.getElementById("setaPasso").textContent = aberto ? "▼" : "▲";
+});
+
+/* ===== FAQ ===== */
+var PERGUNTAS = [
+  { q: "Como o Quem Saiu descobre quem deixou de me seguir?", a: "Comparando a sua lista de seguidores em dois momentos diferentes. Você importa sua lista uma primeira vez e, quando notar que o número de seguidores mudou, importa de novo. Quem estava na primeira lista e não está na segunda, saiu." },
+  { q: "Preciso informar minha senha do Instagram?", a: "Não. O Quem Saiu nunca pede login nem senha." },
+  { q: "Meus dados ficam salvos em algum servidor?", a: "Não. Tudo fica guardado localmente no seu próprio navegador. Não existe backend, nem envio de dados para fora do seu aparelho." },
+  { q: "Apareceu alguém que na verdade me segue. Por quê?", a: "A exportação do Instagram é um retrato do momento em que foi gerada e, de vez em quando, deixa alguém de fora da lista de seguidores. Nesses casos, use o × para esconder a conta da lista." },
+  { q: "Aparecem contas que não existem mais. Dá para esconder?", a: "Sim. A exportação não informa quais contas foram desativadas ou excluídas, então o Quem Saiu não tem como saber sozinho. Toque no nome para conferir o perfil e, se ele não existir mais, use o × ao lado. Depois dá para revisar tudo em 'contas escondidas' e restaurar o que quiser." },
+  { q: "Por que não aparecem as fotos de perfil?", a: "A exportação do Instagram traz apenas os nomes de usuário, sem fotos. Por isso mostramos as iniciais de cada conta, com uma cor fixa para ajudar a reconhecê-las." },
+  { q: "O Instagram deu erro na hora de exportar. O que eu faço?", a: "Acontece — a Central de Contas do Instagram é instável às vezes. Toque em 'Recarregar página'; se não resolver, feche e refaça o caminho desde 'Exportar suas informações'; se ainda assim falhar, tente pelo navegador em accountscenter.instagram.com." },
+  { q: "Escolhi o formato HTML em vez de JSON. E agora?", a: "Refaça a exportação escolhendo JSON no campo 'Formato'. O arquivo HTML não funciona para a comparação." },
+  { q: "Por quanto tempo consigo baixar o arquivo?", a: "O Instagram avisa quando a exportação fica pronta, e o link para baixar fica disponível por 4 dias." },
+  { q: "Como sei se eu ainda sigo quem deixou de me seguir?", a: "A exportação inclui também a sua lista de 'seguindo', então os resultados já mostram os selos 'Você segue' e 'Você não segue' em cada conta." },
+  { q: "Existe versão para computador?", a: "Sim. Além de usar esta página no navegador do computador, existe uma extensão para o Chrome que captura a lista direto da página do Instagram." },
+];
+var faqLista = document.getElementById("faqLista");
+PERGUNTAS.forEach(function (item) {
+  var div = document.createElement("div");
+  div.className = "faq-item";
+  var btn = document.createElement("button");
+  btn.className = "faq-q";
+  btn.innerHTML = item.q + "<span>+</span>";
+  var resp = document.createElement("p");
+  resp.className = "faq-a";
+  resp.textContent = item.a;
+  resp.style.display = "none";
+  btn.addEventListener("click", function () {
+    resp.style.display = resp.style.display === "none" ? "block" : "none";
+  });
+  div.appendChild(btn);
+  div.appendChild(resp);
+  faqLista.appendChild(div);
+});
+</script>
