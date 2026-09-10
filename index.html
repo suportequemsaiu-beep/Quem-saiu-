@@ -900,6 +900,9 @@ inputArquivo.addEventListener("change", async function () {
   if (arquivos.length === 0) return;
   btnImportar.disabled = true;
   btnImportar.textContent = "Lendo arquivo…";
+ btnImportar.textContent = "Lendo arquivo…";
+  mostrarProgresso(5, "Abrindo o arquivo…");
+  try {
   try {
     var nova = await processarArquivos(arquivos);
     var dados = lerDados();
