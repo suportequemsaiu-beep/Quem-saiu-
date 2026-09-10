@@ -630,6 +630,21 @@ var abaAtual = "saiu";
 
 function formatarData(iso) {
   return new Date(iso).toLocaleString("pt-BR", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
+} 
+ var progresso = document.getElementById("progresso");
+var progressoBarra = document.getElementById("progressoBarra");
+var progressoTexto = document.getElementById("progressoTexto");
+
+function mostrarProgresso(pct, texto) {
+  if (!progresso) return;
+  progresso.style.display = "block";
+  progressoBarra.style.width = pct + "%";
+  if (texto) progressoTexto.textContent = texto;
+}
+function esconderProgresso() {
+  if (!progresso) return;
+  progresso.style.display = "none";
+  progressoBarra.style.width = "0%";
 }
 function mostrarErro(msg) { erroImport.innerHTML = '<div class="aviso-erro">' + msg + "</div>"; }
 function limparErro() { erroImport.innerHTML = ""; }
