@@ -780,3 +780,297 @@ function seloPara(u, seguindoSet, tipo) {
 }
 
 function renderizarLista(usuarios, tipo, seguindoSet, textoVazio) {
+var ignoradas = lerIgnoradas();
+  var visiveis = usuarios.filter(function (u) { return ignoradas.indexOf(u) === -1; });
+  var escondidas = usuarios.length - visiveis.length;
+  var podeIgnorar = tipo === "naoSegue";
+
+  var rodape = "";
+  if (podeIgnorar && escondidas > 0) {
+    var nomesEscondidos = usuarios.filter(function (u) { return ignoradas.indexOf(u) !== -1; });
+    rodape = '<div class="rodape-lista">' +
+      '<button class="link-escondidas" id="btnVerEscondidas">' + escondidas +
+      (escondidas === 1 ? " conta escondida" : " contas escondidas") +
+      (painelEscondidasAberto ? " ▲" : " ▼") + "</button>" +
+      '<button class="link-restaurar" id="btnRestaurar">Mostrar todas</button></div>';
+    if (painelEscondidasAberto) {
+      rodape += '<div class="painel-escondidas">' + nomesEscondidos.map(function (u) {
+        return '<div class="item-escondido">' +
+          '<span class="avatar" style="background:' + corDoUsuario(u) + '">' + u.slice(0, 2).toUpperCase() + "</span>" +
+          '<span class="usuario-nome">@' + u + "</span>" +
+          '<button class="btn-restaurar-um" data-restaurar="' + u + '">Restaurar</button></div>';
+      }).join("") + "</div>";
+    }
+  }
+
+  if (visiveis.length === 0) {
+    listaResultado.innerHTML = '<p style="text-align:center; font-size:12px; color:#475569; padding:14px 0;">' + textoVazio + "</p>" + rodape;
+    ligarBotoesLista();
+    return;
+  }
+
+  listaResultado.innerHTML = '<ul class="lista-usuarios">' + visiveis.map(function (u) {
+    return '<li class="item-usuario item-' + tipo + '">' +
+      '<span class="avatar" style="background:' + corDoUsuario(u) + '">' + u.slice(0, 2).toUpperCase() + "</span>" +
+      '<span class="usuario-nome"><a href="https://www.instagram.com/' + encodeURIComponent(u) + '/" target="_blank" rel="noopener">@' + u + "</a></span>" +
+      seloPara(u, seguindoSet, tipo) +
+      (podeIgnorar ? '<button class="btn-ignorar" data-ignorar="' + u + '" title="Esconder esta conta da lista" aria-label="Esconder conta @' + u + '">&times;</button>' : "") +
+      "</li>";
+  }).join("") + "</ul>" + rodape;
+
+  ligarBotoesLista();
+}
+
+function ligarBotoesLista() {
+  listaResultado.querySelectorAll("[data-ignorar]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var linha = b.closest("li");
+      if (linha) linha.classList.add("saindo");
+      setTimeout(function () { ignorarConta(b.dataset.ignorar); renderizarResultado(); }, 180);
+    });
+  });
+  var btnRest = document.getElementById("btnRestaurar");
+  if (btnRest) btnRest.addEventListener("click", function () {
+    restaurarIgnoradas(); painelEscondidasAberto = false; renderizarResultado();
+  });
+  var btnVer = document.getElementById("btnVerEscondidas");
+  if (btnVer) btnVer.addEventListener("click", function () {
+    painelEscondidasAberto = !painelEscondidasAberto; renderizarResultado();
+  });
+  listaResultado.querySelectorAll("[data-restaurar]").forEach(function (b) {
+    b.addEventListener("click", function () { restaurarConta(b.dataset.restaurar); renderizarResultado(); });
+  });
+}
+
+function renderizarResultado() {
+  var dados = lerDados();
+  if (dados.length === 0) { cardResultado.style.display = "none"; return; }
+
+  var atual = dados[dados.length - 1];
+  var anterior = dados.length >= 2 ? dados[dados.length - 2] : null;
+  var seguindoSet = new Set(atual.seguindo || []);
+  var seguidoresSet = new Set(atual.seguidores || []);
+
+  var saiu = anterior ? anterior.seguidores.filter(function (u) { return !seguidoresSet.has(u); }) : [];
+  var entrou = anterior ? atual.seguidores.filter(function (u) { return anterior.seguidores.indexOf(u) === -1; }) : [];
+  var naoSeguemVolta = (atual.seguindo || []).filter(function (u) { return !seguidoresSet.has(u); });
+
+  cardResultado.style.display = "block";
+
+  var abas = [];
+  if (anterior) {
+    abas.push({ id: "saiu", rotulo: "Deixaram de te seguir · " + saiu.length });
+    abas.push({ id: "entrou", rotulo: "Começaram a te seguir · " + entrou.length });
+  }
+  if (seguindoSet.size > 0) {
+    abas.push({ id: "naoSegue", rotulo: "Não te seguem de volta · " + naoSeguemVolta.length });
+  }
+
+  if (!anterior) {
+    tituloResultado.textContent = "Sua lista está guardada";
+    if (abaAtual === "saiu" || abaAtual === "entrou") abaAtual = "naoSegue";
+  } else {
+    tituloResultado.textContent = "Comparando " + formatarData(anterior.data) + " → " + formatarData(atual.data);
+  }
+  var existe = abas.some(function (x) { return x.id === abaAtual; });
+  if (abas.length > 0 && !existe) abaAtual = abas[0].id;
+
+  abasResultado.innerHTML = abas.map(function (x) {
+    return '<button class="aba-res ' + x.id + (x.id === abaAtual ? " ativa" : "") + '" data-res="' + x.id + '">' + x.rotulo + "</button>";
+  }).join("");
+  abasResultado.querySelectorAll("button").forEach(function (b) {
+    b.addEventListener("click", function () { abaAtual = b.dataset.res; renderizarResultado(); });
+  });
+
+  if (abas.length === 0) {
+    listaResultado.innerHTML = '<p style="text-align:center; font-size:12px; color:#475569; padding:14px 0;">Lista guardada. Quando notar mudança nos seguidores, peça um novo arquivo ao Instagram e traga aqui para comparar.</p>';
+    return;
+  }
+
+  if (abaAtual === "saiu") renderizarLista(saiu, "saiu", seguindoSet, "Ninguém deixou de te seguir entre as duas listas.");
+  else if (abaAtual === "entrou") renderizarLista(entrou, "entrou", seguindoSet, "Nenhum seguidor novo entre as duas listas.");
+  else {
+    renderizarLista(naoSeguemVolta, "naoSegue", null, "Todo mundo que você segue também te segue.");
+    var dica = document.createElement("p");
+    dica.style.cssText = "font-size:11px; color:#475569; margin:10px 0 0; line-height:1.5;";
+    dica.innerHTML = 'Toque no nome para abrir o perfil. Se abrir uma página em branco, a conta não existe mais — use o <b>&times;</b> para escondê-la desta lista.';
+    listaResultado.appendChild(dica);
+  }
+}
+
+btnImportar.addEventListener("click", function () { inputArquivo.click(); });
+
+inputArquivo.addEventListener("change", async function () {
+  limparErro();
+  var arquivos = Array.prototype.slice.call(inputArquivo.files || []);
+  if (arquivos.length === 0) return;
+  btnImportar.disabled = true;
+  btnImportar.textContent = "Lendo arquivo…";
+  mostrarProgresso(5, "Abrindo o arquivo…");
+  try {
+    var nova = await processarArquivos(arquivos);
+    var dados = lerDados();
+    dados.push(nova);
+    gravarDados(dados.slice(-10));
+    mostrarProgresso(100, "Pronto!");
+    atualizarStatus();
+    renderizarResultado();
+    setTimeout(esconderProgresso, 700);
+  } catch (erro) {
+    esconderProgresso();
+    mostrarErro(erro && erro.message ? erro.message : "Não consegui ler este arquivo. Confira se é a exportação do Instagram em JSON.");
+  } finally {
+    btnImportar.disabled = false;
+    btnImportar.textContent = "📄 Ver a minha lista";
+    inputArquivo.value = "";
+  }
+});
+
+btnComparar.addEventListener("click", function () { abaAtual = "saiu"; renderizarResultado(); });
+
+document.getElementById("btnApagar").addEventListener("click", function () {
+  apagarDadosLocais();
+  atualizarStatus();
+  cardResultado.style.display = "none";
+});
+
+/* se já houver dados salvos, abre a ferramenta direto */
+if (lerDados().length > 0) {
+  document.getElementById("ferramenta").style.display = "block";
+}
+atualizarStatus();
+renderizarResultado();
+
+/* ===== PWA: instalação e recebimento por compartilhamento ===== */
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", function () {
+    navigator.serviceWorker.register("service-worker.js").catch(function () {});
+  });
+}
+
+/* ===== instalação do PWA: seção dedicada + faixa fixa + convite pós-resultado ===== */
+var eventoInstalacao = null;
+var secaoApp = document.getElementById("secaoApp");
+var faixaApp = document.getElementById("faixaApp");
+var espacoFaixa = document.getElementById("espacoFaixa");
+var convitePos = document.getElementById("convitePos");
+var faixaFechadaNestaLeitura = false;
+var LIMITE_ROLAGEM_FAIXA = 320;
+
+function estaInstalado() {
+  return window.matchMedia && window.matchMedia("(display-mode: standalone)").matches;
+}
+
+function atualizarFaixaVisivel() {
+  if (!faixaApp || !eventoInstalacao || estaInstalado()) return;
+  var mostrar = window.scrollY > LIMITE_ROLAGEM_FAIXA && !faixaFechadaNestaLeitura;
+  faixaApp.style.display = mostrar ? "flex" : "none";
+  if (espacoFaixa) espacoFaixa.style.display = mostrar ? "block" : "none";
+}
+
+window.addEventListener("beforeinstallprompt", function (e) {
+  e.preventDefault();
+  eventoInstalacao = e;
+  if (secaoApp) secaoApp.style.display = "block";
+  if (convitePos) convitePos.style.display = "flex";
+  window.addEventListener("scroll", atualizarFaixaVisivel);
+  atualizarFaixaVisivel();
+});
+
+async function instalarApp() {
+  if (!eventoInstalacao) return;
+  eventoInstalacao.prompt();
+  try { await eventoInstalacao.userChoice; } catch (e) {}
+  eventoInstalacao = null;
+}
+
+["btnInstalar", "btnInstalarFaixa", "btnInstalarPos"].forEach(function (id) {
+  var b = document.getElementById(id);
+  if (b) b.addEventListener("click", instalarApp);
+});
+
+var btnDispensar = document.getElementById("btnDispensar");
+if (btnDispensar) btnDispensar.addEventListener("click", function () {
+  if (secaoApp) secaoApp.style.display = "none";
+});
+
+var btnDispensarPos = document.getElementById("btnDispensarPos");
+if (btnDispensarPos) btnDispensarPos.addEventListener("click", function () {
+  if (convitePos) convitePos.style.display = "none";
+});
+
+var btnFecharFaixa = document.getElementById("btnFecharFaixa");
+if (btnFecharFaixa) btnFecharFaixa.addEventListener("click", function () {
+  faixaFechadaNestaLeitura = true;
+  atualizarFaixaVisivel();
+});
+
+/* ao voltar ao topo, a faixa pode aparecer de novo na próxima descida */
+window.addEventListener("scroll", function () {
+  if (window.scrollY < 40 && faixaFechadaNestaLeitura) faixaFechadaNestaLeitura = false;
+});
+
+window.addEventListener("appinstalled", function () {
+  if (secaoApp) secaoApp.style.display = "none";
+  if (faixaApp) faixaApp.style.display = "none";
+  if (espacoFaixa) espacoFaixa.style.display = "none";
+  if (convitePos) convitePos.style.display = "none";
+  eventoInstalacao = null;
+});
+
+/* se o app foi aberto por compartilhamento, pega o arquivo e processa */
+async function verificarArquivoCompartilhado() {
+  var params = new URLSearchParams(location.search);
+  var marca = params.get("compartilhado");
+  if (!marca) return;
+
+  history.replaceState(null, "", location.pathname);
+  document.getElementById("ferramenta").style.display = "block";
+
+  if (marca === "erro" || marca === "vazio") {
+    mostrarErro("Não consegui receber o arquivo compartilhado. Tente pelo botão de importar.");
+    return;
+  }
+
+  try {
+    var cache = await caches.open("quemsaiu-compartilhado");
+    var resposta = await cache.match("arquivo-compartilhado");
+    if (!resposta) return;
+
+    var nome = "instagram.zip";
+    var cabecalho = resposta.headers.get("x-nome-arquivo");
+    if (cabecalho) { try { nome = decodeURIComponent(cabecalho); } catch (e) {} }
+
+    var blob = await resposta.blob();
+    await cache.delete("arquivo-compartilhado");
+
+    var arquivo = new File([blob], nome, { type: blob.type || "application/zip" });
+
+    btnImportar.disabled = true;
+    btnImportar.textContent = "Lendo arquivo…";
+    mostrarProgresso(5, "Abrindo o arquivo…");
+    try {
+      var nova = await processarArquivos([arquivo]);
+      var dados = lerDados();
+      dados.push(nova);
+      gravarDados(dados.slice(-10));
+      mostrarProgresso(100, "Pronto!");
+      atualizarStatus();
+      renderizarResultado();
+      setTimeout(esconderProgresso, 700);
+    } catch (erro) {
+      esconderProgresso();
+      mostrarErro(erro && erro.message ? erro.message : "Não consegui ler o arquivo compartilhado.");
+    } finally {
+      btnImportar.disabled = false;
+      btnImportar.textContent = "📄 Ver a minha lista";
+    }
+  } catch (e) {
+    mostrarErro("Não consegui abrir o arquivo compartilhado. Tente pelo botão de importar.");
+  }
+}
+verificarArquivoCompartilhado();
+</script>
+
+</body>
+</html>
