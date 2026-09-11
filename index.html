@@ -195,3 +195,241 @@
   .convite-pos { display:none; background:#0f172a; border-radius:14px; padding:16px; margin-top:14px; text-align:left; gap:13px; align-items:flex-start; }
   .convite-pos .mini-icone { width:38px; height:38px; border-radius:10px; background:linear-gradient(160deg,#0ea5e9,#0369a1); position:relative; flex-shrink:0; }
   .convite-pos .mini-icone::before { content:""; position:absolute; left:9px; top:
+<body>
+
+<nav>
+  <div class="container">
+    <div class="marca" id="marca" role="button" tabindex="0" aria-label="Ir para o início">
+      <span class="marca-icone"></span>
+      <span class="marca-nome">Quem Saiu</span>
+    </div>
+    <div class="abas">
+      <button data-tab="inicio" class="ativo" aria-current="page">Início</button>
+      <button data-tab="ajuda">Ajuda</button>
+      <button data-tab="suporte">Suporte</button>
+      <button data-tab="assinatura">Assinatura</button>
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+
+  <section id="inicio" class="ativa">
+
+    <div class="gancho">
+      <div class="cena">
+        <div class="moldura">
+          <div class="vao"><div class="folha"><span class="macaneta"></span></div></div>
+        </div>
+        <div class="figura"><div class="cabeca"></div><div class="corpo"></div></div>
+      </div>
+      <h2>Alguém <em>saiu</em><br>sem avisar.</h2>
+      <p>O Instagram nunca conta quando alguém deixa de te seguir. O Quem Saiu conta.</p>
+      <button class="cta-principal" id="btnDescobrir">Quero descobrir</button>
+      <span class="selo-gratis">Gratuito · sem login, sem senha</span>
+    </div>
+
+    <div class="revelado" id="revelado">
+
+      <p class="rotulo-secao">Uma amostra do que te espera</p>
+      <div class="prova">
+        <span class="etiqueta-exemplo">Exemplo</span>
+        <div class="abas-prova">
+          <button class="aba-prova ativa" data-lista="saiu"><span class="bolinha"></span>Deixaram de te seguir · 3</button>
+          <button class="aba-prova verde" data-lista="entrou"><span class="bolinha"></span>Começaram a te seguir · 5</button>
+          <button class="aba-prova roxa" data-lista="naoSegue"><span class="bolinha"></span>Não te seguem de volta · 18</button>
+        </div>
+        <p class="explica" id="explica">Quem te seguia antes e não te segue mais.</p>
+        <div id="listaProva"></div>
+        <div class="fade"></div>
+      </div>
+
+      <div class="mecanica">
+        <div class="etapa">
+          <span class="marca-num">1</span>
+          <div>
+            <h4>Marque seu ponto de partida</h4>
+            <p>Você importa sua lista de seguidores uma primeira vez. É a foto de como ela está hoje.</p>
+          </div>
+        </div>
+        <div class="etapa">
+          <span class="marca-num">2</span>
+          <div>
+            <h4>Viu o número mudar?</h4>
+            <p>Perdeu um seguidor e ficou naquela dúvida? <span class="destaque">É a hora de voltar aqui.</span> Importe sua lista de novo.</p>
+          </div>
+        </div>
+        <div class="etapa">
+          <span class="marca-num">3</span>
+          <div>
+            <h4>Descubra quem foi</h4>
+            <p>O Quem Saiu compara as duas listas e mostra exatamente quem deixou de te seguir — e quem começou.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bonus">
+        <h4>Já na primeira vez</h4>
+        <p>Antes mesmo de comparar, você descobre quem você segue e não te segue de volta.</p>
+      </div>
+
+      <button class="cta-final" id="btnComecar">Começar agora</button>
+      <p class="privacidade">Seus dados são lidos aqui no seu navegador.<br>Nada é enviado para servidor nenhum.</p>
+
+      <p class="extensao">Está no computador? Existe também uma <a id="linkExtensao">extensão para o Chrome</a>.</p>
+    </div>
+
+    <div class="secao-app" id="secaoApp">
+      <div class="tela-inicial">
+        <div class="grade-apps">
+          <div class="app-falso"></div>
+          <div class="app-nosso"></div>
+          <div class="app-falso"></div>
+          <div class="app-falso"></div>
+          <div class="app-falso"></div>
+          <div class="app-falso"></div>
+        </div>
+        <p class="legenda-icone">na sua tela inicial</p>
+      </div>
+
+      <h3>Deixe o Quem Saiu<br>no seu celular</h3>
+      <p class="desc-app">Instale em segundos e ele fica ali, junto dos seus apps — pronto para quando bater aquela dúvida.</p>
+
+      <div class="vantagens">
+        <div class="vantagem"><span class="tick">&check;</span><span><b>Um toque para abrir.</b> Sem digitar endereço, sem procurar no navegador.</span></div>
+        <div class="vantagem"><span class="tick">&check;</span><span><b>O arquivo vai direto.</b> Toque em Compartilhar no arquivo do Instagram e escolha o Quem Saiu.</span></div>
+        <div class="vantagem"><span class="tick">&check;</span><span><b>Continua sendo só seu.</b> Mesmos dados no seu aparelho, nada enviado para servidor.</span></div>
+      </div>
+
+      <button class="btn-instalar-grande" id="btnInstalar">Instalar o Quem Saiu</button>
+      <p class="nota-loja">Não passa por loja de aplicativos · ocupa quase nada · dá para remover quando quiser</p>
+
+      <button class="link-sem-instalar" id="btnDispensar">Prefiro usar sem instalar</button>
+    </div>
+
+    <div id="ferramenta" style="display:none; padding-top:26px;">
+      <h1>Sua lista</h1>
+      <p class="sub">Escolha o arquivo que você baixou do Instagram — a leitura acontece aqui no seu navegador.</p>
+
+      <div class="card">
+        <button class="botao-importar" id="btnImportar">📄 Ver a minha lista</button>
+        <button class="botao-secundario" id="btnComparar" disabled>🔁 Ver o que mudou</button>
+        <input type="file" id="inputArquivo" multiple style="display:none" />
+        <p class="dica-arquivo">Procure em <b>Recentes</b> ou <b>Downloads</b> — o nome começa com <b>instagram-</b> e é o arquivo mais novo. Não precisa descompactar.</p>
+        <div class="progresso" id="progresso">
+          <div class="progresso-trilho"><div class="progresso-barra" id="progressoBarra"></div></div>
+          <p class="progresso-texto" id="progressoTexto">Abrindo o arquivo…</p>
+        </div>
+        <div id="erroImport" role="alert"></div>
+        <p id="avisoLeitor" class="so-leitor" role="status" aria-live="polite"></p>
+        <p class="status-import" id="statusImport">Nenhuma lista guardada ainda.</p>
+
+        <div class="expansivel">
+          <button class="expansivel-topo" id="togglePasso" aria-expanded="false" aria-controls="corpoPasso">
+            <span>Ainda não tenho o arquivo — como pego?</span>
+            <span id="setaPasso" aria-hidden="true">▼</span>
+          </button>
+          <div class="expansivel-corpo" id="corpoPasso" style="display:none">
+            <p class="passo-titulo">1. Peça o arquivo ao Instagram</p>
+            <ol>
+              <li>Abra seu perfil, toque no menu <b>☰</b> (canto superior direito) e toque em <b>Central de Contas</b> (pode aparecer como <b>Conta Meta</b>)</li>
+              <li>Toque em <b>Suas informações e permissões</b> → <b>Exportar suas informações</b></li>
+              <li>Toque em <b>Criar exportação</b> e escolha sua conta</li>
+              <li>Em "Escolher para onde exportar", toque em <b>Exportar para dispositivo</b> — não em "serviço externo"</li>
+              <li>Em <b>Personalizar informações</b>, marque só <b>Seguidores e seguindo</b>, toque em <b>Salvar</b> e volte</li>
+              <li>Em <b>Formato</b>, escolha <b>JSON</b>, salve e volte</li>
+              <li>Toque em <b>Iniciar exportação</b></li>
+            </ol>
+
+            <p class="passo-titulo">2. Fique de olho no e-mail</p>
+            <p class="nota">O Instagram avisa <b>por e-mail</b> quando o arquivo fica pronto — é o aviso mais confiável, porque a notificação nem sempre chega. O link para baixar fica disponível por 4 dias.</p>
+
+            <p class="passo-titulo">3. Baixe e mande para cá — sem procurar arquivo</p>
+            <ol>
+              <li>Baixe o arquivo pelo link do e-mail</li>
+              <li>No Chrome, toque no menu <b>⋮</b> → <b>Transferências</b></li>
+              <li>Toque nos <b>três pontinhos</b> ao lado do arquivo → <b>Compartilhar</b></li>
+              <li>Escolha o <b>Quem Saiu</b> — ele abre já com a sua lista pronta</li>
+            </ol>
+            <p class="nota">Esse atalho precisa do Quem Saiu instalado. Sem ele, use o botão <b>Ver a minha lista</b> aqui em cima e escolha o arquivo na pasta Downloads.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" id="cardResultado" style="display:none;">
+        <h3 id="tituloResultado">Resultado</h3>
+        <div class="abas-resultado" id="abasResultado"></div>
+        <div id="listaResultado"></div>
+
+        <div class="convite-pos" id="convitePos">
+          <span class="mini-icone"></span>
+          <div>
+            <h4>Gostou? Deixe à mão para a próxima</h4>
+            <p>Instale o Quem Saiu e volte com um toque quando notar mudança nos seguidores.</p>
+            <button class="bt" id="btnInstalarPos">Instalar</button>
+            <button class="depois" id="btnDispensarPos">Depois</button>
+          </div>
+        </div>
+
+        <button class="apagar" id="btnApagar">Apagar meus dados deste navegador</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="ajuda">
+    <div class="topo-secao">
+      <h1>Central de Ajuda</h1>
+      <p class="sub">Perguntas frequentes sobre o Quem Saiu.</p>
+      <div class="card" style="padding: 0 20px;" id="faqLista"></div>
+    </div>
+  </section>
+
+  <section id="suporte">
+    <div class="topo-secao">
+      <h1>Fale com a gente</h1>
+      <p class="sub">Dúvidas, problemas ou sugestões — é só chamar.</p>
+      <div class="card">
+        <h3>E-mail de suporte</h3>
+        <p><a href="mailto:suporte.quemsaiu@gmail.com" style="color:#0ea5e9; font-weight:700;">suporte.quemsaiu@gmail.com</a></p>
+        <p>Respondemos em até 2 dias úteis.</p>
+      </div>
+
+      <div class="card">
+        <h3>Antes de escrever</h3>
+        <p>Muita dúvida comum já está respondida na aba <b>Ajuda</b> — vale dar uma olhada lá primeiro.</p>
+      </div>
+
+      <div class="card">
+        <h3>Relatando um problema?</h3>
+        <p>Ajuda bastante contar o que você estava tentando fazer e, se der, mandar um print da tela. Não precisa informar seu usuário do Instagram nem enviar nenhum arquivo, a menos que você queira.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="assinatura">
+    <div class="topo-secao">
+      <h1>Assinatura &amp; reembolso</h1>
+      <p class="sub">O Quem Saiu ainda é 100% gratuito.</p>
+      <div class="card linha-feature">
+        <div>
+          <h3>Planos pagos</h3>
+          <p>Quando lançarmos planos, os detalhes de preço aparecem aqui.</p>
+        </div>
+        <span class="badge-em-breve">Em breve</span>
+      </div>
+      <div class="card linha-feature">
+        <div>
+          <h3>Política de reembolso</h3>
+          <p>Publicaremos as condições assim que houver planos pagos.</p>
+        </div>
+        <span class="badge-em-breve">Em breve</span>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  Quem Saiu · não afiliado ao Instagram/Meta<br />
+  <a href="privacy-policy.html">Política de privacidade</a> · <a href="mailto:suporte.quemsaiu@gmail.com">suporte.quemsaiu@gmail.com</a>
+</footer>
