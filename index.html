@@ -202,7 +202,30 @@
   .btn-instalar-grande { position:relative; width:100%; border:none; border-radius:14px; padding:16px; background:#0369a1; color:#fff; font-size:15px; font-weight:800; cursor:pointer; }
   .btn-instalar-grande:active { transform:scale(.99); }
   .nota-loja { position:relative; font-size:11.5px; color:#94a3b8; margin:13px 0 0; line-height:1.55; }
-  .link-sem-instalar { position:relative; display:inline-blo
+  .link-sem-instalar { position:relative; display:inline-block; margin-top:16px; background:none; border:none; color:#94a3b8; font-size:12.5px; text-decoration:underline; cursor:pointer; }
+
+  /* ===== faixa fixa de instalação ===== */
+  .faixa-app { display:none; position:fixed; left:0; right:0; bottom:0; z-index:60; background:rgba(15,23,42,.97); backdrop-filter:blur(10px); border-top:1px solid #1e3a5f; padding:8px 14px; align-items:center; gap:10px; }
+  .faixa-app .txt { flex:1; font-size:11.5px; color:#94a3b8; line-height:1.25; }
+  .faixa-app .txt b { display:block; font-size:13px; color:#f1f5f9; line-height:1.25; margin:0; }
+  .faixa-app .bt { border:none; border-radius:9px; padding:8px 14px; background:#0369a1; color:#fff; font-size:12.5px; font-weight:800; flex-shrink:0; cursor:pointer; }
+  .faixa-app .fechar { background:none; border:none; color:#94a3b8; font-size:17px; line-height:1; padding:4px 6px; cursor:pointer; flex-shrink:0; }
+  .espaco-faixa { display:none; height:58px; }
+
+  /* ===== convite pós-resultado ===== */
+  .convite-pos { display:none; background:#0f172a; border-radius:14px; padding:16px; margin-top:14px; text-align:left; gap:13px; align-items:flex-start; }
+  .convite-pos .mini-icone { width:38px; height:38px; border-radius:10px; background:linear-gradient(160deg,#0ea5e9,#0369a1); position:relative; flex-shrink:0; }
+  .convite-pos .mini-icone::before { content:""; position:absolute; left:9px; top:8px; width:13px; height:22px; border:2px solid #fff; border-radius:3px; }
+  .convite-pos .mini-icone::after { content:""; position:absolute; right:7px; top:13px; width:8px; height:8px; border-radius:50%; background:#fff; }
+  .convite-pos h3 { margin:0 0 5px; font-size:13.5px; color:#f1f5f9; }
+  .convite-pos p { margin:0 0 11px; font-size:12.5px; color:#94a3b8; line-height:1.55; }
+  .convite-pos .bt { border:none; border-radius:10px; padding:10px 16px; background:#0369a1; color:#fff; font-size:12.5px; font-weight:800; cursor:pointer; }
+  .convite-pos .depois { background:none; border:none; color:#94a3b8; font-size:12px; text-decoration:underline; margin-left:11px; cursor:pointer; }
+
+  footer { text-align: center; color: #7c8ba1; font-size: 11px; padding: 34px 0 44px; line-height: 1.8; }
+  footer a { color: #94a3b8; }
+</style>
+</head>
 <body>
 
 <nav>
