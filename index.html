@@ -573,11 +573,6 @@ document.getElementById("btnComecar").addEventListener("click", function () {
   setTimeout(function () { f.scrollIntoView({ behavior: "smooth", block: "start" }); }, 60);
 });
 
-document.getElementById("linkExtensao").addEventListener("click", function () {
-  if (LINK_CHROME_STORE) window.open(LINK_CHROME_STORE, "_blank");
-  else alert("A extensão para Chrome ainda está a caminho da loja.");
-});
-
 /* ===== passo a passo expansível ===== */
 document.getElementById("togglePasso").addEventListener("click", function () {
   var c = document.getElementById("corpoPasso");
