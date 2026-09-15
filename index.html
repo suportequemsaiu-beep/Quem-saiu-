@@ -920,7 +920,7 @@ function renderizarResultado() {
   if (abas.length > 0 && !existe) abaAtual = abas[0].id;
 
   abasResultado.innerHTML = abas.map(function (x) {
-    return '<button class="aba-res ' + x.id + (x.id === abaAtual ? " ativa" : "") + '" data-res="' + x.id + '" aria-pressed="' + (x.id === abaAtual) + '">' + x.rotulo + "</button>";
+  return '<button class="aba-res ' + x.id + (x.id === abaAtual ? " ativa" : "") + '" data-res="' + x.id + '" aria-pressed="' + (x.id === abaAtual) + '"><span class="bolha">' + x.n + '</span>' + x.texto + "</button>";
   }).join("");
   abasResultado.querySelectorAll("button").forEach(function (b) {
     b.addEventListener("click", function () { abaAtual = b.dataset.res; renderizarResultado(); });
