@@ -903,11 +903,11 @@ function renderizarResultado() {
 
   var abas = [];
   if (anterior) {
-    abas.push({ id: "saiu", rotulo: "Deixaram de te seguir · " + saiu.length });
-    abas.push({ id: "entrou", rotulo: "Começaram a te seguir · " + entrou.length });
+    abas.push({ id: "saiu", rotulo: "Deixaram de te seguir · " + saiu.length, texto: "deixaram de te seguir", n: saiu.length });
+    abas.push({ id: "entrou", rotulo: "Começaram a te seguir · " + entrou.length, texto: "começaram a te seguir", n: entrou.length });
   }
   if (seguindoSet.size > 0) {
-    abas.push({ id: "naoSegue", rotulo: "Não te seguem de volta · " + naoSeguemVolta.length });
+    abas.push({ id: "naoSegue", rotulo: "Não te seguem de volta · " + naoSeguemVolta.length, texto: "não te seguem de volta", n: naoSeguemVolta.length });
   }
 
   if (!anterior) {
