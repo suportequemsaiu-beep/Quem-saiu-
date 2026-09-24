@@ -30,10 +30,11 @@
 </head>
 <body>
 
+<header>
 <nav>
   <div class="container">
     <div class="marca" id="marca" role="button" tabindex="0" aria-label="Ir para o início">
-      <span class="marca-icone"></span>
+      <span class="marca-icone" aria-hidden="true"></span>
       <span class="marca-nome">Quem Saiu</span>
     </div>
     <div class="abas">
@@ -44,6 +45,7 @@
     </div>
   </div>
 </nav>
+</header>
 
 <div class="container">
 
@@ -69,9 +71,9 @@
       <div class="prova">
         <span class="etiqueta-exemplo">Exemplo</span>
         <div class="abas-prova">
-          <button class="aba-prova ativa" data-lista="saiu"><span class="bolinha"></span>Deixaram de te seguir · 3</button>
-          <button class="aba-prova verde" data-lista="entrou"><span class="bolinha"></span>Começaram a te seguir · 5</button>
-          <button class="aba-prova roxa" data-lista="naoSegue"><span class="bolinha"></span>Não te seguem de volta · 18</button>
+          <button class="aba-prova ativa" data-lista="saiu"><span class="bolinha" aria-hidden="true"></span>Deixaram de te seguir · 3</button>
+          <button class="aba-prova verde" data-lista="entrou"><span class="bolinha" aria-hidden="true"></span>Começaram a te seguir · 5</button>
+          <button class="aba-prova roxa" data-lista="naoSegue"><span class="bolinha" aria-hidden="true"></span>Não te seguem de volta · 18</button>
         </div>
         <p class="explica" id="explica">Quem te seguia antes e não te segue mais.</p>
         <div id="listaProva"></div>
@@ -205,7 +207,7 @@
         <div id="listaResultado"></div>
 
         <div class="convite-pos" id="convitePos">
-          <span class="mini-icone"></span>
+          <span class="mini-icone" aria-hidden="true"></span>
           <div>
             <h3>Gostou? Deixe à mão para a próxima</h3>
             <p>Instale o Quem Saiu e volte com um toque quando notar mudança nos seguidores.</p>
@@ -291,4 +293,4 @@
 <script src="script.js"></script>
 
 </body>
-       </html>
+</html>
