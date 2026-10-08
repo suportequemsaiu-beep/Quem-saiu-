@@ -1,4 +1,5 @@
-* { box-sizing: border-box; }
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  a, button, [role="button"] { touch-action: manipulation; }
   body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #0f172a; color: #f1f5f9; overflow-x: hidden; }
   .container { max-width: 560px; margin: 0 auto; padding: 0 22px; }
 
