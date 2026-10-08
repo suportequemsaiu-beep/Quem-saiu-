@@ -29,7 +29,8 @@
   .gancho { text-align: center; padding: 44px 0 38px; position: relative; }
   .btn-compartilhar svg { width: 12px; height: 12px; }
   .btn-compartilhar { position: absolute; top: 10px; right: 0; display: inline-flex; align-items: center; gap: 5px; background: rgba(148,163,184,.08); border: 1px solid #64748b; color: #cbd5e1; border-radius: 999px; padding: 5px 10px; font-size: 11px; font-weight: 600; font-family: inherit; cursor: pointer; transition: color .2s, border-color .2s, background .2s, transform .12s ease; }
-  .btn-compartilhar:hover, .btn-compartilhar:active { color: #fff; border-color: #38bdf8; background: rgba(56,189,248,.12); }
+  .btn-compartilhar:active { color: #fff; border-color: #38bdf8; background: rgba(56,189,248,.12); }
+  @media (hover: hover) { .btn-compartilhar:hover { color: #fff; border-color: #38bdf8; background: rgba(56,189,248,.12); } }
   .cena { position: relative; width: 170px; height: 132px; margin: 0 auto 30px; perspective: 620px; }
   .moldura { position: absolute; left: 8px; top: 4px; width: 84px; height: 122px; border: 7px solid #38bdf8; border-radius: 9px; }
   .vao { position: absolute; left: 0; top: 0; right: 0; bottom: 0; background: #060c17; border-radius: 3px; overflow: hidden; }
@@ -239,7 +240,6 @@
     .marca-nome { font-size: 18px; }
     nav .abas { gap: 8px; overflow: visible; }
     nav .abas button { padding: 9px 18px; font-size: 13px; transition: background .15s ease, color .15s ease; }
-    nav .abas button:not(.ativo):hover { background: #334155; color: #f1f5f9; }
 
     section:not(#inicio) { max-width: 680px; margin: 0 auto; }
     .revelado, .secao-app, #ferramenta { max-width: 680px; margin-left: auto; margin-right: auto; }
@@ -255,9 +255,14 @@
     .gancho h1 { grid-column: 2; font-size: 56px; letter-spacing: -1.6px; margin: 0 0 18px; }
     .gancho p { grid-column: 2; font-size: 18px; max-width: 460px; margin: 0 0 32px; }
     .cta-principal { grid-column: 2; justify-self: start; padding: 18px 40px; font-size: 16px; transition: background .15s ease, transform .15s ease; }
-    .cta-principal:hover { background: #0284c7; transform: translateY(-1px); }
     .selo-gratis { grid-column: 2; margin-top: 16px; font-size: 13px; }
 
-    .cta-final:hover, .botao-importar:hover, .btn-instalar-grande:hover { background: #0284c7; }
     .card, .prova { box-shadow: 0 14px 38px rgba(0,0,0,.3); }
   }
+
+/* Efeito de passar o mouse: só para quem tem mouse (no toque o :hover "gruda" até tocar em outro lugar) */
+@media (min-width: 900px) and (hover: hover) {
+    nav .abas button:not(.ativo):hover { background: #334155; color: #f1f5f9; }
+    .cta-principal:hover { background: #0284c7; transform: translateY(-1px); }
+    .cta-final:hover, .botao-importar:hover, .btn-instalar-grande:hover { background: #0284c7; }
+}

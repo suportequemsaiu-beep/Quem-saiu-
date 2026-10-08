@@ -308,6 +308,12 @@ organizado" para os detalhes.
 - Botão Compartilhar: ao fechar o menu do Android, o foco voltava ao botão e a
   borda azul de teclado (`:focus-visible`) ficava até tocar em outro lugar. O
   script agora tira o foco do botão (`blur`) após o compartilhamento.
+- Causa real da borda azul que "grudava" no Compartilhar: o `:hover` no celular
+  fica ativo depois do toque até tocar em outro lugar. Todos os efeitos de
+  passar o mouse agora só valem em aparelhos com mouse (`@media (hover: hover)`).
+- Cache: o `index.html` chama `style.css?v=…` e `script.js?v=…`. **Sempre que
+  mudar o CSS ou o JS, troque o número depois de `?v=`** (ex.: `20261008b`), senão
+  celulares e a Cloudflare podem continuar mostrando a versão antiga.
 
 **Não começado:** logo definitivo (o ícone atual é provisório, feito em CSS,
 propositalmente deixado para perto do lançamento).
@@ -432,7 +438,7 @@ Desde ago/2026, separado em três arquivos (antes era um `index.html` só):
 - `index.html` — só estrutura e texto (HTML puro, ~307 linhas). Aponta para
   `style.css` (`<link rel="stylesheet">`) e `script.js` (`<script src="...">`
   no fim do `<body>`). Editar aqui só o que é estrutura/conteúdo visível.
-- `style.css` — todo o CSS do site (~263 linhas). Editar aqui qualquer cor,
+- `style.css` — todo o CSS do site (~268 linhas). Editar aqui qualquer cor,
   tamanho, espaçamento, animação. O que é só do computador fica no bloco
   `@media (min-width: 900px)` no fim do arquivo.
 - `script.js` — todo o JavaScript do site (~662 linhas, o que antes eram os
