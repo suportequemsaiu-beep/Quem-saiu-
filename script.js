@@ -25,6 +25,10 @@ document.getElementById("btnDescobrir").addEventListener("click", function () {
 
 /* ===== compartilhar o site ===== */
 document.getElementById("btnCompartilhar").addEventListener("click", function () {
+  var botao = this;
+  /* Depois do menu de compartilhar fechar, o navegador devolve o foco ao botão e
+     desenha a borda azul de teclado. Tirar o foco evita que ela fique ali. */
+  function soltarFoco() { botao.blur(); }
   var dados = {
     title: "Quem Saiu",
     text: "Descubra quem deixou de te seguir no Instagram — sem login e sem senha.",
@@ -36,11 +40,13 @@ document.getElementById("btnCompartilhar").addEventListener("click", function ()
     setTimeout(function () { rotulo.textContent = "Compartilhar"; }, 2000);
   }
   if (navigator.share) {
-    navigator.share(dados).catch(function () {});
+    navigator.share(dados).catch(function () {}).then(function () { soltarFoco(); setTimeout(soltarFoco, 150); });
+    soltarFoco();
   } else if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(dados.url).then(function () { avisar("Link copiado"); }, function () { avisar("Não foi possível copiar"); });
+    navigator.clipboard.writeText(dados.url).then(function () { avisar("Link copiado"); }, function () { avisar("Não foi possível copiar"); }).then(soltarFoco);
   } else {
     avisar("Copie: quemsaiu.com.br");
+    soltarFoco();
   }
 });
 

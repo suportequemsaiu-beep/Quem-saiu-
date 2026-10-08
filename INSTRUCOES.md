@@ -305,6 +305,9 @@ organizado" para os detalhes.
   (`-webkit-tap-highlight-color`). Em troca, todo botão encolhe um pouco ao ser
   pressionado (regra genérica no topo do `style.css`, como o "Quero descobrir");
   regras próprias de cada botão continuam valendo por cima.
+- Botão Compartilhar: ao fechar o menu do Android, o foco voltava ao botão e a
+  borda azul de teclado (`:focus-visible`) ficava até tocar em outro lugar. O
+  script agora tira o foco do botão (`blur`) após o compartilhamento.
 
 **Não começado:** logo definitivo (o ícone atual é provisório, feito em CSS,
 propositalmente deixado para perto do lançamento).
@@ -432,7 +435,7 @@ Desde ago/2026, separado em três arquivos (antes era um `index.html` só):
 - `style.css` — todo o CSS do site (~263 linhas). Editar aqui qualquer cor,
   tamanho, espaçamento, animação. O que é só do computador fica no bloco
   `@media (min-width: 900px)` no fim do arquivo.
-- `script.js` — todo o JavaScript do site (~656 linhas, o que antes eram os
+- `script.js` — todo o JavaScript do site (~663 linhas, o que antes eram os
   dois blocos `<script>` inline, agora concatenados em um arquivo). Editar
   aqui qualquer comportamento, lógica de importação, PWA.
 - `manifest.json` — configuração do app instalável (PWA), incluindo o
