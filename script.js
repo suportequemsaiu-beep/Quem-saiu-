@@ -1,4 +1,3 @@
-/* ===== configuração ===== */
 /* ===== navegação ===== */
 function irParaAba(id) {
   document.querySelectorAll("nav .abas button").forEach(function (b) {
