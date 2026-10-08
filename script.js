@@ -135,7 +135,7 @@ var PERGUNTAS = [
   { q: "Escolhi o formato HTML em vez de JSON. E agora?", a: "Refaça a exportação escolhendo JSON no campo 'Formato'. O arquivo HTML não funciona para a comparação." },
   { q: "Por quanto tempo consigo baixar o arquivo?", a: "O Instagram avisa quando a exportação fica pronta, e o link para baixar fica disponível por 4 dias." },
   { q: "Como sei se eu ainda sigo quem deixou de me seguir?", a: "A exportação inclui também a sua lista de 'seguindo', então os resultados já mostram os selos 'Você segue' e 'Você não segue' em cada conta." },
-  { q: "Existe versão para computador?", a: "Sim. Além de usar esta página no navegador do computador, existe uma extensão para o Chrome que captura a lista direto da página do Instagram." },
+  { q: "Existe versão para computador?", a: "Sim. Basta abrir quemsaiu.com.br no navegador do computador: a página funciona do mesmo jeito que no celular. Clique em 'Ver a minha lista' e escolha o arquivo que você baixou do Instagram." },
 ];
 var faqLista = document.getElementById("faqLista");
 PERGUNTAS.forEach(function (item) {
