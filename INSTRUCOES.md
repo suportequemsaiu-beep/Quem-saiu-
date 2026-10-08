@@ -34,9 +34,13 @@ Suporte: suporte.quemsaiu@gmail.com
    logotipo ou elementos que sugiram afiliação. O rodapé declara explicitamente
    que o produto não é afiliado ao Instagram/Meta.
 
-5. **Celular primeiro.** A maioria dos usuários está no Android. A importação de
-   arquivo é o coração do produto; a extensão de Chrome é acessório e pode ser
-   descartada sem afetar o resto.
+5. **Celular primeiro, computador também.** A maioria dos usuários está no
+   Android, e o visual base é o do celular. O computador é atendido pelo mesmo
+   site no navegador, com ajustes de layout que só valem em telas a partir de
+   900 px (bloco `@media (min-width: 900px)` no fim do `style.css`) — mudanças
+   para o computador nunca devem alterar o celular. A importação de arquivo é o
+   coração do produto. **A extensão de Chrome foi descartada (out/2026):** o
+   site no navegador já cobre o computador.
 
 ## Decisões de produto já tomadas
 
@@ -64,14 +68,13 @@ repositório é público: tudo que entra nele fica visível para sempre, inclusi
 histórico de commits. Uma chave vazada precisa ser revogada, não só apagada.
 
 **Tornar o repositório privado não protege o código do site.** Todo visitante
-baixa o HTML, o CSS e o JavaScript para o próprio navegador. Além disso, o
-GitHub Pages só funciona em repositórios públicos no plano gratuito — privatizar
-tiraria o site do ar.
+baixa o HTML, o CSS e o JavaScript para o próprio navegador.
 
-**O GitHub Pages não permite uso comercial.** Os termos proíbem usá-lo para
-rodar negócio online, e-commerce ou SaaS, e desaconselham transações sensíveis
-como senhas e cartões. Consequência prática: **quando o Quem Saiu tiver planos
-pagos, a hospedagem precisa mudar.** Não é opcional.
+**Hospedagem já migrada (out/2026).** O GitHub Pages não permite uso comercial
+(os termos proíbem negócio online, e-commerce ou SaaS), por isso o site saiu de
+lá e hoje roda na Cloudflare (projeto `quem-saiu`, em Workers e Pages). Antes de
+cobrar qualquer plano, conferir os termos do plano da Cloudflare para uso
+comercial — isso ainda não foi verificado.
 
 **Cobrança não pode ser verificada só no navegador.** Qualquer checagem feita em
 JavaScript pode ser burlada por quem abrir as ferramentas do navegador. Planos
@@ -87,7 +90,8 @@ gratuito manteria tudo no aparelho.
 
 **É tecnicamente possível**, mas exige servidor: o modelo de IA roda fora do
 celular e a chave de acesso não pode ficar no código do site. Ou seja, depende
-da migração de hospedagem que os planos pagos já exigem.
+de um servidor (a hospedagem já está na Cloudflare, mas hoje só serve arquivos
+estáticos; o servidor do chat ainda não existe).
 
 **O que muda de categoria — e é o ponto principal:** as listas não contêm apenas
 dados de quem usa o site. São centenas de nomes de **outras pessoas**, que nunca
@@ -110,8 +114,8 @@ de nomes, e as dúvidas possíveis são poucas e conhecidas. Boa parte do valor 
 chat pode ser entregue sem IA, sem servidor e sem custo — por exemplo, um "por
 que esta conta está aqui?" ao lado de cada nome, explicando na hora.
 
-**Decisão:** adiado. Reavaliar quando houver migração de hospedagem e planos
-pagos, e apenas com orientação sobre as obrigações de LGPD.
+**Decisão:** adiado. Reavaliar junto com os planos pagos, e apenas com
+orientação sobre as obrigações de LGPD.
 
 ## Regra: política de privacidade e textos andam juntos
 
@@ -120,23 +124,21 @@ ele fará depois. Toda mudança que altere o comportamento (chat com IA, servido
 planos pagos, qualquer envio de dados) exige revisar a política **antes** do
 lançamento, não depois.
 
-Atenção: a mensagem de privacidade vive em **três lugares**, e todos precisam ser
-atualizados juntos, senão o site se contradiz:
+Atenção: a mensagem de privacidade vive em **dois lugares**, e os dois precisam
+ser atualizados juntos, senão o site se contradiz:
 1. `privacy-policy.html`
 2. O texto dentro do site ("Seus dados são lidos aqui no seu navegador. Nada é
    enviado para servidor nenhum.")
-3. A descrição da extensão na Chrome Web Store
 
-A política é datada. Toda revisão atualiza a data.
+A política é datada. Toda revisão atualiza a data (última: 7 de outubro de 2026,
+quando a hospedagem passou a constar como Cloudflare e o botão Compartilhar foi
+descrito).
 
 **Caso real (set/2026):** a política descrevia a extensão de Chrome como se já
-estivesse publicada ("A extensão lê... e salva..."), mas ela nunca foi ao ar —
-o site já dizia "em produção". Foi removida a seção inteira da extensão da
-política (e a menção a ela na seção de Termos do Instagram), até que exista
-de verdade. **Lembrete: quando a extensão for publicada, trazer essa seção de
-volta** — o texto antigo com as permissões (storage, host_permissions em
-instagram.com) está no histórico do repositório, não precisa reescrever do
-zero.
+estivesse publicada, mas ela nunca foi ao ar — o site já dizia "em produção".
+A seção da extensão foi removida da política. **Em out/2026 a extensão foi
+descartada de vez** e o aviso "em produção" saiu do site; o texto antigo com as
+permissões continua no histórico do repositório, caso a ideia volte.
 
 ## Checklist antes de ligar o chat com IA (ou qualquer envio de dados)
 
@@ -162,7 +164,8 @@ Levantamento jurídico feito em agosto/2026. Não substitui advogado.
 
 **Estrutura:**
 - Empresa com CNPJ recebendo as assinaturas. Nunca o CPF pessoal do responsável.
-- Não publicar a extensão de Chrome (maior atrito com os termos da Meta).
+- Não publicar extensão de Chrome (maior atrito com os termos da Meta) — já
+  descartada.
 - Não usar a marca Instagram em nome, domínio ou logo.
 
 **Por que o modelo atual é seguro:** enquanto tudo roda no navegador, o projeto
@@ -212,11 +215,18 @@ e ainda premia quem convidou.
 ## Contas e endereços do projeto
 
 - Site: **https://quemsaiu.com.br** — domínio próprio, ativo, com HTTPS.
-  O endereço antigo (suportequemsaiu-beep.github.io/Quem-saiu-/) redireciona
-  sozinho para cá.
-- Hospedagem: ainda GitHub Pages (o domínio próprio só trocou o endereço, não
-  a hospedagem — troca de hospedagem continua pendente para quando houver
-  planos pagos, ver "Segurança e limites da hospedagem").
+- Hospedagem: **Cloudflare** (projeto `quem-saiu`, em Workers e Pages). O
+  domínio `quemsaiu.com.br` e o `www.quemsaiu.com.br` apontam para ele, e cada
+  alteração na branch `main` gera uma publicação nova (confirmado no painel em
+  7/out/2026). O GitHub Pages deixou de ser a hospedagem; o arquivo `CNAME` na
+  raiz é sobra dele e não é necessário para a Cloudflare. Não conferi se o
+  endereço antigo `suportequemsaiu-beep.github.io/Quem-saiu-/` ainda
+  redireciona.
+- O painel da Cloudflare mostra "visitantes únicos" do domínio. É contagem feita
+  pelo próprio provedor, sem nenhum código nosso no site — por isso não quebra a
+  regra 1. É estimativa (conta por endereço de IP e inclui robôs).
+- Acesso ao painel da Cloudflare: conta ligada ao e-mail do projeto
+  (suporte.quemsaiu@gmail.com).
 - Repositório: github.com/suportequemsaiu-beep/Quem-saiu- (público, branch main)
 - E-mail do projeto: suporte.quemsaiu@gmail.com
 - Domínio registrado no registro.br, R$ 40/ano, no nome do responsável legal
@@ -270,12 +280,34 @@ quando não — contraste conferido nas duas variações).
 JavaScript separados em `style.css` e `script.js`. Ver "Como o código está
 organizado" para os detalhes.
 
-**Não começado:** logo definitivo (o ícone atual é provisório, feito em CSS,
-propositalmente deixado para perto do lançamento), medição de uso que respeite
-privacidade.
+**Atualizações de out/2026 (publicadas):**
+- Botão discreto "Compartilhar" no canto direito, acima da porta (menor no
+  celular). Usa o compartilhamento do aparelho quando existe; senão copia o
+  link e mostra "Link copiado". Envia só o endereço do site, nunca dados da
+  lista. Texto padrão: "Descubra quem deixou de te seguir no Instagram — sem
+  login e sem senha."
+- Passo 1 do "como pego o arquivo" começa com um link para a Central de Contas
+  do Instagram ("Toque aqui para abrir a Central de Contas do Instagram"),
+  substituindo o antigo "abra seu perfil, toque no menu ☰…". A lista continua
+  com 7 itens.
+- Layout para computador (telas ≥ 900 px): início em duas colunas, menu em uma
+  linha, conteúdo numa coluna de 680 px, efeito ao passar o mouse. No
+  computador o passo 3 do passo a passo é outro ("Baixe e escolha o arquivo
+  aqui"), porque o atalho de Compartilhar do Android não existe lá; o passo 3
+  de celular fica oculto nessa largura.
+- Removidos: o aviso "Está no computador? Uma extensão para o Chrome está em
+  produção" e o estilo `.extensao`. A resposta do FAQ "Existe versão para
+  computador?" agora explica que basta abrir o site no navegador.
+- Política de privacidade: hospedagem corrigida para Cloudflare, nota sobre o
+  botão Compartilhar, data atualizada.
 
-**Adiado de propósito:** extensão de Chrome, chat com IA, planos pagos,
-convites — todos dependem de sair do GitHub Pages.
+**Não começado:** logo definitivo (o ícone atual é provisório, feito em CSS,
+propositalmente deixado para perto do lançamento).
+
+**Adiado de propósito:** chat com IA, planos pagos e convites — todos dependem
+de um servidor, que ainda não existe. (Hospedagem já está na Cloudflare.)
+
+**Descartado:** extensão de Chrome (out/2026).
 
 ## Descobertas de campo (testadas no aparelho, não supostas)
 
@@ -333,8 +365,8 @@ com mais de 5 partes no total.
 
 ## Ideia avaliada: publicar na Play Store via PWA (TWA)
 
-Diferente da extensão de Chrome, publicar o Quem Saiu na Play Store pode **não
-exigir computador** — existe o PWABuilder (ferramenta web, não precisa
+Publicar o Quem Saiu na Play Store pode **não exigir computador** — existe o
+PWABuilder (ferramenta web, não precisa
 instalar nada local, diferente do Bubblewrap CLI que exige Node/JDK/Android
 SDK). Você digita o endereço do site e ele gera o pacote sozinho.
 
@@ -354,9 +386,9 @@ preenchido no Google Play Console na hora de criar a ficha, repetindo as
 palavras-chave principais 4-5 vezes de forma natural. Não é algo para editar
 no `index.html` agora.
 
-**Status:** avaliado, não iniciado. Mais promissor que a extensão de Chrome
-por não depender claramente de computador, mas ainda não confirmamos se o
-próprio Google Play Console funciona bem pelo navegador do celular.
+**Status:** avaliado, não iniciado. Não depende claramente de computador, mas
+ainda não confirmamos se o próprio Google Play Console funciona bem pelo
+navegador do celular.
 
 ## Avaliação de sugestões de UI recebidas de outra IA (Gemini, ago/2026)
 
@@ -389,12 +421,13 @@ categoria (Perplexity e Gemini, duas vezes).
 
 Desde ago/2026, separado em três arquivos (antes era um `index.html` só):
 
-- `index.html` — só estrutura e texto (HTML puro, ~294 linhas). Aponta para
+- `index.html` — só estrutura e texto (HTML puro, ~307 linhas). Aponta para
   `style.css` (`<link rel="stylesheet">`) e `script.js` (`<script src="...">`
   no fim do `<body>`). Editar aqui só o que é estrutura/conteúdo visível.
-- `style.css` — todo o CSS do site (~223 linhas). Editar aqui qualquer cor,
-  tamanho, espaçamento, animação.
-- `script.js` — todo o JavaScript do site (~637 linhas, o que antes eram os
+- `style.css` — todo o CSS do site (~260 linhas). Editar aqui qualquer cor,
+  tamanho, espaçamento, animação. O que é só do computador fica no bloco
+  `@media (min-width: 900px)` no fim do arquivo.
+- `script.js` — todo o JavaScript do site (~657 linhas, o que antes eram os
   dois blocos `<script>` inline, agora concatenados em um arquivo). Editar
   aqui qualquer comportamento, lógica de importação, PWA.
 - `manifest.json` — configuração do app instalável (PWA), incluindo o
@@ -428,6 +461,10 @@ cor não exige mais tocar no arquivo inteiro de 1000+ linhas.
 - **Diferença de datas entre as listas é normal.** Os registros de "seguindo"
   costumam ser mais antigos que os de "seguidores". Isso não indica exportação
   incompleta — não criar alertas baseados nisso.
+- **A leitura do site por ferramenta pode mostrar uma versão antiga.** Em
+  7/out/2026 a ferramenta de busca ainda mostrava o texto velho quando o site
+  já estava atualizado (cache). Para saber se uma publicação entrou, olhar o
+  site no navegador ou a aba Deployments do projeto na Cloudflare.
 - **Buscar o próprio site nunca prova que o HTML está bem formado.** Ferramentas
   de busca/leitura tolerante conseguem extrair texto mesmo com uma tag de
   fechamento faltando. Só um navegador de verdade (ou view-source:) revela isso.
@@ -449,3 +486,7 @@ Não há testes automatizados. Antes de qualquer publicação, conferir no celul
 4. Importar um .zip real do Instagram gera a lista correta.
 5. O botão × esconde uma conta e o painel "contas escondidas" permite restaurar.
 6. Nenhum erro no console do navegador.
+7. O botão "Compartilhar" abre a lista de apps do aparelho (ou copia o link).
+8. No computador (tela larga): início em duas colunas, "Sua lista" na mesma
+   coluna do resto, e o passo 3 mostrando a versão para computador. No celular,
+   conferir que nada disso mudou.
