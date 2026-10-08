@@ -1,5 +1,9 @@
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
   a, button, [role="button"] { touch-action: manipulation; }
+  /* Ao pressionar, todo botão encolhe um pouco (feedback de toque). Especificidade zero: regras próprias de cada botão ainda vencem. */
+  :where(button, [role="button"]) { transition: transform .12s ease; }
+  :where(button:not(:disabled), [role="button"]):active { transform: scale(.96); }
+  :where(.faq-q, .expansivel-topo):active { transform: scale(.985); }
   body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #0f172a; color: #f1f5f9; overflow-x: hidden; }
   .container { max-width: 560px; margin: 0 auto; padding: 0 22px; }
 
@@ -24,7 +28,7 @@
   /* ===== gancho ===== */
   .gancho { text-align: center; padding: 44px 0 38px; position: relative; }
   .btn-compartilhar svg { width: 12px; height: 12px; }
-  .btn-compartilhar { position: absolute; top: 10px; right: 0; display: inline-flex; align-items: center; gap: 5px; background: rgba(148,163,184,.08); border: 1px solid #64748b; color: #cbd5e1; border-radius: 999px; padding: 5px 10px; font-size: 11px; font-weight: 600; font-family: inherit; cursor: pointer; transition: color .2s, border-color .2s; }
+  .btn-compartilhar { position: absolute; top: 10px; right: 0; display: inline-flex; align-items: center; gap: 5px; background: rgba(148,163,184,.08); border: 1px solid #64748b; color: #cbd5e1; border-radius: 999px; padding: 5px 10px; font-size: 11px; font-weight: 600; font-family: inherit; cursor: pointer; transition: color .2s, border-color .2s, background .2s, transform .12s ease; }
   .btn-compartilhar:hover, .btn-compartilhar:active { color: #fff; border-color: #38bdf8; background: rgba(56,189,248,.12); }
   .cena { position: relative; width: 170px; height: 132px; margin: 0 auto 30px; perspective: 620px; }
   .moldura { position: absolute; left: 8px; top: 4px; width: 84px; height: 122px; border: 7px solid #38bdf8; border-radius: 9px; }
@@ -197,7 +201,7 @@
   .vantagem span { font-size:13px; color:#cbd5e1; line-height:1.5; }
   .vantagem b { color:#f1f5f9; }
   .btn-instalar-grande { position:relative; width:100%; border:none; border-radius:14px; padding:16px; background:#0369a1; color:#fff; font-size:15px; font-weight:800; cursor:pointer; }
-  .btn-instalar-grande:active { transform:scale(.99); }
+  .btn-instalar-grande:active { transform:scale(.97); }
   .nota-loja { position:relative; font-size:11.5px; color:#94a3b8; margin:13px 0 0; line-height:1.55; }
   .link-sem-instalar { position:relative; display:inline-block; margin-top:16px; background:none; border:none; color:#94a3b8; font-size:12.5px; text-decoration:underline; cursor:pointer; }
 
