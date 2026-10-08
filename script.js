@@ -24,6 +24,27 @@ document.getElementById("btnDescobrir").addEventListener("click", function () {
   setTimeout(function () { r.scrollIntoView({ behavior: "smooth", block: "start" }); }, 60);
 });
 
+/* ===== compartilhar o site ===== */
+document.getElementById("btnCompartilhar").addEventListener("click", function () {
+  var dados = {
+    title: "Quem Saiu",
+    text: "Descubra quem deixou de te seguir no Instagram — sem login e sem senha.",
+    url: "https://quemsaiu.com.br"
+  };
+  var rotulo = document.getElementById("txtCompartilhar");
+  function avisar(msg) {
+    rotulo.textContent = msg;
+    setTimeout(function () { rotulo.textContent = "Compartilhar"; }, 2000);
+  }
+  if (navigator.share) {
+    navigator.share(dados).catch(function () {});
+  } else if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(dados.url).then(function () { avisar("Link copiado"); }, function () { avisar("Não foi possível copiar"); });
+  } else {
+    avisar("Copie: quemsaiu.com.br");
+  }
+});
+
 /* ===== prova interativa ===== */
 var LISTAS = {
   saiu: {
