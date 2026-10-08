@@ -435,7 +435,7 @@ Desde ago/2026, separado em três arquivos (antes era um `index.html` só):
 - `style.css` — todo o CSS do site (~263 linhas). Editar aqui qualquer cor,
   tamanho, espaçamento, animação. O que é só do computador fica no bloco
   `@media (min-width: 900px)` no fim do arquivo.
-- `script.js` — todo o JavaScript do site (~663 linhas, o que antes eram os
+- `script.js` — todo o JavaScript do site (~662 linhas, o que antes eram os
   dois blocos `<script>` inline, agora concatenados em um arquivo). Editar
   aqui qualquer comportamento, lógica de importação, PWA.
 - `manifest.json` — configuração do app instalável (PWA), incluindo o
