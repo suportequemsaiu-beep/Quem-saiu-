@@ -429,7 +429,7 @@ Desde ago/2026, separado em três arquivos (antes era um `index.html` só):
 - `index.html` — só estrutura e texto (HTML puro, ~307 linhas). Aponta para
   `style.css` (`<link rel="stylesheet">`) e `script.js` (`<script src="...">`
   no fim do `<body>`). Editar aqui só o que é estrutura/conteúdo visível.
-- `style.css` — todo o CSS do site (~265 linhas). Editar aqui qualquer cor,
+- `style.css` — todo o CSS do site (~263 linhas). Editar aqui qualquer cor,
   tamanho, espaçamento, animação. O que é só do computador fica no bloco
   `@media (min-width: 900px)` no fim do arquivo.
 - `script.js` — todo o JavaScript do site (~656 linhas, o que antes eram os
