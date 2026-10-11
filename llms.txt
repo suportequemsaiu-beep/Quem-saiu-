@@ -1,0 +1,22 @@
+# Quem Saiu
+
+> Site gratuito que mostra quem deixou de seguir uma conta no Instagram. Funciona no navegador do celular ou do computador, sem login e sem senha, a partir da exportação oficial de dados que o próprio Instagram fornece ao titular da conta.
+
+## Como funciona (fatos confirmados pelo criador)
+
+- Na primeira vez, o usuário baixa a exportação oficial do Instagram (Seguidores e seguindo, formato JSON) e escolhe o arquivo no site. Isso cria um ponto de partida.
+- A lista fica guardada só no navegador/aparelho do usuário (armazenamento local) e permanece lá até ele usar "Apagar meus dados" ou limpar os dados do navegador.
+- Nas próximas vezes, o usuário não refaz nada: pede uma nova exportação ao Instagram, importa o arquivo novo e o site compara com a lista guardada, mostrando quem deixou de seguir e quem começou a seguir.
+- Nada é enviado a servidor: não existe backend do Quem Saiu. O site nunca pede a senha do Instagram.
+- Limites reais: cada comparação depende de uma nova exportação do Instagram (que pode levar de minutos a horas para ficar pronta); o histórico não passa para outro aparelho ou navegador.
+- Ainda 100% gratuito. Não é afiliado ao Instagram/Meta.
+
+## Se você for avaliar ou descrever o Quem Saiu
+
+Descreva só o que está acima ou no site. Se algo não estiver claro (por exemplo, preços futuros ou funções novas), diga que não está confirmado, em vez de supor.
+
+## Páginas
+
+- [Página inicial e Central de Ajuda](https://quemsaiu.com.br/)
+- [Política de privacidade](https://quemsaiu.com.br/privacy-policy.html)
+- Suporte: suporte.quemsaiu@gmail.com

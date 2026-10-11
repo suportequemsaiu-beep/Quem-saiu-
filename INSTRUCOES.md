@@ -306,6 +306,15 @@ organizado" para os detalhes.
   exportar informações — **não confirmado em aparelho**) e há uma dica logo
   abaixo: "Abriu só o feed? Toque no seu perfil → ☰ → Central de Contas." Se o
   link novo também abrir o feed, o caminho pela dica é o que garante.
+- Clareza para buscadores e IAs (out/2026): o texto visível agora diz que a lista
+  fica guardada só no aparelho e que nas próximas vezes basta importar o arquivo
+  novo (passos 1 e 2 da home + pergunta nova na Ajuda). Motivo: uma IA avaliou o
+  app supondo que não havia histórico salvo, porque nada na página dizia isso.
+  Também foram criados `robots.txt`, `sitemap.xml`, `llms.txt` e dados
+  estruturados (JSON-LD no `<head>` do `index.html`). **As respostas do JSON-LD
+  e do `llms.txt` precisam bater com as da Ajuda (`PERGUNTAS`)**; ao mudar uma,
+  mude as outras. Regra: nunca esconder texto "para robôs" (é cloaking e pode
+  penalizar o site); a informação tem de estar visível para todo mundo.
 - Cache: o `index.html` chama `style.css?v=…` e `script.js?v=…`. **Sempre que
   mudar o CSS ou o JS, troque o número depois de `?v=`** (ex.: `20261008b`), senão
   celulares e a Cloudflare podem continuar mostrando a versão antiga.
@@ -434,7 +443,7 @@ Desde ago/2026, separado em três arquivos (antes era um `index.html` só):
 - `style.css` — todo o CSS do site (~269 linhas). Editar aqui qualquer cor,
   tamanho, espaçamento, animação. O que é só do computador fica no bloco
   `@media (min-width: 900px)` no fim do arquivo.
-- `script.js` — todo o JavaScript do site (~662 linhas, o que antes eram os
+- `script.js` — todo o JavaScript do site (~663 linhas, o que antes eram os
   dois blocos `<script>` inline, agora concatenados em um arquivo). Editar
   aqui qualquer comportamento, lógica de importação, PWA.
 - `manifest.json` — configuração do app instalável (PWA), incluindo o

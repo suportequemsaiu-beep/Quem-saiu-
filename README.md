@@ -24,6 +24,7 @@ de dados que o próprio Instagram fornece ao titular da conta.
 | `service-worker.js` | Recebe o arquivo compartilhado pelo Android |
 | `manifest.json` | Configuração do app instalável |
 | `privacy-policy.html` | Política de privacidade |
+| `robots.txt`, `sitemap.xml`, `llms.txt` | Ajudam buscadores e IAs a entender o site (o `llms.txt` resume os fatos confirmados) |
 | `INSTRUCOES.md` | Regras, decisões e histórico do projeto — leia antes de alterar |
 
 Hospedagem: Cloudflare, com publicação automática a cada alteração na branch `main`.

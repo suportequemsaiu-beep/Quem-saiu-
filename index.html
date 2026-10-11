@@ -6,7 +6,7 @@
 <title>Quem Saiu — Saiba quem deixou de te seguir no Instagram</title>
 
 <!-- descrição para buscadores -->
-<meta name="description" content="Descubra quem deixou de te seguir no Instagram sem risco de banimento. Um app de unfollow que não pede login nem senha — leitura no seu navegador, a partir da exportação oficial de dados do Instagram." />
+<meta name="description" content="Descubra quem deixou de te seguir no Instagram sem risco de banimento. Um app de unfollow que não pede login nem senha — leitura no seu navegador, a partir da exportação oficial de dados do Instagram. Sua lista fica guardada só no seu aparelho para comparar nas próximas vezes." />
 <link rel="canonical" href="https://quemsaiu.com.br/" />
 
 <!-- como o link aparece ao ser compartilhado -->
@@ -22,11 +22,62 @@
 <meta name="twitter:description" content="Sem login, sem senha: a leitura acontece no seu próprio aparelho." />
 <meta name="twitter:image" content="https://quemsaiu.com.br/icone-512.png" />
 
+<!-- dados estruturados (buscadores e IAs). Mantenha as respostas iguais às da Central de Ajuda (PERGUNTAS no script.js) -->
+<script type="application/ld+json">
+[
+ {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Quem Saiu",
+  "url": "https://quemsaiu.com.br/",
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "Qualquer navegador (celular e computador)",
+  "inLanguage": "pt-BR",
+  "offers": {
+   "@type": "Offer",
+   "price": "0",
+   "priceCurrency": "BRL"
+  },
+  "description": "Mostra quem deixou de seguir uma conta no Instagram, comparando duas exportações oficiais de dados. Sem login e sem senha; a leitura e o histórico ficam só no navegador do usuário."
+ },
+ {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+   {
+    "@type": "Question",
+    "name": "Preciso refazer tudo a cada vez que quiser comparar?",
+    "acceptedAnswer": {
+     "@type": "Answer",
+     "text": "Não. Na primeira vez, a sua lista fica guardada no seu aparelho e continua lá até você apagar. Nas próximas, é só importar o arquivo novo do Instagram e o Quem Saiu compara com a lista guardada. Ela só some se você usar “Apagar meus dados” ou limpar os dados do navegador, e não passa para outro aparelho ou navegador."
+    }
+   },
+   {
+    "@type": "Question",
+    "name": "Preciso informar minha senha do Instagram?",
+    "acceptedAnswer": {
+     "@type": "Answer",
+     "text": "Não. O Quem Saiu nunca pede login nem senha."
+    }
+   },
+   {
+    "@type": "Question",
+    "name": "Meus dados ficam salvos em algum servidor?",
+    "acceptedAnswer": {
+     "@type": "Answer",
+     "text": "Não. Tudo fica guardado localmente no seu próprio navegador. Não existe backend, nem envio de dados para fora do seu aparelho."
+    }
+   }
+  ]
+ }
+]
+</script>
+
 <link rel="manifest" href="manifest.json" />
 <meta name="theme-color" content="#0f172a" />
 <link rel="apple-touch-icon" href="icone-192.png" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-<link rel="stylesheet" href="style.css?v=20261011a" />
+<link rel="stylesheet" href="style.css?v=20261011b" />
 </head>
 <body>
 
@@ -90,14 +141,14 @@
           <span class="marca-num">1</span>
           <div>
             <h3>Marque seu ponto de partida</h3>
-            <p>Você importa sua lista de seguidores uma primeira vez. É a foto de como ela está hoje.</p>
+            <p>Você importa sua lista de seguidores uma primeira vez. É a foto de como ela está hoje — e fica guardada só no seu aparelho.</p>
           </div>
         </div>
         <div class="etapa">
           <span class="marca-num">2</span>
           <div>
             <h3>Viu o número mudar?</h3>
-            <p>Perdeu um seguidor e ficou naquela dúvida? <span class="destaque">É a hora de voltar aqui.</span> Importe sua lista de novo.</p>
+            <p>Perdeu um seguidor e ficou naquela dúvida? <span class="destaque">É a hora de voltar aqui.</span> Importe só o arquivo novo — não precisa refazer nada.</p>
           </div>
         </div>
         <div class="etapa">
@@ -301,7 +352,7 @@
   <button class="fechar" id="btnFecharFaixa" aria-label="Fechar aviso">&times;</button>
 </div>
 
-<script src="script.js?v=20261011a"></script>
+<script src="script.js?v=20261011b"></script>
 
 </body>
 </html>
