@@ -39,8 +39,7 @@ Suporte: suporte.quemsaiu@gmail.com
    site no navegador, com ajustes de layout que só valem em telas a partir de
    900 px (bloco `@media (min-width: 900px)` no fim do `style.css`) — mudanças
    para o computador nunca devem alterar o celular. A importação de arquivo é o
-   coração do produto. **A extensão de Chrome foi descartada (out/2026):** o
-   site no navegador já cobre o computador.
+   coração do produto. O site no navegador já cobre o computador.
 
 ## Decisões de produto já tomadas
 
@@ -134,11 +133,6 @@ A política é datada. Toda revisão atualiza a data (última: 7 de outubro de 2
 quando a hospedagem passou a constar como Cloudflare e o botão Compartilhar foi
 descrito).
 
-**Caso real (set/2026):** a política descrevia a extensão de Chrome como se já
-estivesse publicada, mas ela nunca foi ao ar — o site já dizia "em produção".
-A seção da extensão foi removida da política. **Em out/2026 a extensão foi
-descartada de vez** e o aviso "em produção" saiu do site; o texto antigo com as
-permissões continua no histórico do repositório, caso a ideia volte.
 
 ## Checklist antes de ligar o chat com IA (ou qualquer envio de dados)
 
@@ -164,8 +158,6 @@ Levantamento jurídico feito em agosto/2026. Não substitui advogado.
 
 **Estrutura:**
 - Empresa com CNPJ recebendo as assinaturas. Nunca o CPF pessoal do responsável.
-- Não publicar extensão de Chrome (maior atrito com os termos da Meta) — já
-  descartada.
 - Não usar a marca Instagram em nome, domínio ou logo.
 
 **Por que o modelo atual é seguro:** enquanto tudo roda no navegador, o projeto
@@ -269,9 +261,7 @@ da mecânica), e uma varredura completa de contraste que corrigiu:
 do Instagram") e "Ver o que mudou" (era "Comparar com a exportação anterior").
 
 **Também publicado, mais recente:** pergunta nova no FAQ sobre app sem senha
-(com aria-expanded corrigido em todo o FAQ, não só no passo a passo); texto da
-extensão do Chrome mudou de link clicável para "está em produção" (removido
-código morto: LINK_CHROME_STORE e o listener que ficou órfão); reforço
+(com aria-expanded corrigido em todo o FAQ, não só no passo a passo); reforço
 "nunca peça nem envie sua senha" na aba Suporte; abas do resultado redesenhadas
 com o número numa bolinha antes do texto (branca quando ativa, colorida
 quando não — contraste conferido nas duas variações).
@@ -295,9 +285,8 @@ organizado" para os detalhes.
   computador o passo 3 do passo a passo é outro ("Baixe e escolha o arquivo
   aqui"), porque o atalho de Compartilhar do Android não existe lá; o passo 3
   de celular fica oculto nessa largura.
-- Removidos: o aviso "Está no computador? Uma extensão para o Chrome está em
-  produção" e o estilo `.extensao`. A resposta do FAQ "Existe versão para
-  computador?" agora explica que basta abrir o site no navegador.
+- A resposta do FAQ "Existe versão para computador?" explica que basta abrir o
+  site no navegador.
 - Política de privacidade: hospedagem corrigida para Cloudflare, nota sobre o
   botão Compartilhar, data atualizada.
 - Botão Compartilhar mais claro (texto `#cbd5e1`, borda `#64748b`, fundo leve).
@@ -320,8 +309,6 @@ propositalmente deixado para perto do lançamento).
 
 **Adiado de propósito:** chat com IA, planos pagos e convites — todos dependem
 de um servidor, que ainda não existe. (Hospedagem já está na Cloudflare.)
-
-**Descartado:** extensão de Chrome (out/2026).
 
 ## Descobertas de campo (testadas no aparelho, não supostas)
 
