@@ -134,6 +134,7 @@
   .passo-2 .passo-nota { color:#166534; background:#dcfce7; }
   .passo-3 .passo-nota { color:#6b21a8; background:#f3e8ff; }
   .passo ol a { color: #0369a1; font-weight: 700; }
+  .dica-passo { display: block; font-size: 12px; line-height: 1.5; color: #64748b; margin-top: 2px; }
 .abas-resultado { display: flex; gap: 8px; margin: 4px 0 12px; flex-wrap: wrap; }
   .aba-res { border: none; border-radius: 999px; padding: 8px 12px; font-size: 12px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
   .aba-res .bolha { border-radius: 999px; min-width: 20px; height: 20px; padding: 0 6px; font-size: 11px; font-weight: 800; display: inline-flex; align-items: center; justify-content: center; }

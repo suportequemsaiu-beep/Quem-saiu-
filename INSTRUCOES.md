@@ -300,6 +300,12 @@ organizado" para os detalhes.
 - Causa real da borda azul que "grudava" no Compartilhar: o `:hover` no celular
   fica ativo depois do toque até tocar em outro lugar. Todos os efeitos de
   passar o mouse agora só valem em aparelhos com mouse (`@media (hover: hover)`).
+- Atalho da Central de Contas: no Android com o app instalado, o link
+  `accountscenter.instagram.com` abria só o feed do Instagram (testado pela
+  usuária). O link agora aponta para `…/info_and_permissions/dyi/` (página de
+  exportar informações — **não confirmado em aparelho**) e há uma dica logo
+  abaixo: "Abriu só o feed? Toque no seu perfil → ☰ → Central de Contas." Se o
+  link novo também abrir o feed, o caminho pela dica é o que garante.
 - Cache: o `index.html` chama `style.css?v=…` e `script.js?v=…`. **Sempre que
   mudar o CSS ou o JS, troque o número depois de `?v=`** (ex.: `20261008b`), senão
   celulares e a Cloudflare podem continuar mostrando a versão antiga.
@@ -425,7 +431,7 @@ Desde ago/2026, separado em três arquivos (antes era um `index.html` só):
 - `index.html` — só estrutura e texto (HTML puro, ~307 linhas). Aponta para
   `style.css` (`<link rel="stylesheet">`) e `script.js` (`<script src="...">`
   no fim do `<body>`). Editar aqui só o que é estrutura/conteúdo visível.
-- `style.css` — todo o CSS do site (~268 linhas). Editar aqui qualquer cor,
+- `style.css` — todo o CSS do site (~269 linhas). Editar aqui qualquer cor,
   tamanho, espaçamento, animação. O que é só do computador fica no bloco
   `@media (min-width: 900px)` no fim do arquivo.
 - `script.js` — todo o JavaScript do site (~662 linhas, o que antes eram os
