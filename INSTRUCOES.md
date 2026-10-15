@@ -308,7 +308,7 @@ organizado" para os detalhes.
   app supondo que não havia histórico salvo, porque nada na página dizia isso.
   Também foram criados `robots.txt`, `sitemap.xml`, `llms.txt` e dados
   estruturados (JSON-LD no `<head>` do `index.html`). **As respostas do JSON-LD
-  e do `llms.txt` precisam bater com as da Ajuda (`PERGUNTAS`)**; ao mudar uma,
+  e do `llms.txt` precisam bater com as da Ajuda (os `<details>` da aba Ajuda no `index.html`)**; ao mudar uma,
   mude as outras. Regra: nunca esconder texto "para robôs" (é cloaking e pode
   penalizar o site); a informação tem de estar visível para todo mundo.
 - Correções de código (out/2026), todas testadas no navegador:
@@ -328,8 +328,58 @@ organizado" para os detalhes.
   - O × para esconder contas existe em todas as abas do resultado (a Ajuda já
     prometia isso); a escolha vale para todas as abas.
   - Comparação com `Set` (50 mil seguidores comparam em menos de 1 s).
+- Rodada de avaliação por IAs (out/2026): cinco IAs (ChatGPT, Gemini, Grok,
+  Perplexity, Kimi) avaliaram o site só pelo que está escrito. O que apareceu e
+  o que foi feito:
+  - **"Minutos a horas" no `llms.txt`** era uma frase minha, nunca confirmada, e o
+    título "fatos confirmados pelo criador" fazia as IAs repetirem como fato.
+    Agora o tempo da exportação é "varia" e o título é só "Como funciona".
+    **Regra: nada no `llms.txt`, na Ajuda ou nos dados estruturados pode ser
+    escrito como confirmado sem a Janaína ter confirmado.**
+  - **"Sem risco de banimento"** saiu da descrição do site e da prévia do link
+    (promessa que não dá para garantir; nenhuma IA a via, e a página não dizia
+    nada sobre banimento). A política agora diz só que o app não acessa a conta
+    e que não há garantia sobre como o Instagram trata ferramentas de terceiros.
+    A frase da "portabilidade de dados" saiu da política até um advogado
+    confirmar.
+  - **iPhone/Safari nunca foi testado** e isso está escrito em todo lugar. O
+    atalho Compartilhar → Quem Saiu só existe no Android. O JSON-LD não diz
+    mais "Qualquer navegador".
+  - **A Ajuda agora é HTML puro** (`<details>` no `index.html`), e não mais montada
+    por JavaScript: as IAs não liam as respostas. O JSON-LD (FAQPage) tem as
+    mesmas 17 perguntas e respostas. Para mudar uma resposta: edite o
+    `<details>` e copie o texto igual para o JSON-LD.
+  - Bloco visível "O que vale saber antes de começar" na home (sem senha, histórico
+    só neste navegador, sempre o arquivo mais novo, aparelhos testados).
+  - Abas do resultado explicam o que mostram; o botão de apagar diz o que remove;
+    o status com 1 lista pede um arquivo mais novo.
+  - **Aviso de arquivo mais antigo:** o app compara as duas listas mais recentes
+    **na ordem em que foram importadas**, não pela data do arquivo. Se o nome do
+    .zip trouxer a data (`instagram-usuario-AAAA-MM-DD-xxxx.zip`, formato que
+    ainda não foi conferido num arquivo real) e ela for anterior à da última lista
+    guardada, o app pergunta antes de guardar. Sem data no nome, não há aviso.
+  - **Limite de armazenamento:** o navegador deixa guardar uns 5 milhões de
+    caracteres no `localStorage`. Medido: uma conta de 50 mil seguidores enche em
+    6 listas; de 300 mil, nem a segunda lista cabe. Agora `guardarNova()`
+    descarta as listas mais antigas até caber, mantendo sempre as 2 mais
+    recentes; se nem 2 couberem (contas acima de uns 150 mil seguidores), a lista
+    vale só nesta página e o app avisa. A solução definitiva seria usar
+    IndexedDB (não feito).
+  - Teste com 300 mil seguidores: leitura em ~1,5 s no computador. Se 60 mil
+    contas mudarem, abrir a aba leva ~5 s (renderiza todas as linhas). Em celular
+    não foi medido.
+  - **JSZip agora é servido pelo próprio site** (`jszip.min.js`, versão 3.10.1,
+    licença MIT/GPL no cabeçalho do arquivo, que não deve ser removido). Não há
+    mais nenhuma requisição para fora do site, e a política foi atualizada.
+  - Exemplo da amostra: `@yuri22` (amigo da Janaína, com autorização) no lugar
+    de um perfil de pessoa famosa. Os outros nomes da amostra
+    (`@bruno_costa`, `@paula.mendes`) parecem inventados, mas podem existir.
+  - Pendente para um advogado: política de privacidade/LGPD antes de cobrar,
+    quem aparece como responsável pelo site, e "Ainda 100% gratuito".
+  - Se as IAs não abrirem a política ou o `llms.txt` (aconteceu com uma), vale
+    olhar na Cloudflare (Segurança → Bots) se há bloqueio de robôs de IA.
 - Cache: o `index.html` chama `style.css?v=…` e `script.js?v=…`. **Sempre que
-  mudar o CSS ou o JS, troque o número depois de `?v=`** (ex.: `20261008b`), senão
+  mudar o CSS ou o JS, troque o número depois de `?v=`** (hoje `20261015a`), senão
   celulares e a Cloudflare podem continuar mostrando a versão antiga.
 
 **Não começado:** logo definitivo (o ícone atual é provisório, feito em CSS,
@@ -450,10 +500,10 @@ categoria (Perplexity e Gemini, duas vezes).
 
 Desde ago/2026, separado em três arquivos (antes era um `index.html` só):
 
-- `index.html` — só estrutura e texto (HTML puro, ~307 linhas). Aponta para
+- `index.html` — só estrutura e texto (HTML puro, ~550 linhas; inclui a Central de Ajuda em `<details>` e o JSON-LD). Aponta para
   `style.css` (`<link rel="stylesheet">`) e `script.js` (`<script src="...">`
   no fim do `<body>`). Editar aqui só o que é estrutura/conteúdo visível.
-- `style.css` — todo o CSS do site (~268 linhas). Editar aqui qualquer cor,
+- `style.css` — todo o CSS do site (~280 linhas). Editar aqui qualquer cor,
   tamanho, espaçamento, animação. O que é só do computador fica no bloco
   `@media (min-width: 900px)` no fim do arquivo.
 - `script.js` — todo o JavaScript do site (~689 linhas, o que antes eram os
@@ -466,8 +516,8 @@ Desde ago/2026, separado em três arquivos (antes era um `index.html` só):
 - `privacy-policy.html` — política de privacidade.
 - `icone-*.png` — ícones do app.
 
-Biblioteca externa: JSZip, carregada por CDN, usada para abrir o .zip no
-navegador. É a única dependência.
+Biblioteca: JSZip 3.10.1 (`jszip.min.js`, copiada para dentro do site, sem CDN),
+usada para abrir o .zip no navegador. É a única dependência.
 
 **Por que separar ajudou:** cada arquivo sozinho cabe numa colagem só (menos
 o CSS e o JS, que ainda passam de ~15.000 caracteres e precisam de 2 blocos

@@ -72,7 +72,7 @@ var LISTAS = {
     explica: "Quem você segue e não te segue de volta.",
     classe: "naoSegue",
     itens: [
-      { cor: "#6366f1", nome: "@adamsandler" },
+      { cor: "#6366f1", nome: "@yuri22" },
       { cor: "#f59e0b" }, { cor: "#84cc16" }
     ]
   }
@@ -127,43 +127,7 @@ document.getElementById("togglePasso").addEventListener("click", function () {
   this.setAttribute("aria-expanded", aberto ? "false" : "true");
 });
 
-/* ===== FAQ ===== */
-var PERGUNTAS = [
-  { q: "Como o Quem Saiu descobre quem deixou de me seguir?", a: "Comparando a sua lista de seguidores em dois momentos diferentes. Você importa sua lista uma primeira vez e, quando notar que o número de seguidores mudou, importa de novo. Quem estava na primeira lista e não está na segunda, saiu." },
-  { q: "Preciso informar minha senha do Instagram?", a: "Não. O Quem Saiu nunca pede login nem senha." },
-  { q: "Existe um app de unfollow do Instagram que não pede senha?", a: "Sim — o Quem Saiu nunca pede login ou senha. Aplicativos que exigem essas credenciais violam os Termos de Uso do Instagram, o que pode levar a penalidades na conta. O Quem Saiu usa só a exportação oficial de dados, um caminho que o próprio Instagram disponibiliza para qualquer usuário." },
-  { q: "Preciso refazer tudo a cada vez que quiser comparar?", a: "Não. Na primeira vez, a sua lista fica guardada no seu aparelho e continua lá até você apagar. Nas próximas, é só importar o arquivo novo do Instagram e o Quem Saiu compara com a lista guardada. Ela só some se você usar 'Apagar meus dados' ou limpar os dados do navegador, e não passa para outro aparelho ou navegador." },
-  { q: "Meus dados ficam salvos em algum servidor?", a: "Não. Tudo fica guardado localmente no seu próprio navegador. Não existe backend, nem envio de dados para fora do seu aparelho." },
-  { q: "Apareceu alguém que na verdade me segue. Por quê?", a: "A exportação do Instagram é um retrato do momento em que foi gerada e, de vez em quando, deixa alguém de fora da lista de seguidores. Nesses casos, use o × para esconder a conta da lista." },
-  { q: "Aparecem contas que não existem mais. Dá para esconder?", a: "Sim. A exportação não informa quais contas foram desativadas ou excluídas, então o Quem Saiu não tem como saber sozinho. Toque no nome para conferir o perfil e, se ele não existir mais, use o × ao lado. Depois dá para revisar tudo em 'contas escondidas' e restaurar o que quiser." },
-  { q: "Por que não aparecem as fotos de perfil?", a: "A exportação do Instagram traz apenas os nomes de usuário, sem fotos. Por isso mostramos as iniciais de cada conta, com uma cor fixa para ajudar a reconhecê-las." },
-  { q: "O Instagram deu erro na hora de exportar. O que eu faço?", a: "Acontece — a Central de Contas do Instagram é instável às vezes. Toque em 'Recarregar página'; se não resolver, feche e refaça o caminho desde 'Exportar suas informações'; se ainda assim falhar, tente pelo navegador em accountscenter.instagram.com." },
-  { q: "Escolhi o formato HTML em vez de JSON. E agora?", a: "Refaça a exportação escolhendo JSON no campo 'Formato'. O arquivo HTML não funciona para a comparação." },
-  { q: "Por quanto tempo consigo baixar o arquivo?", a: "O Instagram avisa quando a exportação fica pronta, e o link para baixar fica disponível por 4 dias." },
-  { q: "Como sei se eu ainda sigo quem deixou de me seguir?", a: "A exportação inclui também a sua lista de 'seguindo', então os resultados já mostram os selos 'Você segue' e 'Você não segue' em cada conta." },
-  { q: "Existe versão para computador?", a: "Sim. O Quem Saiu funciona também no navegador do computador: é só abrir esta página, escolher o arquivo que você baixou do Instagram e ver o resultado." },
-];
-var faqLista = document.getElementById("faqLista");
-PERGUNTAS.forEach(function (item) {
-  var div = document.createElement("div");
-  div.className = "faq-item";
-  var btn = document.createElement("button");
-  btn.className = "faq-q";
-  btn.setAttribute("aria-expanded", "false");
-  btn.innerHTML = item.q + "<span>+</span>";
-  var resp = document.createElement("p");
-  resp.className = "faq-a";
-  resp.textContent = item.a;
-  resp.style.display = "none";
-  btn.addEventListener("click", function () {
-    var aberto = resp.style.display !== "none";
-    resp.style.display = aberto ? "none" : "block";
-    btn.setAttribute("aria-expanded", aberto ? "false" : "true");
-  });
-  div.appendChild(btn);
-  div.appendChild(resp);
-  faqLista.appendChild(div);
-});
+/* A Central de Ajuda fica escrita direto no index.html (<details>), para qualquer leitor, inclusive robôs, ver as respostas. */
 
 /* ===== FERRAMENTA DE IMPORTAÇÃO ===== */
 var CHAVE = "quemsaiu_exportacoes";
@@ -286,16 +250,17 @@ async function pareceZip(arquivo) {
 }
 
 async function processarArquivos(arquivos) {
-  var seguidores = [], seguindo = [], achouAlgo = false, temHtml = false;
+  var seguidores = [], seguindo = [], achouAlgo = false, temHtml = false, dataArquivo = null;
 
   for (var a = 0; a < arquivos.length; a++) {
     var arquivo = arquivos[a];
     var nome = arquivo.name.toLowerCase();
+    if (!dataArquivo) dataArquivo = dataNoNome(nome);
     var ehZip = nome.endsWith(".zip") || (!nome.endsWith(".json") && await pareceZip(arquivo));
 
     if (ehZip) {
       mostrarProgresso(15, "Abrindo o arquivo…");
-      if (typeof JSZip === "undefined") throw erroAmigavel('Não consegui carregar o leitor de arquivos .zip. Confira a internet e tente de novo — ou escolha direto os arquivos <b>followers_1.json</b> e <b>following.json</b>.');
+      if (typeof JSZip === "undefined") throw erroAmigavel('Não consegui carregar o leitor de arquivos .zip. Recarregue a página e tente de novo — ou escolha direto os arquivos <b>followers_1.json</b> e <b>following.json</b>.');
       var zip = await JSZip.loadAsync(arquivo);
       var entradas = Object.keys(zip.files);
       for (var e = 0; e < entradas.length; e++) {
@@ -339,13 +304,31 @@ async function processarArquivos(arquivos) {
     var v = new Set();
     return l.filter(function (u) { if (v.has(u)) return false; v.add(u); return true; });
   }
-  return { data: new Date().toISOString(), seguidores: unicos(seguidores), seguindo: unicos(seguindo) };
+  var nova = { data: new Date().toISOString(), seguidores: unicos(seguidores), seguindo: unicos(seguindo) };
+  if (dataArquivo) nova.dataArquivo = dataArquivo;
+  return nova;
 }
+
+/* o .zip do Instagram costuma trazer a data no nome (instagram-usuario-2026-10-14-xxxx.zip);
+   se não trouxer, simplesmente não há como conferir e nada é avisado */
+function dataNoNome(nome) {
+  var m = String(nome).match(/(20\d{2})-(\d{2})-(\d{2})/);
+  if (!m) return null;
+  var mes = Number(m[2]), dia = Number(m[3]);
+  if (mes < 1 || mes > 12 || dia < 1 || dia > 31) return null;
+  return m[1] + "-" + m[2] + "-" + m[3];
+}
+function dataBr(iso) { var p = iso.split("-"); return p[2] + "/" + p[1] + "/" + p[0]; }
 
 /* confere a lista nova e guarda; devolve false se a pessoa desistir */
 function guardarNova(nova) {
   var dados = lerDados();
   var ultima = dados.length ? dados[dados.length - 1] : null;
+  if (ultima && ultima.dataArquivo && nova.dataArquivo && nova.dataArquivo < ultima.dataArquivo) {
+    var okData = window.confirm("Este arquivo parece mais antigo (" + dataBr(nova.dataArquivo) + ") do que a última lista guardada (" + dataBr(ultima.dataArquivo) +
+      "). Se você guardar assim, as saídas e as entradas aparecem trocadas.\n\nGuardar assim mesmo?");
+    if (!okData) return false;
+  }
   if (ultima && ultima.seguidores && ultima.seguidores.length >= 20 &&
       nova.seguidores.length < ultima.seguidores.length * 0.5) {
     var ok = window.confirm("Esta lista tem " + nova.seguidores.length + " seguidores e a anterior tinha " + ultima.seguidores.length +
@@ -353,8 +336,17 @@ function guardarNova(nova) {
     if (!ok) return false;
   }
   dados.push(nova);
-  if (!gravarDados(dados.slice(-10))) {
-    mostrarErro("Não consegui guardar a sua lista neste navegador (pode ser aba anônima ou falta de espaço). Ela fica aqui só até você fechar esta página.");
+  /* o navegador deixa guardar só uns 5 milhões de caracteres: se não couberem 10 listas,
+     descarta as mais antigas, mas mantém sempre as 2 mais recentes (as que são comparadas) */
+  var cheio = dados.slice(-10), cabe = cheio, gravou = false;
+  while (true) {
+    if (gravarDados(cabe)) { gravou = true; break; }
+    if (cabe.length <= 2) break;
+    cabe = cabe.slice(1);
+  }
+  if (!gravou) {
+    memoria[CHAVE] = cheio;
+    mostrarErro("Não consegui guardar a sua lista neste navegador (pode ser aba anônima, falta de espaço ou uma conta com muitos seguidores). Ela fica aqui só até você fechar esta página.");
   }
   return true;
 }
@@ -369,6 +361,7 @@ function atualizarStatus() {
   var u = dados[dados.length - 1];
   statusImport.textContent = dados.length + (dados.length === 1 ? " lista guardada" : " listas guardadas") +
     " · última: " + formatarData(u.data) + " (" + u.seguidores.length + " seguidores)" +
+    (dados.length === 1 ? " · importe um arquivo mais novo para comparar" : "") +
     (memoria[CHAVE] ? " · só enquanto esta página estiver aberta" : "");
   btnComparar.disabled = dados.length < 2;
 }
@@ -506,15 +499,22 @@ function renderizarResultado() {
     aviso.textContent = "Lista pronta. " + rotuloAtivo + ".";
   }
 
-  if (abaAtual === "saiu") renderizarLista(saiu, "saiu", seguindoSet, "Ninguém deixou de te seguir entre as duas listas.");
-  else if (abaAtual === "entrou") renderizarLista(entrou, "entrou", seguindoSet, "Nenhum seguidor novo entre as duas listas.");
-  else {
+  var explicaAba = "";
+  if (abaAtual === "saiu") {
+    renderizarLista(saiu, "saiu", seguindoSet, "Ninguém deixou de te seguir entre as duas listas.");
+    explicaAba = "Estavam na lista anterior e não estão na atual. O arquivo não diz o motivo: a pessoa pode ter deixado de seguir ou desativado ou excluído a conta.";
+  } else if (abaAtual === "entrou") {
+    renderizarLista(entrou, "entrou", seguindoSet, "Nenhum seguidor novo entre as duas listas.");
+    explicaAba = "Estão na lista atual e não estavam na anterior.";
+  } else {
     renderizarLista(naoSeguemVolta, "naoSegue", null, "Todo mundo que você segue também te segue.");
+    explicaAba = "Quem você segue e não te segue de volta.";
     var dica = document.createElement("p");
     dica.style.cssText = "font-size:11px; color:#475569; margin:10px 0 0; line-height:1.5;";
     dica.innerHTML = 'Toque no nome para abrir o perfil. Se abrir uma página em branco, a conta não existe mais — use o <b>&times;</b> para escondê-la desta lista.';
     listaResultado.appendChild(dica);
   }
+  listaResultado.insertAdjacentHTML("afterbegin", '<p class="explica-aba">' + explicaAba + "</p>");
 }
 
 btnImportar.addEventListener("click", function () { inputArquivo.click(); });

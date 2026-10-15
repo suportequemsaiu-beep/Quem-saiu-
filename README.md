@@ -21,10 +21,11 @@ de dados que o próprio Instagram fornece ao titular da conta.
 | `index.html` | Estrutura e textos |
 | `style.css` | Todo o visual (inclui o layout para telas largas, a partir de 900 px) |
 | `script.js` | Comportamento: importação, comparação, compartilhar, PWA |
+| `jszip.min.js` | Biblioteca JSZip 3.10.1 (abre o .zip no navegador), servida pelo próprio site |
 | `service-worker.js` | Recebe o arquivo compartilhado pelo Android |
 | `manifest.json` | Configuração do app instalável |
 | `privacy-policy.html` | Política de privacidade |
-| `robots.txt`, `sitemap.xml`, `llms.txt` | Ajudam buscadores e IAs a entender o site (o `llms.txt` resume os fatos confirmados) |
+| `robots.txt`, `sitemap.xml`, `llms.txt` | Ajudam buscadores e IAs a entender o site (o `llms.txt` resume como o site funciona; nada nele deve ser escrito como confirmado sem a criadora confirmar) |
 | `INSTRUCOES.md` | Regras, decisões e histórico do projeto — leia antes de alterar |
 
 Hospedagem: Cloudflare, com publicação automática a cada alteração na branch `main`.
