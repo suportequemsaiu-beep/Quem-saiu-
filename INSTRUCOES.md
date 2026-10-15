@@ -378,6 +378,24 @@ organizado" para os detalhes.
     quem aparece como responsável pelo site, e "Ainda 100% gratuito".
   - Se as IAs não abrirem a política ou o `llms.txt` (aconteceu com uma), vale
     olhar na Cloudflare (Segurança → Bots) se há bloqueio de robôs de IA.
+- **Fora do repositório (só a Janaína consegue ver/mudar; a IA não tem acesso ao
+  painel da Cloudflare nem às configurações do GitHub):**
+  - Cloudflare → Segurança → Bots: conferir se "bloquear robôs de IA" está ligado
+    (se estiver, IAs que leem o site em tempo real podem não abrir a política nem
+    o `llms.txt`, o que já aconteceu com uma).
+  - Cloudflare → Análises (Web Analytics): se estiver ligado, a política já cobre
+    ("estatísticas agregadas de visitas" pela hospedagem); se algum dia for
+    desligado ou trocado, revisar o texto da política.
+  - Cloudflare → SSL/TLS: "Sempre usar HTTPS" e, depois de confirmar que tudo
+    funciona, HSTS.
+  - Cloudflare → quem hospeda: o arquivo `CNAME` na raiz é resto do GitHub Pages;
+    se a hospedagem for Cloudflare Pages, ele não faz nada.
+  - GitHub → descrição e site do repositório (Settings → About).
+  - **Cabeçalhos de segurança (`_headers`) ainda não foram criados.** Antes, confirmar
+    que a hospedagem é Cloudflare Pages (só ela lê esse arquivo). Se criar uma
+    política de conteúdo (CSP), ela precisa liberar só o próprio site e, se a
+    Análise da Cloudflare estiver ligada, `static.cloudflareinsights.com`; qualquer
+    recurso externo novo no site passa a exigir mudar a CSP.
 - Cache: o `index.html` chama `style.css?v=…` e `script.js?v=…`. **Sempre que
   mudar o CSS ou o JS, troque o número depois de `?v=`** (hoje `20261015a`), senão
   celulares e a Cloudflare podem continuar mostrando a versão antiga.
