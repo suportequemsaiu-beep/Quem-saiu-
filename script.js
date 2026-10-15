@@ -171,12 +171,14 @@ var CHAVE_IGNORADAS = "quemsaiu_ignoradas";
 
 var memoria = {};
 function lerDados() {
+  if (memoria[CHAVE]) return memoria[CHAVE];
   try { return JSON.parse(localStorage.getItem(CHAVE)) || []; }
-  catch (e) { return memoria[CHAVE] || []; }
+  catch (e) { return []; }
 }
+/* devolve true se gravou no aparelho; false se só ficou na memória desta página */
 function gravarDados(v) {
-  try { localStorage.setItem(CHAVE, JSON.stringify(v)); }
-  catch (e) { memoria[CHAVE] = v; }
+  try { localStorage.setItem(CHAVE, JSON.stringify(v)); delete memoria[CHAVE]; return true; }
+  catch (e) { memoria[CHAVE] = v; return false; }
 }
 function apagarDadosLocais() {
   try { localStorage.removeItem(CHAVE); localStorage.removeItem(CHAVE_IGNORADAS); } catch (e) {}
@@ -184,11 +186,12 @@ function apagarDadosLocais() {
   delete memoria[CHAVE_IGNORADAS];
 }
 function lerIgnoradas() {
+  if (memoria[CHAVE_IGNORADAS]) return memoria[CHAVE_IGNORADAS];
   try { return JSON.parse(localStorage.getItem(CHAVE_IGNORADAS)) || []; }
-  catch (e) { return memoria[CHAVE_IGNORADAS] || []; }
+  catch (e) { return []; }
 }
 function gravarIgnoradas(v) {
-  try { localStorage.setItem(CHAVE_IGNORADAS, JSON.stringify(v)); }
+  try { localStorage.setItem(CHAVE_IGNORADAS, JSON.stringify(v)); delete memoria[CHAVE_IGNORADAS]; }
   catch (e) { memoria[CHAVE_IGNORADAS] = v; }
 }
 function ignorarConta(u) {
@@ -232,6 +235,12 @@ function esconderProgresso() {
   progressoBarra.style.width = "0%";
 }
 
+/* nomes de usuário vêm do arquivo do Instagram: nunca entram na tela como HTML cru */
+function escapar(t) {
+  return String(t).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+}
+/* erro com texto nosso (pode ter <b>); qualquer outro erro mostra uma mensagem padrão */
+function erroAmigavel(html) { var e = new Error(html); e.amigavel = true; return e; }
 function mostrarErro(msg) { erroImport.innerHTML = '<div class="aviso-erro">' + msg + "</div>"; }
 function limparErro() { erroImport.innerHTML = ""; }
 
@@ -286,6 +295,7 @@ async function processarArquivos(arquivos) {
 
     if (ehZip) {
       mostrarProgresso(15, "Abrindo o arquivo…");
+      if (typeof JSZip === "undefined") throw erroAmigavel('Não consegui carregar o leitor de arquivos .zip. Confira a internet e tente de novo — ou escolha direto os arquivos <b>followers_1.json</b> e <b>following.json</b>.');
       var zip = await JSZip.loadAsync(arquivo);
       var entradas = Object.keys(zip.files);
       for (var e = 0; e < entradas.length; e++) {
@@ -314,23 +324,39 @@ async function processarArquivos(arquivos) {
       } else if (ehArquivoSeguindo(b)) {
         seguindo = seguindo.concat(extrairUsuarios(JSON.parse(texto)));
         achouAlgo = true;
-      } else {
-        var ex = extrairUsuarios(JSON.parse(texto));
-        if (ex.length > 0) { seguidores = seguidores.concat(ex); achouAlgo = true; }
       }
     }
   }
 
-  if (!achouAlgo && temHtml) throw new Error("Esta exportação está em HTML. Refaça a exportação no Instagram escolhendo o formato JSON.");
-  if (!achouAlgo) throw new Error('Não encontrei os dados de seguidores neste arquivo. Selecione o <b>.zip que você baixou do Instagram</b> — o nome começa com "instagram-". Se preferir, pode selecionar os arquivos "followers_1.json" e "following.json" de dentro dele.');
+  if (!achouAlgo && temHtml) throw erroAmigavel("Esta exportação está em HTML. Refaça a exportação no Instagram escolhendo o formato JSON.");
+  if (!achouAlgo) throw erroAmigavel('Não encontrei os dados de seguidores neste arquivo. Selecione o <b>.zip que você baixou do Instagram</b> — o nome começa com "instagram-". Se preferir, pode selecionar os arquivos "followers_1.json" e "following.json" de dentro dele.');
+
+  if (seguidores.length === 0) throw erroAmigavel('Não encontrei a lista de <b>seguidores</b> (followers_1.json). Se você escolheu só o following.json, escolha também o followers_1.json — ou use o .zip inteiro. Confira se a exportação inclui "Seguidores e seguindo".');
 
   mostrarProgresso(95, "Organizando a sua lista…");
 
   function unicos(l) {
-    var v = {};
-    return l.filter(function (u) { if (v[u]) return false; v[u] = true; return true; });
+    var v = new Set();
+    return l.filter(function (u) { if (v.has(u)) return false; v.add(u); return true; });
   }
   return { data: new Date().toISOString(), seguidores: unicos(seguidores), seguindo: unicos(seguindo) };
+}
+
+/* confere a lista nova e guarda; devolve false se a pessoa desistir */
+function guardarNova(nova) {
+  var dados = lerDados();
+  var ultima = dados.length ? dados[dados.length - 1] : null;
+  if (ultima && ultima.seguidores && ultima.seguidores.length >= 20 &&
+      nova.seguidores.length < ultima.seguidores.length * 0.5) {
+    var ok = window.confirm("Esta lista tem " + nova.seguidores.length + " seguidores e a anterior tinha " + ultima.seguidores.length +
+      ". Pode ser um arquivo incompleto (por exemplo, faltando o followers_2.json).\n\nGuardar assim mesmo?");
+    if (!ok) return false;
+  }
+  dados.push(nova);
+  if (!gravarDados(dados.slice(-10))) {
+    mostrarErro("Não consegui guardar a sua lista neste navegador (pode ser aba anônima ou falta de espaço). Ela fica aqui só até você fechar esta página.");
+  }
+  return true;
 }
 
 function atualizarStatus() {
@@ -342,7 +368,8 @@ function atualizarStatus() {
   }
   var u = dados[dados.length - 1];
   statusImport.textContent = dados.length + (dados.length === 1 ? " lista guardada" : " listas guardadas") +
-    " · última: " + formatarData(u.data) + " (" + u.seguidores.length + " seguidores)";
+    " · última: " + formatarData(u.data) + " (" + u.seguidores.length + " seguidores)" +
+    (memoria[CHAVE] ? " · só enquanto esta página estiver aberta" : "");
   btnComparar.disabled = dados.length < 2;
 }
 var PALETA_AVATAR = ["#0369a1","#c2410c","#047857","#7c3aed","#db2777","#b45309","#0f766e","#4f46e5","#dc2626","#4d7c0f"];
@@ -367,7 +394,7 @@ function renderizarLista(usuarios, tipo, seguindoSet, textoVazio) {
   var ignoradas = lerIgnoradas();
   var visiveis = usuarios.filter(function (u) { return ignoradas.indexOf(u) === -1; });
   var escondidas = usuarios.length - visiveis.length;
-  var podeIgnorar = tipo === "naoSegue";
+  var podeIgnorar = true;
 
   var rodape = "";
   if (podeIgnorar && escondidas > 0) {
@@ -380,9 +407,9 @@ function renderizarLista(usuarios, tipo, seguindoSet, textoVazio) {
     if (painelEscondidasAberto) {
       rodape += '<div class="painel-escondidas">' + nomesEscondidos.map(function (u) {
         return '<div class="item-escondido">' +
-          '<span class="avatar" style="background:' + corDoUsuario(u) + '">' + u.slice(0, 2).toUpperCase() + "</span>" +
-          '<span class="usuario-nome">@' + u + "</span>" +
-          '<button class="btn-restaurar-um" data-restaurar="' + u + '">Restaurar</button></div>';
+          '<span class="avatar" style="background:' + corDoUsuario(u) + '">' + escapar(u.slice(0, 2).toUpperCase()) + "</span>" +
+          '<span class="usuario-nome">@' + escapar(u) + "</span>" +
+          '<button class="btn-restaurar-um" data-restaurar="' + escapar(u) + '">Restaurar</button></div>';
       }).join("") + "</div>";
     }
   }
@@ -395,10 +422,10 @@ function renderizarLista(usuarios, tipo, seguindoSet, textoVazio) {
 
   listaResultado.innerHTML = '<ul class="lista-usuarios">' + visiveis.map(function (u) {
     return '<li class="item-usuario item-' + tipo + '">' +
-      '<span class="avatar" style="background:' + corDoUsuario(u) + '">' + u.slice(0, 2).toUpperCase() + "</span>" +
-      '<span class="usuario-nome"><a href="https://www.instagram.com/' + encodeURIComponent(u) + '/" target="_blank" rel="noopener">@' + u + "</a></span>" +
+      '<span class="avatar" style="background:' + corDoUsuario(u) + '">' + escapar(u.slice(0, 2).toUpperCase()) + "</span>" +
+      '<span class="usuario-nome"><a href="https://www.instagram.com/' + encodeURIComponent(u) + '/" target="_blank" rel="noopener">@' + escapar(u) + "</a></span>" +
       seloPara(u, seguindoSet, tipo) +
-      (podeIgnorar ? '<button class="btn-ignorar" data-ignorar="' + u + '" title="Esconder esta conta da lista" aria-label="Esconder conta @' + u + '">&times;</button>' : "") +
+      (podeIgnorar ? '<button class="btn-ignorar" data-ignorar="' + escapar(u) + '" title="Esconder esta conta da lista" aria-label="Esconder conta @' + escapar(u) + '">&times;</button>' : "") +
       "</li>";
   }).join("") + "</ul>" + rodape;
 
@@ -435,8 +462,9 @@ function renderizarResultado() {
   var seguindoSet = new Set(atual.seguindo || []);
   var seguidoresSet = new Set(atual.seguidores || []);
 
+  var anteriorSet = anterior ? new Set(anterior.seguidores) : null;
   var saiu = anterior ? anterior.seguidores.filter(function (u) { return !seguidoresSet.has(u); }) : [];
-  var entrou = anterior ? atual.seguidores.filter(function (u) { return anterior.seguidores.indexOf(u) === -1; }) : [];
+  var entrou = anterior ? atual.seguidores.filter(function (u) { return !anteriorSet.has(u); }) : [];
   var naoSeguemVolta = (atual.seguindo || []).filter(function (u) { return !seguidoresSet.has(u); });
 
   cardResultado.style.display = "block";
@@ -500,16 +528,14 @@ inputArquivo.addEventListener("change", async function () {
   mostrarProgresso(5, "Abrindo o arquivo…");
   try {
     var nova = await processarArquivos(arquivos);
-    var dados = lerDados();
-    dados.push(nova);
-    gravarDados(dados.slice(-10));
+    if (!guardarNova(nova)) { esconderProgresso(); return; }
     mostrarProgresso(100, "Pronto!");
     atualizarStatus();
     renderizarResultado();
     setTimeout(esconderProgresso, 700);
   } catch (erro) {
     esconderProgresso();
-    mostrarErro(erro && erro.message ? erro.message : "Não consegui ler este arquivo. Confira se é a exportação do Instagram em JSON.");
+    mostrarErro(erro && erro.amigavel ? erro.message : "Não consegui ler este arquivo. Confira se é a exportação do Instagram em formato JSON (não HTML).");
   } finally {
     btnImportar.disabled = false;
     btnImportar.textContent = "📄 Ver a minha lista";
@@ -520,7 +546,9 @@ inputArquivo.addEventListener("change", async function () {
 btnComparar.addEventListener("click", function () { abaAtual = "saiu"; renderizarResultado(); });
 
 document.getElementById("btnApagar").addEventListener("click", function () {
+  if (!window.confirm("Apagar a sua lista e o histórico guardados neste aparelho? Depois não dá para voltar.")) return;
   apagarDadosLocais();
+  if (window.caches) caches.delete("quemsaiu-compartilhado").catch(function () {});
   atualizarStatus();
   cardResultado.style.display = "none";
 });
@@ -642,16 +670,14 @@ async function verificarArquivoCompartilhado() {
     mostrarProgresso(5, "Abrindo o arquivo…");
     try {
       var nova = await processarArquivos([arquivo]);
-      var dados = lerDados();
-      dados.push(nova);
-      gravarDados(dados.slice(-10));
+      if (!guardarNova(nova)) { esconderProgresso(); return; }
       mostrarProgresso(100, "Pronto!");
       atualizarStatus();
       renderizarResultado();
       setTimeout(esconderProgresso, 700);
     } catch (erro) {
       esconderProgresso();
-      mostrarErro(erro && erro.message ? erro.message : "Não consegui ler o arquivo compartilhado.");
+      mostrarErro(erro && erro.amigavel ? erro.message : "Não consegui ler o arquivo compartilhado. Confira se é a exportação do Instagram em formato JSON (não HTML).");
     } finally {
       btnImportar.disabled = false;
       btnImportar.textContent = "📄 Ver a minha lista";

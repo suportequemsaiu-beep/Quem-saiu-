@@ -276,10 +276,10 @@ organizado" para os detalhes.
   link e mostra "Link copiado". Envia só o endereço do site, nunca dados da
   lista. Texto padrão: "Descubra quem deixou de te seguir no Instagram — sem
   login e sem senha."
-- Passo 1 do "como pego o arquivo" começa com um link para a Central de Contas
-  do Instagram ("Toque aqui para abrir a Central de Contas do Instagram"),
-  substituindo o antigo "abra seu perfil, toque no menu ☰…". A lista continua
-  com 7 itens.
+- Passo 1 do "como pego o arquivo": o primeiro item é um passo escrito ("Abra
+  seu perfil, toque no menu ☰ e toque em Central de Contas (pode aparecer como
+  Conta Meta)"). **Não há link para a Central de Contas**: no Android o app do
+  Instagram captura o link e abre só o feed. A lista tem 7 itens.
 - Layout para computador (telas ≥ 900 px): início em duas colunas, menu em uma
   linha, conteúdo numa coluna de 680 px, efeito ao passar o mouse. No
   computador o passo 3 do passo a passo é outro ("Baixe e escolha o arquivo
@@ -300,12 +300,8 @@ organizado" para os detalhes.
 - Causa real da borda azul que "grudava" no Compartilhar: o `:hover` no celular
   fica ativo depois do toque até tocar em outro lugar. Todos os efeitos de
   passar o mouse agora só valem em aparelhos com mouse (`@media (hover: hover)`).
-- Atalho da Central de Contas: no Android com o app instalado, o link
-  `accountscenter.instagram.com` abria só o feed do Instagram (testado pela
-  usuária). O link agora aponta para `…/info_and_permissions/dyi/` (página de
-  exportar informações — **não confirmado em aparelho**) e há uma dica logo
-  abaixo: "Abriu só o feed? Toque no seu perfil → ☰ → Central de Contas." Se o
-  link novo também abrir o feed, o caminho pela dica é o que garante.
+- Atalho da Central de Contas: testado em out/2026 (o link abria só o feed);
+  tentamos um link direto com dica e, no fim, o link foi removido (ver acima).
 - Clareza para buscadores e IAs (out/2026): o texto visível agora diz que a lista
   fica guardada só no aparelho e que nas próximas vezes basta importar o arquivo
   novo (passos 1 e 2 da home + pergunta nova na Ajuda). Motivo: uma IA avaliou o
@@ -315,6 +311,23 @@ organizado" para os detalhes.
   e do `llms.txt` precisam bater com as da Ajuda (`PERGUNTAS`)**; ao mudar uma,
   mude as outras. Regra: nunca esconder texto "para robôs" (é cloaking e pode
   penalizar o site); a informação tem de estar visível para todo mundo.
+- Correções de código (out/2026), todas testadas no navegador:
+  - Nomes de usuário vindos do arquivo passam por `escapar()` antes de entrar na
+    tela (antes, um arquivo adulterado executava script). Erros de leitura só
+    mostram HTML quando criados com `erroAmigavel()`; os demais viram mensagem
+    padrão em português.
+  - A importação recusa arquivo sem lista de seguidores (ex.: só o
+    `following.json`) e ignora `.json` desconhecidos (antes, qualquer `.json`
+    virava "seguidores"). Se a lista nova tiver menos da metade dos seguidores
+    da anterior (e a anterior tiver 20 ou mais), pergunta antes de guardar.
+  - Se o navegador não deixar gravar, a lista fica na memória, o status diz "só
+    enquanto esta página estiver aberta" e aparece um aviso (antes, falhava em
+    silêncio).
+  - "Apagar meus dados" pede confirmação e também apaga a cópia do arquivo
+    recebida pelo Compartilhar (Cache Storage `quemsaiu-compartilhado`).
+  - O × para esconder contas existe em todas as abas do resultado (a Ajuda já
+    prometia isso); a escolha vale para todas as abas.
+  - Comparação com `Set` (50 mil seguidores comparam em menos de 1 s).
 - Cache: o `index.html` chama `style.css?v=…` e `script.js?v=…`. **Sempre que
   mudar o CSS ou o JS, troque o número depois de `?v=`** (ex.: `20261008b`), senão
   celulares e a Cloudflare podem continuar mostrando a versão antiga.
@@ -440,10 +453,10 @@ Desde ago/2026, separado em três arquivos (antes era um `index.html` só):
 - `index.html` — só estrutura e texto (HTML puro, ~307 linhas). Aponta para
   `style.css` (`<link rel="stylesheet">`) e `script.js` (`<script src="...">`
   no fim do `<body>`). Editar aqui só o que é estrutura/conteúdo visível.
-- `style.css` — todo o CSS do site (~269 linhas). Editar aqui qualquer cor,
+- `style.css` — todo o CSS do site (~268 linhas). Editar aqui qualquer cor,
   tamanho, espaçamento, animação. O que é só do computador fica no bloco
   `@media (min-width: 900px)` no fim do arquivo.
-- `script.js` — todo o JavaScript do site (~663 linhas, o que antes eram os
+- `script.js` — todo o JavaScript do site (~689 linhas, o que antes eram os
   dois blocos `<script>` inline, agora concatenados em um arquivo). Editar
   aqui qualquer comportamento, lógica de importação, PWA.
 - `manifest.json` — configuração do app instalável (PWA), incluindo o
