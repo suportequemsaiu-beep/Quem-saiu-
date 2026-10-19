@@ -207,6 +207,8 @@ function escapar(t) {
 function erroAmigavel(html) { var e = new Error(html); e.amigavel = true; return e; }
 function mostrarErro(msg) { erroImport.innerHTML = '<div class="aviso-erro">' + msg + "</div>"; }
 function limparErro() { erroImport.innerHTML = ""; }
+/* aviso que não é erro (ex.: "nada mudou"); só texto nosso, nunca nomes do arquivo sem escapar */
+function mostrarAviso(msg) { erroImport.innerHTML = '<div class="aviso-erro aviso-info">' + msg + "</div>"; }
 
 /* Hoje o Instagram entrega os seguidores como uma lista direta e quem você segue dentro de um
    objeto ({"relationships_following": [...]}). Se o formato mudar, é melhor parar com um aviso
@@ -222,7 +224,8 @@ function formatoDiferente(nome) {
 function extrairUsuarios(json, nome) {
   var itens = null;
   if (Array.isArray(json)) itens = json;
-  else if (json && typeof json === "object") {
+  else if (!json || typeof json !== "object") throw formatoDiferente(nome);
+  else {
     /* só vale uma lista cujos itens parecem contas; se houver mais de uma, só a de nome conhecido */
     var candidatas = Object.keys(json).filter(function (k) {
       return Array.isArray(json[k]) && json[k].some(pareceItemDeConta);
@@ -232,9 +235,14 @@ function extrairUsuarios(json, nome) {
       var conhecidas = candidatas.filter(function (k) { return CHAVES_CONHECIDAS.indexOf(k) !== -1; });
       if (conhecidas.length !== 1) throw formatoDiferente(nome);
       itens = json[conhecidas[0]];
+    } else {
+      /* nenhuma lista com cara de conta: só vale se for uma lista de nome conhecido (por exemplo, vazia,
+         de quem não segue ninguém); qualquer outra coisa é formato desconhecido, não "lista vazia" */
+      var vazias = CHAVES_CONHECIDAS.filter(function (k) { return Array.isArray(json[k]); });
+      if (vazias.length !== 1) throw formatoDiferente(nome);
+      itens = json[vazias[0]];
     }
   }
-  if (!itens) return [];
   var usuarios = [];
   itens.forEach(function (item) {
     var sld = item && item.string_list_data;
@@ -276,11 +284,27 @@ async function pareceZip(arquivo) {
 async function processarArquivos(arquivos) {
   var seguidores = [], seguindo = [], achouAlgo = false, temHtml = false, dataArquivo = null;
 
+  /* misturar dois .zip, ou o mesmo arquivo duas vezes, juntaria listas de datas diferentes numa só e
+     mostraria um resultado falso: só vale um .zip sozinho, ou arquivos .json de nomes diferentes */
+  var tipos = [], zips = 0, vistos = new Set();
+  for (var q = 0; q < arquivos.length; q++) {
+    var nq = arquivos[q].name.toLowerCase();
+    var zq = nq.endsWith(".zip") || (!nq.endsWith(".json") && await pareceZip(arquivos[q]));
+    tipos.push(zq);
+    if (zq) { zips++; continue; }
+    var bq = nq.split("/").pop();
+    if (vistos.has(bq)) throw erroAmigavel('O arquivo <b>' + escapar(bq) + '</b> foi escolhido mais de uma vez. Escolha cada arquivo uma vez só.');
+    vistos.add(bq);
+  }
+  if (zips > 1 || (zips === 1 && arquivos.length > 1)) {
+    throw erroAmigavel('Escolha só <b>um arquivo .zip</b> por vez (o mais novo), sem outros arquivos junto. Com vários, listas de datas diferentes se misturam e o resultado fica errado.');
+  }
+
   for (var a = 0; a < arquivos.length; a++) {
     var arquivo = arquivos[a];
     var nome = arquivo.name.toLowerCase();
     if (!dataArquivo) dataArquivo = dataNoNome(nome);
-    var ehZip = nome.endsWith(".zip") || (!nome.endsWith(".json") && await pareceZip(arquivo));
+    var ehZip = tipos[a];
 
     if (ehZip) {
       mostrarProgresso(15, "Abrindo o arquivo…");
@@ -345,9 +369,28 @@ function dataNoNome(nome) {
 function dataBr(iso) { var p = iso.split("-"); return p[2] + "/" + p[1] + "/" + p[0]; }
 
 /* confere a lista nova e guarda; devolve false se a pessoa desistir */
+function mesmaLista(a, b) {
+  if (!Array.isArray(a) || !Array.isArray(b) || a.length !== b.length) return false;
+  var conj = new Set(a);
+  return b.every(function (u) { return conj.has(u); });
+}
+
 function guardarNova(nova) {
   var dados = lerDados();
   var ultima = dados.length ? dados[dados.length - 1] : null;
+  /* seguidores iguais aos da última lista (ex.: o mesmo arquivo importado duas vezes): não vira lista
+     nova, senão a comparação passaria a ser dessa lista com ela mesma e a anterior de verdade
+     deixaria de aparecer */
+  if (ultima && mesmaLista(ultima.seguidores, nova.seguidores)) {
+    var aviso = "Nada mudou nos seus seguidores desde a última lista guardada (ninguém saiu nem entrou), por isso esta não foi guardada de novo.";
+    if (nova.seguindo.length > 0 && !mesmaLista(ultima.seguindo || [], nova.seguindo)) {
+      ultima.seguindo = nova.seguindo;
+      aviso += " A lista de quem você segue foi atualizada.";
+      if (!gravarDados(dados)) aviso += " Não deu para gravar neste navegador: ela vale só até fechar esta página.";
+    }
+    mostrarAviso(aviso);
+    return true;
+  }
   if (ultima && ultima.dataArquivo && nova.dataArquivo && nova.dataArquivo < ultima.dataArquivo) {
     var okData = window.confirm("Este arquivo parece mais antigo (" + dataBr(nova.dataArquivo) + ") do que a última lista guardada (" + dataBr(ultima.dataArquivo) +
       "). Se você guardar assim, as saídas e as entradas aparecem trocadas.\n\nGuardar assim mesmo?");

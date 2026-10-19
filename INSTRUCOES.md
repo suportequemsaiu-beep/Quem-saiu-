@@ -378,8 +378,17 @@ organizado" para os detalhes.
   estranhos passam e aparecem como estão (não são descartados em silêncio). Testado com
   arquivos de teste, não com exportações reais; se o Instagram mudar o formato de
   verdade, ajustar `CHAVES_CONHECIDAS` e `pareceItemDeConta()`.
+- Importação mais estrita (out/2026, auditoria): (1) `extrairUsuarios()` não devolve mais
+  "lista vazia" quando o formato é desconhecido: só `[]` e um objeto com uma chave conhecida e
+  lista vazia (quem não segue ninguém) valem como vazios; qualquer outra coisa (`{}`, `null`, objeto
+  sem lista de contas) para com `formatoDiferente()`. (2) `processarArquivos()` só aceita um .zip
+  sozinho, ou arquivos .json de nomes diferentes; dois .zip, .zip + .json ou o mesmo nome duas vezes
+  param com aviso (antes as listas de datas diferentes eram misturadas). (3) `guardarNova()` não cria
+  lista nova quando os seguidores são iguais aos da última (o mesmo arquivo importado duas vezes
+  fazia a comparação ser da lista com ela mesma); se só o "seguindo" mudou, atualiza esse campo na
+  lista existente. O aviso usa `mostrarAviso()` (estilo `.aviso-info`).
 - Cache: o `index.html` chama `style.css?v=…` e `script.js?v=…`. **Sempre que
-  mudar o CSS ou o JS, troque o número depois de `?v=`** (hoje `20261019b`), senão
+  mudar o CSS ou o JS, troque o número depois de `?v=`** (hoje `20261019c`), senão
   celulares e a Cloudflare podem continuar mostrando a versão antiga.
 
 **Não começado:** logo definitivo (o ícone atual é provisório, feito em CSS,
