@@ -387,6 +387,12 @@ organizado" para os detalhes.
   lista nova quando os seguidores são iguais aos da última (o mesmo arquivo importado duas vezes
   fazia a comparação ser da lista com ela mesma); se só o "seguindo" mudou, atualiza esse campo na
   lista existente. O aviso usa `mostrarAviso()` (estilo `.aviso-info`).
+- Dados guardados (out/2026, auditoria): `lerDados()` só aceita itens com cara de lista guardada
+  (`listaValida()`: `data` texto, `seguidores` e `seguindo` listas de textos); o resto do
+  armazenamento é ignorado em vez de quebrar a página (antes um valor ruim parava o script e deixava
+  de registrar o service worker e de receber o Compartilhar). Toda lista nova leva `v: 1`
+  (`VERSAO_DADOS`). **Se o formato guardado mudar um dia, aumente `VERSAO_DADOS` e faça a migração
+  em `lerDados()`; listas sem `v` (anteriores a esta versão) continuam valendo.**
 - Cache: o `index.html` chama `style.css?v=…` e `script.js?v=…`. **Sempre que
   mudar o CSS ou o JS, troque o número depois de `?v=`** (hoje `20261019c`), senão
   celulares e a Cloudflare podem continuar mostrando a versão antiga.

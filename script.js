@@ -134,10 +134,21 @@ var CHAVE = "quemsaiu_exportacoes";
 var CHAVE_IGNORADAS = "quemsaiu_ignoradas";
 
 var memoria = {};
+/* versão do formato das listas guardadas (campo "v"); se o formato mudar um dia, é por ela que se migra */
+var VERSAO_DADOS = 1;
+function soTextos(l) { return Array.isArray(l) && l.every(function (u) { return typeof u === "string"; }); }
+/* só entra no app o que tem cara de lista guardada; qualquer outra coisa no armazenamento (dado antigo,
+   de versão futura ou mexido à mão) é ignorada em vez de quebrar a página inteira */
+function listaValida(x) {
+  return !!x && typeof x === "object" && typeof x.data === "string" && soTextos(x.seguidores) &&
+    (x.seguindo === undefined || soTextos(x.seguindo));
+}
 function lerDados() {
   if (memoria[CHAVE]) return memoria[CHAVE];
-  try { return JSON.parse(localStorage.getItem(CHAVE)) || []; }
-  catch (e) { return []; }
+  try {
+    var v = JSON.parse(localStorage.getItem(CHAVE));
+    return Array.isArray(v) ? v.filter(listaValida) : [];
+  } catch (e) { return []; }
 }
 /* devolve true se gravou no aparelho; false se só ficou na memória desta página */
 function gravarDados(v) {
@@ -151,8 +162,10 @@ function apagarDadosLocais() {
 }
 function lerIgnoradas() {
   if (memoria[CHAVE_IGNORADAS]) return memoria[CHAVE_IGNORADAS];
-  try { return JSON.parse(localStorage.getItem(CHAVE_IGNORADAS)) || []; }
-  catch (e) { return []; }
+  try {
+    var v = JSON.parse(localStorage.getItem(CHAVE_IGNORADAS));
+    return Array.isArray(v) ? v.filter(function (u) { return typeof u === "string"; }) : [];
+  } catch (e) { return []; }
 }
 function gravarIgnoradas(v) {
   try { localStorage.setItem(CHAVE_IGNORADAS, JSON.stringify(v)); delete memoria[CHAVE_IGNORADAS]; }
@@ -352,7 +365,7 @@ async function processarArquivos(arquivos) {
     var v = new Set();
     return l.filter(function (u) { if (v.has(u)) return false; v.add(u); return true; });
   }
-  var nova = { data: new Date().toISOString(), seguidores: unicos(seguidores), seguindo: unicos(seguindo) };
+  var nova = { v: VERSAO_DADOS, data: new Date().toISOString(), seguidores: unicos(seguidores), seguindo: unicos(seguindo) };
   if (dataArquivo) nova.dataArquivo = dataArquivo;
   return nova;
 }
