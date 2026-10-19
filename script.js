@@ -475,7 +475,9 @@ function renderizarLista(usuarios, tipo, seguindoSet, textoVazio) {
   }
 
   if (visiveis.length === 0) {
-    listaResultado.innerHTML = '<p style="text-align:center; font-size:12px; color:#475569; padding:14px 0;">' + textoVazio + "</p>" + rodape;
+    /* se há contas escondidas, a lista não está vazia: está toda escondida */
+    var msgVazio = escondidas > 0 ? "Todas as contas desta lista estão escondidas." : textoVazio;
+    listaResultado.innerHTML = '<p style="text-align:center; font-size:12px; color:#475569; padding:14px 0;">' + msgVazio + "</p>" + rodape;
     ligarBotoesLista();
     return;
   }
@@ -526,16 +528,19 @@ function renderizarResultado() {
   var saiu = anterior ? anterior.seguidores.filter(function (u) { return !seguidoresSet.has(u); }) : [];
   var entrou = anterior ? atual.seguidores.filter(function (u) { return !anteriorSet.has(u); }) : [];
   var naoSeguemVolta = (atual.seguindo || []).filter(function (u) { return !seguidoresSet.has(u); });
+  /* os números das abas contam só as contas que estão visíveis (as escondidas aparecem no rodapé da lista) */
+  var escondidasSet = new Set(lerIgnoradas());
+  function contarVisiveis(l) { return l.filter(function (u) { return !escondidasSet.has(u); }).length; }
 
   cardResultado.style.display = "block";
 
   var abas = [];
   if (anterior) {
-    abas.push({ id: "saiu", rotulo: "Deixaram de te seguir · " + saiu.length, texto: "deixaram de te seguir", n: saiu.length });
-    abas.push({ id: "entrou", rotulo: "Começaram a te seguir · " + entrou.length, texto: "começaram a te seguir", n: entrou.length });
+    abas.push({ id: "saiu", rotulo: "Deixaram de te seguir · " + contarVisiveis(saiu), texto: "deixaram de te seguir", n: contarVisiveis(saiu) });
+    abas.push({ id: "entrou", rotulo: "Começaram a te seguir · " + contarVisiveis(entrou), texto: "começaram a te seguir", n: contarVisiveis(entrou) });
   }
   if (seguindoSet.size > 0) {
-    abas.push({ id: "naoSegue", rotulo: "Não te seguem de volta · " + naoSeguemVolta.length, texto: "não te seguem de volta", n: naoSeguemVolta.length });
+    abas.push({ id: "naoSegue", rotulo: "Não te seguem de volta · " + contarVisiveis(naoSeguemVolta), texto: "não te seguem de volta", n: contarVisiveis(naoSeguemVolta) });
   }
 
   if (!anterior) {
@@ -569,10 +574,10 @@ function renderizarResultado() {
   var explicaAba = "";
   if (abaAtual === "saiu") {
     renderizarLista(saiu, "saiu", seguindoSet, "Ninguém deixou de te seguir entre as duas listas.");
-    explicaAba = "Estavam na lista anterior e não estão na atual. O arquivo não diz o motivo: a pessoa pode ter deixado de seguir ou desativado ou excluído a conta.";
+    explicaAba = "Estavam na lista anterior e não estão na atual. O arquivo não diz o motivo: a pessoa pode ter deixado de seguir, desativado ou excluído a conta, ou trocado de nome de usuário (nesse caso o nome novo aparece em \"Começaram a te seguir\").";
   } else if (abaAtual === "entrou") {
     renderizarLista(entrou, "entrou", seguindoSet, "Nenhum seguidor novo entre as duas listas.");
-    explicaAba = "Estão na lista atual e não estavam na anterior.";
+    explicaAba = "Estão na lista atual e não estavam na anterior (pode ser uma conta nova ou alguém que trocou de nome de usuário).";
   } else {
     renderizarLista(naoSeguemVolta, "naoSegue", null, "Todo mundo que você segue também te segue.");
     explicaAba = "Quem você segue e não te segue de volta.";
