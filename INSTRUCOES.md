@@ -393,6 +393,9 @@ organizado" para os detalhes.
   de registrar o service worker e de receber o Compartilhar). Toda lista nova leva `v: 1`
   (`VERSAO_DADOS`). **Se o formato guardado mudar um dia, aumente `VERSAO_DADOS` e faça a migração
   em `lerDados()`; listas sem `v` (anteriores a esta versão) continuam valendo.**
+- Pequenos ajustes (out/2026): nomes de arquivo com " (1)" (o Android renomeia downloads repetidos)
+  valem como o original e contam como repetidos se o original também for escolhido; ao abrir o site
+  sem vir do Compartilhar, uma cópia temporária que tenha sobrado no `Cache Storage` é apagada.
 - Cache: o `index.html` chama `style.css?v=…` e `script.js?v=…`. **Sempre que
   mudar o CSS ou o JS, troque o número depois de `?v=`** (hoje `20261019c`), senão
   celulares e a Cloudflare podem continuar mostrando a versão antiga.

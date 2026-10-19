@@ -283,8 +283,9 @@ function extrairUsuarios(json, nome) {
   return usuarios;
 }
 
-function ehArquivoSeguidores(n) { return /^followers(_\d+)?\.json$/i.test(n); }
-function ehArquivoSeguindo(n) { return /^following\.json$/i.test(n); }
+/* o Android renomeia downloads repetidos para "nome (1).json": também vale */
+function ehArquivoSeguidores(n) { return /^followers(_\d+)?( \(\d+\))?\.json$/i.test(n); }
+function ehArquivoSeguindo(n) { return /^following( \(\d+\))?\.json$/i.test(n); }
 
 /* confere a assinatura do arquivo (ZIP começa com PK) */
 async function pareceZip(arquivo) {
@@ -306,8 +307,9 @@ async function processarArquivos(arquivos) {
     tipos.push(zq);
     if (zq) { zips++; continue; }
     var bq = nq.split("/").pop();
-    if (vistos.has(bq)) throw erroAmigavel('O arquivo <b>' + escapar(bq) + '</b> foi escolhido mais de uma vez. Escolha cada arquivo uma vez só.');
-    vistos.add(bq);
+    var chaveq = bq.replace(/ \(\d+\)(?=\.json$)/, "");
+    if (vistos.has(chaveq)) throw erroAmigavel('O arquivo <b>' + escapar(bq) + '</b> foi escolhido mais de uma vez. Escolha cada arquivo uma vez só.');
+    vistos.add(chaveq);
   }
   if (zips > 1 || (zips === 1 && arquivos.length > 1)) {
     throw erroAmigavel('Escolha só <b>um arquivo .zip</b> por vez (o mais novo), sem outros arquivos junto. Com vários, listas de datas diferentes se misturam e o resultado fica errado.');
@@ -726,7 +728,11 @@ window.addEventListener("appinstalled", function () {
 async function verificarArquivoCompartilhado() {
   var params = new URLSearchParams(location.search);
   var marca = params.get("compartilhado");
-  if (!marca) return;
+  if (!marca) {
+    /* abriu sem ter vindo do Compartilhar: se sobrou uma cópia temporária de um envio que ninguém leu, apaga */
+    if (window.caches) caches.delete("quemsaiu-compartilhado").catch(function () {});
+    return;
+  }
 
   history.replaceState(null, "", location.pathname);
   document.getElementById("ferramenta").style.display = "block";
