@@ -483,7 +483,7 @@ function renderizarLista(usuarios, tipo, seguindoSet, textoVazio) {
   listaResultado.innerHTML = '<ul class="lista-usuarios">' + visiveis.map(function (u) {
     return '<li class="item-usuario item-' + tipo + '">' +
       '<span class="avatar" style="background:' + corDoUsuario(u) + '">' + escapar(u.slice(0, 2).toUpperCase()) + "</span>" +
-      '<span class="usuario-nome"><a href="https://www.instagram.com/' + encodeURIComponent(u) + '/" target="_blank" rel="noopener">@' + escapar(u) + "</a></span>" +
+      '<span class="usuario-nome"><a href="https://www.instagram.com/' + encodeURIComponent(u) + '/" target="_blank" rel="noopener noreferrer">@' + escapar(u) + "</a></span>" +
       seloPara(u, seguindoSet, tipo) +
       (podeIgnorar ? '<button class="btn-ignorar" data-ignorar="' + escapar(u) + '" title="Esconder esta conta da lista" aria-label="Esconder conta @' + escapar(u) + '">&times;</button>' : "") +
       "</li>";

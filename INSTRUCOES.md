@@ -129,9 +129,9 @@ ser atualizados juntos, senão o site se contradiz:
 2. O texto dentro do site ("Seus dados são lidos aqui no seu navegador. Nada é
    enviado para servidor nenhum.")
 
-A política é datada. Toda revisão atualiza a data (última: 7 de outubro de 2026,
-quando a hospedagem passou a constar como Cloudflare e o botão Compartilhar foi
-descrito).
+A política é datada. Toda revisão atualiza a data (última: 19 de outubro de 2026,
+quando passou a constar que o navegador não informa ao Instagram de qual site o usuário veio;
+antes: 15 de outubro, JSZip local e cópia temporária do Compartilhar).
 
 
 ## Checklist antes de ligar o chat com IA (ou qualquer envio de dados)
