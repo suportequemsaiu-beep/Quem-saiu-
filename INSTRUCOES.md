@@ -406,7 +406,7 @@ organizado" para os detalhes.
   arquivos de teste, não com exportações reais; se o Instagram mudar o formato de
   verdade, ajustar `CHAVES_CONHECIDAS` e `pareceItemDeConta()`.
 - Cache: o `index.html` chama `style.css?v=…` e `script.js?v=…`. **Sempre que
-  mudar o CSS ou o JS, troque o número depois de `?v=`** (hoje `20261019a`), senão
+  mudar o CSS ou o JS, troque o número depois de `?v=`** (hoje `20261019b`), senão
   celulares e a Cloudflare podem continuar mostrando a versão antiga.
 
 **Não começado:** logo definitivo (o ícone atual é provisório, feito em CSS,
