@@ -396,8 +396,13 @@ organizado" para os detalhes.
 - Pequenos ajustes (out/2026): nomes de arquivo com " (1)" (o Android renomeia downloads repetidos)
   valem como o original e contam como repetidos se o original também for escolhido; ao abrir o site
   sem vir do Compartilhar, uma cópia temporária que tenha sobrado no `Cache Storage` é apagada.
+- **Testes (out/2026):** a pasta `tests/` tem testes automáticos no navegador (Playwright/Chromium).
+  **Antes de publicar qualquer mudança em `script.js`, `index.html`, `style.css` ou `service-worker.js`,
+  rode `python3 tests/rodar_todos.py` e só publique com "Tudo certo."** Mudou um comportamento de
+  propósito? Atualize o teste. Criou um comportamento novo? Crie um teste. Eles não cobrem celular
+  de verdade nem iPhone. A pasta é publicada junto com o site (não tem nada sigiloso).
 - Cache: o `index.html` chama `style.css?v=…` e `script.js?v=…`. **Sempre que
-  mudar o CSS ou o JS, troque o número depois de `?v=`** (hoje `20261019c`), senão
+  mudar o CSS ou o JS, troque o número depois de `?v=`** (hoje `20261019d`), senão
   celulares e a Cloudflare podem continuar mostrando a versão antiga.
 
 **Não começado:** logo definitivo (o ícone atual é provisório, feito em CSS,

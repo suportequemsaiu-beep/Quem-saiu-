@@ -26,6 +26,7 @@ de dados que o próprio Instagram fornece ao titular da conta.
 | `manifest.json` | Configuração do app instalável |
 | `privacy-policy.html` | Política de privacidade |
 | `robots.txt`, `sitemap.xml`, `llms.txt` | Ajudam buscadores e IAs a entender o site (o `llms.txt` resume como o site funciona; nada nele deve ser escrito como confirmado sem a criadora confirmar) |
+| `tests/` | Testes automáticos (`python3 tests/rodar_todos.py`); rodar antes de publicar |
 | `INSTRUCOES.md` | Regras, decisões e histórico do projeto — leia antes de alterar |
 
 Hospedagem: Cloudflare, com publicação automática a cada alteração na branch `main`.
