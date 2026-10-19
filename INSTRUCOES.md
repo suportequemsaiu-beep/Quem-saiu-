@@ -157,7 +157,6 @@ Levantamento jurídico feito em agosto/2026. Não substitui advogado.
 - Plano de resposta a incidente pronto (prazo curto para notificar).
 
 **Estrutura:**
-- Empresa com CNPJ recebendo as assinaturas. Nunca o CPF pessoal do responsável.
 - Não usar a marca Instagram em nome, domínio ou logo.
 
 **Por que o modelo atual é seguro:** enquanto tudo roda no navegador, o projeto
@@ -166,30 +165,7 @@ aparelho dele. É o chat com IA que muda essa condição.
 
 ## Ideia avaliada: convites que liberam acesso (adiada)
 
-Ideia: quem convida X pessoas ganha tokens ou tempo de plano. Serve de marketing
-para um produto sem verba de divulgação.
-
-**Decidido:** nada de plano vitalício por convite. Convite dá tokens ou tempo —
-nunca acesso permanente, senão cria uma via onde ninguém paga e o custo fica.
-
-**Contra fraude, o produto tem uma defesa natural:** para usar de verdade é
-preciso uma exportação real do Instagram, que demora e exige conta com histórico.
-Isso torna caro fabricar convidado. Três mecanismos aproveitam isso:
-- Recompensa só quando o convidado **importa uma lista**, não ao se cadastrar.
-- Exigir lista com tamanho mínimo (conta nova quase não tem seguidores).
-- Identificar por uma **impressão digital** do nome de usuário (código embaralhado,
-  não reversível): garante uma recompensa por conta sem guardar dado pessoal.
-
-**O que a ideia exige e hoje não existe:** contas de usuário. Sem identificar
-quem convidou quem, não há programa de convites — e isso significa login,
-servidor e mais dados sob responsabilidade do projeto.
-
-**Sobre custo:** o limite de uso da IA precisa ser controlado no servidor, com
-teto por usuário e **teto global de gasto**, para o pior cenário do mês ser
-conhecido. Cuidado com o efeito dobrado: cada convite traz um usuário que custa
-e ainda premia quem convidou.
-
-**Decisão:** adiado junto com o chat e os planos pagos.
+Adiada junto com o chat e os planos pagos: exigiria contas de usuário e servidor, que hoje não existem. Os detalhes comerciais ficam fora deste arquivo público.
 
 ## Como trabalhar neste projeto (combinado com o dono)
 
@@ -217,12 +193,9 @@ e ainda premia quem convidou.
 - O painel da Cloudflare mostra "visitantes únicos" do domínio. É contagem feita
   pelo próprio provedor, sem nenhum código nosso no site — por isso não quebra a
   regra 1. É estimativa (conta por endereço de IP e inclui robôs).
-- Acesso ao painel da Cloudflare: conta ligada ao e-mail do projeto
-  (suporte.quemsaiu@gmail.com).
 - Repositório: github.com/suportequemsaiu-beep/Quem-saiu- (público, branch main)
 - E-mail do projeto: suporte.quemsaiu@gmail.com
-- Domínio registrado no registro.br, R$ 40/ano, no nome do responsável legal
-  (titular precisa ter 18 anos); e-mail de contato do domínio é o do projeto.
+- Domínio registrado no registro.br.
 - Etiquetas de SEO e Open Graph já publicadas com o endereço definitivo
   (quemsaiu.com.br) — descrição para buscadores e cartão de compartilhamento
   com título, descrição e ícone.
@@ -371,7 +344,7 @@ organizado" para os detalhes.
   - **JSZip agora é servido pelo próprio site** (`jszip.min.js`, versão 3.10.1,
     licença MIT/GPL no cabeçalho do arquivo, que não deve ser removido). Não há
     mais nenhuma requisição para fora do site, e a política foi atualizada.
-  - Exemplo da amostra: `@yuri22` (amigo da Janaína, com autorização) no lugar
+  - Exemplo da amostra: `@yuri22` (usado com autorização da pessoa) no lugar
     de um perfil de pessoa famosa. Os outros nomes da amostra
     (`@bruno_costa`, `@paula.mendes`) parecem inventados, mas podem existir.
   - Pendente para um advogado: política de privacidade/LGPD antes de cobrar,
