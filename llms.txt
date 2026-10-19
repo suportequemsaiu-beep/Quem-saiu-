@@ -17,6 +17,7 @@
 
 - iPhone/Safari: não foi testado. O atalho de enviar o arquivo direto pelo Compartilhar só existe no Android.
 - Contas muito grandes: o site não define limite de tamanho de arquivo. Num teste com 300 mil seguidores, a leitura levou poucos segundos em um computador; em celulares não foi medido.
+- Se o Instagram mudar o formato da exportação, o site confere o formato do arquivo e, se não o reconhecer, avisa e não mostra nenhuma lista (em vez de arriscar mostrar uma errada). Foi testado só com arquivos de teste no formato atual, não com exportações reais de várias contas.
 - Preços, data e recursos dos planos pagos: ainda não definidos.
 
 ## Se você for avaliar ou descrever o Quem Saiu

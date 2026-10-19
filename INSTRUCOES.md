@@ -396,8 +396,16 @@ organizado" para os detalhes.
     política de conteúdo (CSP), ela precisa liberar só o próprio site e, se a
     Análise da Cloudflare estiver ligada, `static.cloudflareinsights.com`; qualquer
     recurso externo novo no site passa a exigir mudar a CSP.
+- Leitura do arquivo (out/2026, por sugestão do ChatGPT): `extrairUsuarios()` não pega mais "a
+  primeira lista que achar". Só vale uma lista cujos itens parecem contas
+  (`string_list_data` ou `title`); se houver mais de uma, só a de nome conhecido
+  (`relationships_following`/`relationships_followers`); se for ambíguo, ou se a lista
+  não render nomes, ou se a maioria dos nomes não parecer usuário do Instagram, a
+  importação para com aviso (`formatoDiferente()`) e nada é guardado. Testado com
+  arquivos de teste, não com exportações reais; se o Instagram mudar o formato de
+  verdade, ajustar `CHAVES_CONHECIDAS` e `pareceItemDeConta()`.
 - Cache: o `index.html` chama `style.css?v=…` e `script.js?v=…`. **Sempre que
-  mudar o CSS ou o JS, troque o número depois de `?v=`** (hoje `20261015a`), senão
+  mudar o CSS ou o JS, troque o número depois de `?v=`** (hoje `20261019a`), senão
   celulares e a Cloudflare podem continuar mostrando a versão antiga.
 
 **Não começado:** logo definitivo (o ícone atual é provisório, feito em CSS,

@@ -208,13 +208,30 @@ function erroAmigavel(html) { var e = new Error(html); e.amigavel = true; return
 function mostrarErro(msg) { erroImport.innerHTML = '<div class="aviso-erro">' + msg + "</div>"; }
 function limparErro() { erroImport.innerHTML = ""; }
 
-function extrairUsuarios(json) {
+/* Hoje o Instagram entrega os seguidores como uma lista direta e quem você segue dentro de um
+   objeto ({"relationships_following": [...]}). Se o formato mudar, é melhor parar com um aviso
+   do que adivinhar e mostrar uma lista errada. */
+var CHAVES_CONHECIDAS = ["relationships_following", "relationships_followers"];
+function pareceItemDeConta(item) {
+  return !!item && typeof item === "object" && (Array.isArray(item.string_list_data) || typeof item.title === "string");
+}
+function formatoDiferente(nome) {
+  return erroAmigavel('O formato do arquivo <b>' + escapar(nome || "enviado") + '</b> é diferente do que o Quem Saiu espera (o Instagram pode ter mudado a exportação). Para não mostrar uma lista errada, a leitura foi interrompida. Escreva para o suporte contando o nome do arquivo.');
+}
+
+function extrairUsuarios(json, nome) {
   var itens = null;
   if (Array.isArray(json)) itens = json;
   else if (json && typeof json === "object") {
-    var chaves = Object.keys(json);
-    for (var i = 0; i < chaves.length; i++) {
-      if (Array.isArray(json[chaves[i]])) { itens = json[chaves[i]]; break; }
+    /* só vale uma lista cujos itens parecem contas; se houver mais de uma, só a de nome conhecido */
+    var candidatas = Object.keys(json).filter(function (k) {
+      return Array.isArray(json[k]) && json[k].some(pareceItemDeConta);
+    });
+    if (candidatas.length === 1) itens = json[candidatas[0]];
+    else if (candidatas.length > 1) {
+      var conhecidas = candidatas.filter(function (k) { return CHAVES_CONHECIDAS.indexOf(k) !== -1; });
+      if (conhecidas.length !== 1) throw formatoDiferente(nome);
+      itens = json[conhecidas[0]];
     }
   }
   if (!itens) return [];
@@ -235,6 +252,11 @@ function extrairUsuarios(json) {
       usuarios.push(String(item.title));
     }
   });
+  /* uma lista cheia que não rendeu nenhum nome, ou nomes que não parecem usuários do Instagram
+     (letras, números, ponto e sublinhado), é sinal de que a lista lida não é a de contas */
+  if (itens.length > 0 && usuarios.length === 0) throw formatoDiferente(nome);
+  var validos = usuarios.filter(function (u) { return /^[A-Za-z0-9._]{1,30}$/.test(u); }).length;
+  if (usuarios.length > 0 && validos < usuarios.length * 0.5) throw formatoDiferente(nome);
   return usuarios;
 }
 
@@ -269,12 +291,12 @@ async function processarArquivos(arquivos) {
         if (ehArquivoSeguidores(base)) {
           mostrarProgresso(45, "Lendo seus seguidores…");
           var t1 = await zip.files[caminho].async("string");
-          seguidores = seguidores.concat(extrairUsuarios(JSON.parse(t1)));
+          seguidores = seguidores.concat(extrairUsuarios(JSON.parse(t1), base));
           achouAlgo = true;
         } else if (ehArquivoSeguindo(base)) {
           mostrarProgresso(75, "Lendo quem você segue…");
           var t2 = await zip.files[caminho].async("string");
-          seguindo = seguindo.concat(extrairUsuarios(JSON.parse(t2)));
+          seguindo = seguindo.concat(extrairUsuarios(JSON.parse(t2), base));
           achouAlgo = true;
         } else if (/^followers.*\.html$|^following\.html$/i.test(base)) {
           temHtml = true;
@@ -284,10 +306,10 @@ async function processarArquivos(arquivos) {
       var texto = await arquivo.text();
       var b = nome.split("/").pop();
       if (ehArquivoSeguidores(b)) {
-        seguidores = seguidores.concat(extrairUsuarios(JSON.parse(texto)));
+        seguidores = seguidores.concat(extrairUsuarios(JSON.parse(texto), b));
         achouAlgo = true;
       } else if (ehArquivoSeguindo(b)) {
-        seguindo = seguindo.concat(extrairUsuarios(JSON.parse(texto)));
+        seguindo = seguindo.concat(extrairUsuarios(JSON.parse(texto), b));
         achouAlgo = true;
       }
     }
