@@ -400,8 +400,9 @@ organizado" para os detalhes.
   primeira lista que achar". Só vale uma lista cujos itens parecem contas
   (`string_list_data` ou `title`); se houver mais de uma, só a de nome conhecido
   (`relationships_following`/`relationships_followers`); se for ambíguo, ou se a lista
-  não render nomes, ou se a maioria dos nomes não parecer usuário do Instagram, a
-  importação para com aviso (`formatoDiferente()`) e nada é guardado. Testado com
+  não render nomes, ou se mais de 10% dos nomes não parecerem usuário do Instagram, a
+  importação para com aviso (`formatoDiferente()`) e nada é guardado. Até 10% de nomes
+  estranhos passam e aparecem como estão (não são descartados em silêncio). Testado com
   arquivos de teste, não com exportações reais; se o Instagram mudar o formato de
   verdade, ajustar `CHAVES_CONHECIDAS` e `pareceItemDeConta()`.
 - Cache: o `index.html` chama `style.css?v=…` e `script.js?v=…`. **Sempre que

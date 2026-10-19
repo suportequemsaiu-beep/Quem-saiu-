@@ -252,11 +252,13 @@ function extrairUsuarios(json, nome) {
       usuarios.push(String(item.title));
     }
   });
-  /* uma lista cheia que não rendeu nenhum nome, ou nomes que não parecem usuários do Instagram
-     (letras, números, ponto e sublinhado), é sinal de que a lista lida não é a de contas */
+  /* uma lista cheia que não rendeu nenhum nome, ou em que mais de 10% dos nomes não parecem usuários
+     do Instagram (letras, números, ponto e sublinhado), é sinal de que a lista lida não é a de contas.
+     Até 10% de nomes estranhos passam e aparecem como estão (nunca são descartados em silêncio,
+     para não criar "saídas" ou "entradas" que não existem). */
   if (itens.length > 0 && usuarios.length === 0) throw formatoDiferente(nome);
   var validos = usuarios.filter(function (u) { return /^[A-Za-z0-9._]{1,30}$/.test(u); }).length;
-  if (usuarios.length > 0 && validos < usuarios.length * 0.5) throw formatoDiferente(nome);
+  if (usuarios.length > 0 && validos < usuarios.length * 0.9) throw formatoDiferente(nome);
   return usuarios;
 }
 
