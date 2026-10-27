@@ -322,8 +322,10 @@ organizado" para os detalhes.
     por JavaScript: as IAs não liam as respostas. O JSON-LD (FAQPage) tem as
     mesmas 17 perguntas e respostas. Para mudar uma resposta: edite o
     `<details>` e copie o texto igual para o JSON-LD.
-  - Bloco visível "O que vale saber antes de começar" na home (sem senha, histórico
-    só neste navegador, sempre o arquivo mais novo, aparelhos testados).
+  - ~~Bloco "O que vale saber antes de começar" na home~~ — **removido em 27/out/2026 por
+    decisão da dona do site.** Os mesmos avisos continuam na Ajuda ("Quantas listas ficam
+    guardadas?", "Funciona no iPhone?"), na política de privacidade, no `llms.txt`, na dica ao
+    lado do botão de importar e no aviso de arquivo mais antigo.
   - Abas do resultado explicam o que mostram; o botão de apagar diz o que remove;
     o status com 1 lista pede um arquivo mais novo.
   - **Aviso de arquivo mais antigo:** o app compara as duas listas mais recentes
@@ -402,7 +404,7 @@ organizado" para os detalhes.
   propósito? Atualize o teste. Criou um comportamento novo? Crie um teste. Eles não cobrem celular
   de verdade nem iPhone. A pasta é publicada junto com o site (não tem nada sigiloso).
 - Cache: o `index.html` chama `style.css?v=…` e `script.js?v=…`. **Sempre que
-  mudar o CSS ou o JS, troque o número depois de `?v=`** (hoje `20261019d`), senão
+  mudar o CSS ou o JS, troque o número depois de `?v=`** (hoje `20261027a`), senão
   celulares e a Cloudflare podem continuar mostrando a versão antiga.
 
 **Não começado:** logo definitivo (o ícone atual é provisório, feito em CSS,

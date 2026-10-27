@@ -39,10 +39,10 @@ with sync_playwright() as p:
     ok("cdnjs" not in cru,"N1 index.html não chama mais o CDN")
     ok("jszip.min.js" in cru,"N1 JSZip vem do próprio site")
     for frase in ["Funciona no iPhone?","Quantas listas ficam guardadas?","O Quem Saiu acessa a minha conta do Instagram?","E se o Instagram mudar o formato do arquivo?",
-                  "O que vale saber antes de começar","Histórico só neste navegador","Sempre o arquivo mais novo","No Chrome do Android","O tempo para o arquivo ficar pronto varia",
+                  "No Chrome do Android","O tempo para o arquivo ficar pronto varia",
                   "Remove as listas guardadas e as contas escondidas","Peça um novo arquivo ao Instagram"]:
         ok(frase in cru,"N1 HTML cru contém: "+frase)
-    ok("adamsandler" not in cru and "adamsandler" not in open("/home/claude/quem-saiu-/script.js",encoding="utf-8").read().lower(),"N1 @adamsandler removido")
+    ok("adamsandler" not in cru and "adamsandler" not in open(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),"script.js"),encoding="utf-8").read().lower(),"N1 @adamsandler removido")
 
     # N2 Ajuda: 17 <details>, respostas no HTML cru iguais às do JSON-LD
     det=re.findall(r'<summary class="faq-q">(.*?)<span aria-hidden="true">\+</span></summary>\s*<p class="faq-a">(.*?)</p>',cru,re.S)
@@ -55,7 +55,7 @@ with sync_playwright() as p:
 
     # N3 página: sem requisições externas, sem erros, bloco visível, amostra
     pg=abrir(b)
-    ok(pg.is_visible(".vale-saber"),"N3 'O que vale saber' visível já no começo (antes de tocar em Quero descobrir)")
+    ok("vale-saber" not in cru and pg.locator(".vale-saber").count()==0,"N3 bloco 'O que vale saber antes de começar' removido da tela inicial")
     pg.screenshot(path=B+"avaliacao/telas/n_home_inicio.png",full_page=True)
     pg.click("#btnDescobrir"); pg.wait_for_timeout(500)
     pg.click("[data-lista=naoSegue]"); pg.wait_for_timeout(200)
