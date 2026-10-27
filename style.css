@@ -1,3 +1,5 @@
+/* o visual é escuro e fixo; "only light" impede o escurecimento automático que alguns celulares aplicam por cima */
+:root { color-scheme: only light; }
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
   a, button, [role="button"] { touch-action: manipulation; }
   /* Ao pressionar, todo botão encolhe um pouco (feedback de toque). Especificidade zero: regras próprias de cada botão ainda vencem. */

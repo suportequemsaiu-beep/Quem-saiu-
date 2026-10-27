@@ -403,8 +403,15 @@ organizado" para os detalhes.
   rode `python3 tests/rodar_todos.py` e só publique com "Tudo certo."** Mudou um comportamento de
   propósito? Atualize o teste. Criou um comportamento novo? Crie um teste. Eles não cobrem celular
   de verdade nem iPhone. A pasta é publicada junto com o site (não tem nada sigiloso).
+- **Tema escuro (out/2026):** o visual do site é escuro e fixo (não há versão clara). Alguns celulares
+  escurecem sites por conta própria e estragavam o visual (fundo quase preto, figura da porta cinza
+  quase invisível, visto no celular de um amigo). Por isso o `index.html` tem
+  `<meta name="color-scheme" content="only light">` e o `style.css` tem `:root { color-scheme: only light; }`:
+  isso pede ao navegador para não escurecer a página e **não muda nada na aparência normal**. Não foi
+  possível reproduzir o escurecimento no computador; a confirmação é pedir um print de um celular
+  afetado. Se um dia o site ganhar um tema claro de verdade, revisar essas duas linhas.
 - Cache: o `index.html` chama `style.css?v=…` e `script.js?v=…`. **Sempre que
-  mudar o CSS ou o JS, troque o número depois de `?v=`** (hoje `20261027a`), senão
+  mudar o CSS ou o JS, troque o número depois de `?v=`** (hoje `20261027b`), senão
   celulares e a Cloudflare podem continuar mostrando a versão antiga.
 
 **Não começado:** logo definitivo (o ícone atual é provisório, feito em CSS,

@@ -32,6 +32,7 @@ crie um teste para ele.
 | `link_do_perfil.py` | o Instagram não recebe o endereço do site ao abrir um perfil |
 | `textos_e_contadores.py` | explicação das abas, números que contam só as contas visíveis, contas escondidas |
 | `dados_guardados.py` | dado ruim no armazenamento não quebra a página; versão das listas |
+| `aparencia.py` | o site avisa ao navegador para não escurecer a página sozinho (modo escuro forçado de alguns celulares) |
 | `ajustes_menores.py` | nomes com "(1)", limpeza da cópia temporária e Compartilhar |
 
 ## O que **não** é testado aqui
