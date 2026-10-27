@@ -411,7 +411,7 @@ organizado" para os detalhes.
   possível reproduzir o escurecimento no computador; a confirmação é pedir um print de um celular
   afetado. Se um dia o site ganhar um tema claro de verdade, revisar essas duas linhas.
 - Cache: o `index.html` chama `style.css?v=…` e `script.js?v=…`. **Sempre que
-  mudar o CSS ou o JS, troque o número depois de `?v=`** (hoje `20261027b`), senão
+  mudar o CSS ou o JS, troque o número depois de `?v=`** (hoje `20261027d`), senão
   celulares e a Cloudflare podem continuar mostrando a versão antiga.
 
 **Não começado:** logo definitivo (o ícone atual é provisório, feito em CSS,
@@ -427,6 +427,15 @@ de um servidor, que ainda não existe. (Hospedagem já está na Cloudflare.)
   escolhido. O passo a passo não citava isso e a pessoa não conseguia terminar; agora o passo existe
   (depois de "Exportar para dispositivo") e há uma pergunta na Ajuda. Foi visto em um único print,
   não testado por nós; o Instagram muda a tela de vez em quando.
+- **Passo a passo novo (27/out/2026, pedido da criadora: "dar uma cara nova"):** os 12 passos agora
+  aparecem **um por vez**, com barra de progresso, botões Voltar/Próximo e uma telinha desenhada em
+  cada passo. Os passos ficam escritos no `index.html` (`<ol id="listaEtapas">`, um `<li class="etapa">`
+  por passo, com `data-fase` e `data-tela`), então robôs e quem estiver sem JavaScript veem a lista
+  inteira. O `script.js` só monta a barra, os botões e os desenhos (desenhos feitos à mão em SVG,
+  telas genéricas, sem logo nem cores do Instagram; aviso "os desenhos são só um guia"). Os passos
+  ficam todos na mesma célula de uma grade, para os botões não pularem de lugar. No computador
+  (≥ 900 px) o último passo é `.so-computador`; no celular é `.so-celular`. Para mudar um passo,
+  edite o `<li>` (texto) e a função de `DESENHOS` (desenho). Teste: `tests/passo_a_passo.py`.
 
 - O compartilhamento de .zip do Android para o PWA **funciona**. Caminho mais
   curto testado: Chrome → menu ⋮ → Transferências → três pontinhos no arquivo →
@@ -512,9 +521,8 @@ navegador do celular.
 Foram 4 sugestões de "elevar a UI para parecer software profissional". Cada
 uma verificada contra o código real antes de decidir:
 
-1. **Mockups das telas do Instagram no passo a passo** — válido, mas já
-   discutido e adiado antes (ver decisão sobre screenshots). Trabalhoso de
-   produzir, sem decisão de fazer ainda.
+1. **Mockups das telas do Instagram no passo a passo** — feito em 27/out/2026
+   como desenhos genéricos (sem imagens do Instagram), ver "Passo a passo novo".
 2. **Dashboard de resultados com cards simultâneos** (em vez das 3 abas
    atuais, mostrar os 3 números ao mesmo tempo, tipografia grande, cores
    pastel) — única sugestão genuinamente nova. É mudança de arquitetura de

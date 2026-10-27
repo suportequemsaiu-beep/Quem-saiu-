@@ -127,6 +127,256 @@ document.getElementById("togglePasso").addEventListener("click", function () {
   this.setAttribute("aria-expanded", aberto ? "false" : "true");
 });
 
+/* ===== passo a passo: um passo por vez =====
+   Os passos ficam escritos no index.html (assim qualquer leitor, inclusive robôs, vê o texto).
+   Aqui só se monta a barra de progresso, os botões e os desenhos. Se algo falhar, a lista inteira continua visível. */
+(function () {
+  var corpo = document.getElementById("corpoPasso");
+  var lista = document.getElementById("listaEtapas");
+  if (!corpo || !lista) return;
+
+  /* Desenhos genéricos de telas de celular: sem logo e sem as cores de nenhum aplicativo. */
+  function moldura(inner) {
+    return '<svg viewBox="0 0 200 240" aria-hidden="true" focusable="false">' +
+      '<rect x="3" y="3" width="194" height="234" rx="24" fill="#fff" stroke="#94a3b8" stroke-width="3"/>' +
+      '<rect x="80" y="11" width="40" height="5" rx="2.5" fill="#cbd5e1"/>' + inner + '</svg>';
+  }
+  function barra(x, y, w, cor) {
+    return '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="7" rx="3.5" fill="' + (cor || "#e2e8f0") + '"/>';
+  }
+  function anel(x, y, w, h, r) {
+    return '<rect class="alvo-anel" x="' + (x - 4) + '" y="' + (y - 4) + '" width="' + (w + 8) + '" height="' + (h + 8) +
+      '" rx="' + (r + 4) + '" fill="none" stroke="#0369a1" stroke-width="2.5"/>';
+  }
+  /* linha da lista; opcoes: alvo (destacada), apagada (opção errada), valor (texto à direita) */
+  function linha(y, texto, o) {
+    o = o || {};
+    var h = 30, fundo = o.alvo ? "#e0f2fe" : "#f1f5f9";
+    var out = '<rect x="16" y="' + y + '" width="168" height="' + h + '" rx="10" fill="' + fundo + '"' +
+      (o.alvo ? ' stroke="#0369a1" stroke-width="1.5"' : "") + '/>';
+    if (texto) {
+      out += '<text x="27" y="' + (y + 19) + '" font-size="10" font-family="sans-serif" font-weight="' + (o.alvo ? 700 : 500) +
+        '" fill="' + (o.alvo ? "#0c4a6e" : (o.apagada ? "#94a3b8" : "#64748b")) + '">' + texto + '</text>';
+    } else {
+      out += barra(27, y + 12, 70 + (y % 5) * 9);
+    }
+    if (o.valor) {
+      out += '<text x="174" y="' + (y + 19) + '" font-size="9.5" font-family="sans-serif" font-weight="700" text-anchor="end" fill="#0369a1">' + o.valor + '</text>';
+    }
+    return out + (o.alvo ? anel(16, y, 168, h, 10) : "");
+  }
+  function botao(y, texto, ring) {
+    return '<rect x="16" y="' + y + '" width="168" height="34" rx="12" fill="#0369a1"/>' +
+      '<text x="100" y="' + (y + 21) + '" font-size="11" font-family="sans-serif" font-weight="800" text-anchor="middle" fill="#fff">' + texto + '</text>' +
+      (ring ? anel(16, y, 168, 34, 12) : "");
+  }
+  function titulo(txt) {
+    return '<text x="100" y="42" font-size="10" font-family="sans-serif" font-weight="800" text-anchor="middle" fill="#475569">' + txt + '</text>';
+  }
+  var cinzaIcone = '#475569';
+  var DESENHOS = {
+    perfil: function () {
+      return moldura(barra(18, 34, 64, "#cbd5e1") +
+        '<rect x="165" y="32" width="20" height="3" rx="1.5" fill="' + cinzaIcone + '"/><rect x="165" y="38" width="20" height="3" rx="1.5" fill="' + cinzaIcone + '"/><rect x="165" y="44" width="20" height="3" rx="1.5" fill="' + cinzaIcone + '"/>' +
+        anel(161, 27, 28, 24, 8) +
+        '<circle cx="42" cy="88" r="22" fill="#e2e8f0"/>' + barra(78, 76, 28) + barra(112, 76, 28) + barra(146, 76, 28) +
+        barra(78, 94, 96) + barra(18, 126, 90, "#cbd5e1") +
+        '<rect x="16" y="146" width="168" height="26" rx="9" fill="#f1f5f9"/>' +
+        '<rect x="16" y="184" width="52" height="42" rx="6" fill="#f1f5f9"/><rect x="74" y="184" width="52" height="42" rx="6" fill="#f1f5f9"/><rect x="132" y="184" width="52" height="42" rx="6" fill="#f1f5f9"/>');
+    },
+    menu: function () {
+      return moldura(titulo("Menu") + linha(58, null) + linha(94, null) + linha(130, "Central de Contas", { alvo: true }) + linha(166, null) + linha(202, null));
+    },
+    central: function () {
+      return moldura(titulo("Central de Contas") + linha(58, null) +
+        linha(94, "Suas informações e permissões", { alvo: true }) +
+        '<text x="100" y="142" font-size="13" text-anchor="middle" font-family="sans-serif" font-weight="800" fill="#0369a1">↓</text>' +
+        linha(150, "Exportar suas informações", { alvo: true }) + linha(194, null));
+    },
+    criar: function () {
+      return moldura(titulo("Exportar informações") +
+        '<rect x="16" y="58" width="168" height="54" rx="12" fill="#f1f5f9"/><circle cx="42" cy="85" r="14" fill="#e2e8f0"/>' + barra(66, 77, 80) + barra(66, 91, 50) +
+        botao(138, "Criar exportação", true));
+    },
+    destino: function () {
+      return moldura(titulo("Para onde exportar") +
+        linha(62, "Exportar para dispositivo", { alvo: true }) +
+        linha(112, "Exportar para serviço externo", { apagada: true }) +
+        '<circle cx="182" cy="112" r="9" fill="#e11d48"/><text x="182" y="116" font-size="11" font-family="sans-serif" font-weight="800" text-anchor="middle" fill="#fff">✕</text>');
+    },
+    notificar: function () {
+      return moldura(titulo("Exportar informações") +
+        linha(62, "Notificar", { alvo: true, valor: "E-mail" }) +
+        linha(102, "Personalizar informações") + linha(142, "Formato") + botao(190, "Iniciar exportação", false));
+    },
+    personalizar: function () {
+      function opcao(y, marcada, texto) {
+        return '<rect x="16" y="' + y + '" width="168" height="30" rx="10" fill="' + (marcada ? "#e0f2fe" : "#f1f5f9") + '"' + (marcada ? ' stroke="#0369a1" stroke-width="1.5"' : "") + '/>' +
+          '<rect x="26" y="' + (y + 8) + '" width="14" height="14" rx="4" fill="' + (marcada ? "#0369a1" : "#fff") + '" stroke="' + (marcada ? "#0369a1" : "#cbd5e1") + '" stroke-width="1.5"/>' +
+          (marcada ? '<path d="M29 ' + (y + 15.5) + ' l3 3 l5 -6" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>' : "") +
+          (texto ? '<text x="48" y="' + (y + 19) + '" font-size="10" font-family="sans-serif" font-weight="700" fill="#0c4a6e">' + texto + '</text>' : barra(48, y + 12, 60)) +
+          (marcada ? anel(16, y, 168, 30, 10) : "");
+      }
+      return moldura(titulo("Personalizar informações") + opcao(58, true, "Seguidores e seguindo") + opcao(94, false) + opcao(130, false) + botao(184, "Salvar", false));
+    },
+    formato: function () {
+      function radio(y, marcada, texto) {
+        return '<rect x="16" y="' + y + '" width="168" height="30" rx="10" fill="' + (marcada ? "#e0f2fe" : "#f1f5f9") + '"' + (marcada ? ' stroke="#0369a1" stroke-width="1.5"' : "") + '/>' +
+          '<circle cx="33" cy="' + (y + 15) + '" r="7" fill="#fff" stroke="' + (marcada ? "#0369a1" : "#cbd5e1") + '" stroke-width="1.5"/>' +
+          (marcada ? '<circle cx="33" cy="' + (y + 15) + '" r="3.5" fill="#0369a1"/>' : "") +
+          '<text x="48" y="' + (y + 19) + '" font-size="10" font-family="sans-serif" font-weight="' + (marcada ? 700 : 500) + '" fill="' + (marcada ? "#0c4a6e" : "#64748b") + '">' + texto + '</text>' +
+          (marcada ? anel(16, y, 168, 30, 10) : "");
+      }
+      return moldura(titulo("Formato") + radio(62, false, "HTML") + radio(102, true, "JSON") + botao(184, "Salvar", false));
+    },
+    iniciar: function () {
+      return moldura(titulo("Exportar informações") +
+        linha(62, "Notificar", { valor: "E-mail" }) + linha(102, "Personalizar informações") + linha(142, "Formato", { valor: "JSON" }) +
+        botao(190, "Iniciar exportação", true));
+    },
+    email: function () {
+      return moldura(
+        '<rect x="30" y="78" width="140" height="94" rx="12" fill="#f0fdf4" stroke="#16a34a" stroke-width="3"/>' +
+        '<path d="M34 86 L100 134 L166 86" fill="none" stroke="#16a34a" stroke-width="3" stroke-linejoin="round"/>' +
+        '<circle cx="168" cy="78" r="13" fill="#16a34a"/><path d="M161 78 l5 5 l9 -10" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>' +
+        barra(52, 196, 96));
+    },
+    baixar: function () {
+      return moldura(
+        '<circle cx="100" cy="92" r="44" fill="#f3e8ff"/>' +
+        '<path d="M100 68 V104 M84 92 L100 108 L116 92" fill="none" stroke="#7e22ce" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>' +
+        '<path d="M82 120 H118" stroke="#7e22ce" stroke-width="5" stroke-linecap="round"/>' +
+        '<rect x="16" y="168" width="168" height="34" rx="11" fill="#f1f5f9"/>' +
+        '<text x="28" y="189" font-size="10" font-family="sans-serif" font-weight="700" fill="#475569">instagram-….zip</text>');
+    },
+    compartilhar: function () {
+      function app(x, nome, alvo) {
+        return '<rect x="' + x + '" y="148" width="32" height="32" rx="9" fill="' + (alvo ? "#0369a1" : "#cbd5e1") + '"/>' +
+          '<text x="' + (x + 16) + '" y="196" font-size="7.5" font-family="sans-serif" font-weight="' + (alvo ? 800 : 500) + '" text-anchor="middle" fill="' + (alvo ? "#0c4a6e" : "#94a3b8") + '">' + nome + '</text>' +
+          (alvo ? anel(x, 148, 32, 32, 9) : "");
+      }
+      return moldura(
+        '<rect x="16" y="34" width="168" height="40" rx="11" fill="#f1f5f9"/>' +
+        '<text x="26" y="58" font-size="10" font-family="sans-serif" font-weight="700" fill="#475569">instagram-….zip</text>' +
+        '<circle cx="170" cy="48" r="1.8" fill="#475569"/><circle cx="170" cy="54" r="1.8" fill="#475569"/><circle cx="170" cy="60" r="1.8" fill="#475569"/>' +
+        '<text x="100" y="112" font-size="10" font-family="sans-serif" font-weight="800" text-anchor="middle" fill="#475569">Compartilhar</text>' +
+        '<rect x="12" y="122" width="176" height="96" rx="16" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.5"/>' +
+        app(22, "", false) + app(62, "", false) + app(102, "", false) + app(142, "Quem Saiu", true));
+    },
+    pc: function () {
+      return '<svg viewBox="0 0 200 240" aria-hidden="true" focusable="false">' +
+        '<rect x="8" y="46" width="184" height="128" rx="12" fill="#fff" stroke="#94a3b8" stroke-width="3"/>' +
+        '<rect x="8" y="46" width="184" height="18" rx="12" fill="#e2e8f0"/><rect x="8" y="56" width="184" height="8" fill="#e2e8f0"/>' +
+        '<circle cx="22" cy="55" r="3" fill="#cbd5e1"/><circle cx="33" cy="55" r="3" fill="#cbd5e1"/><circle cx="44" cy="55" r="3" fill="#cbd5e1"/>' +
+        '<rect x="30" y="88" width="140" height="34" rx="11" fill="#0369a1"/>' +
+        '<text x="100" y="109" font-size="11" font-family="sans-serif" font-weight="800" text-anchor="middle" fill="#fff">Ver a minha lista</text>' +
+        anel(30, 88, 140, 34, 11) + barra(48, 142, 104) +
+        '<path d="M70 174 L64 200 H136 L130 174" fill="#e2e8f0" stroke="#94a3b8" stroke-width="3" stroke-linejoin="round"/></svg>';
+    }
+  };
+  var FASES = { pedir: "Pedir ao Instagram", esperar: "Esperar o e-mail", enviar: "Enviar para cá" };
+
+  var todas = Array.prototype.slice.call(lista.children);
+  var larga = window.matchMedia ? window.matchMedia("(min-width: 900px)") : null;
+  var pos = 0;
+
+  try {
+    todas.forEach(function (li) {
+      var f = DESENHOS[li.getAttribute("data-tela")];
+      if (!f) return;
+      var d = document.createElement("div");
+      d.className = "etapa-desenho";
+      d.innerHTML = f();
+      li.insertBefore(d, li.firstChild);
+    });
+
+    var topo = document.createElement("div");
+    topo.className = "passo-topo";
+    var chip = document.createElement("span");
+    chip.className = "passo-fase";
+    var cont = document.createElement("span");
+    cont.className = "passo-contagem";
+    topo.appendChild(chip);
+    topo.appendChild(cont);
+    var trilha = document.createElement("div");
+    trilha.className = "passo-trilha";
+    trilha.setAttribute("role", "progressbar");
+    trilha.setAttribute("aria-label", "Progresso do passo a passo");
+    var fill = document.createElement("div");
+    fill.className = "passo-trilha-fill";
+    trilha.appendChild(fill);
+    var nav = document.createElement("div");
+    nav.className = "passo-nav";
+    var voltar = document.createElement("button");
+    voltar.type = "button";
+    voltar.className = "passo-voltar";
+    voltar.textContent = "Voltar";
+    var prox = document.createElement("button");
+    prox.type = "button";
+    prox.className = "passo-proximo";
+    nav.appendChild(voltar);
+    nav.appendChild(prox);
+    var aviso = document.createElement("p");
+    aviso.className = "so-leitor";
+    aviso.setAttribute("aria-live", "polite");
+
+    corpo.insertBefore(topo, lista);
+    corpo.insertBefore(trilha, lista);
+    topo.appendChild(aviso);
+    lista.parentNode.insertBefore(nav, lista.nextSibling);
+    corpo.classList.add("com-passos");
+
+    var visiveis = function () {
+      var w = !!(larga && larga.matches);
+      return todas.filter(function (li) {
+        return !(li.classList.contains(w ? "so-celular" : "so-computador"));
+      });
+    };
+    var mostrar = function (i, volta) {
+      var v = visiveis();
+      pos = Math.max(0, Math.min(i, v.length - 1));
+      todas.forEach(function (li) { li.classList.remove("atual", "voltando"); });
+      var li = v[pos];
+      li.classList.add("atual");
+      if (volta) li.classList.add("voltando");
+      var fase = li.getAttribute("data-fase");
+      corpo.setAttribute("data-fase", fase);
+      chip.textContent = FASES[fase] || "";
+      cont.textContent = "Passo " + (pos + 1) + " de " + v.length;
+      fill.style.width = ((pos + 1) / v.length * 100) + "%";
+      trilha.setAttribute("aria-valuemin", "1");
+      trilha.setAttribute("aria-valuemax", String(v.length));
+      trilha.setAttribute("aria-valuenow", String(pos + 1));
+      voltar.hidden = pos === 0;
+      prox.textContent = pos === v.length - 1 ? "Já tenho o arquivo" : "Próximo";
+      var h = li.querySelector("h3");
+      aviso.textContent = "Passo " + (pos + 1) + " de " + v.length + (h ? ": " + h.textContent : "");
+    };
+
+    voltar.addEventListener("click", function () { mostrar(pos - 1, true); });
+    prox.addEventListener("click", function () {
+      if (pos < visiveis().length - 1) { mostrar(pos + 1, false); return; }
+      /* último passo: fecha o passo a passo e leva até o botão de escolher o arquivo */
+      mostrar(0, false);
+      document.getElementById("togglePasso").click();
+      var b = document.getElementById("btnImportar");
+      if (b) {
+        b.scrollIntoView({ behavior: "smooth", block: "center" });
+        try { b.focus({ preventScroll: true }); } catch (e) { b.focus(); }
+      }
+    });
+    if (larga) {
+      var aoMudar = function () { mostrar(pos, false); };
+      if (larga.addEventListener) larga.addEventListener("change", aoMudar);
+      else if (larga.addListener) larga.addListener(aoMudar);
+    }
+    mostrar(0, false);
+  } catch (e) {
+    /* se algo der errado, volta a mostrar a lista inteira, como no HTML */
+    corpo.classList.remove("com-passos");
+  }
+})();
+
 /* A Central de Ajuda fica escrita direto no index.html (<details>), para qualquer leitor, inclusive robôs, ver as respostas. */
 
 /* ===== FERRAMENTA DE IMPORTAÇÃO ===== */

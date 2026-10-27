@@ -199,7 +199,7 @@
 <meta name="theme-color" content="#0f172a" />
 <link rel="apple-touch-icon" href="icone-192.png" />
 <script src="jszip.min.js?v=3.10.1"></script>
-<link rel="stylesheet" href="style.css?v=20261027b" />
+<link rel="stylesheet" href="style.css?v=20261027d" />
 </head>
 <body>
 
@@ -345,44 +345,63 @@
             <span id="setaPasso" aria-hidden="true">▼</span>
           </button>
           <div class="expansivel-corpo" id="corpoPasso" style="display:none">
-            <div class="passo passo-1">
-              <div class="passo-cab"><span class="passo-num">1</span><h3>Peça o arquivo ao Instagram</h3></div>
-              <ol>
-                <li>Abra seu perfil, toque no menu <b>☰</b> (canto superior direito) e toque em <b>Central de Contas</b> (pode aparecer como <b>Conta Meta</b>)</li>
-                <li>Toque em <b>Suas informações e permissões</b> → <b>Exportar suas informações</b></li>
-                <li>Toque em <b>Criar exportação</b> e escolha sua conta</li>
-                <li>Em "Escolher para onde exportar", toque em <b>Exportar para dispositivo</b> — não em "serviço externo"</li>
-                <li>Toque em <b>Notificar</b> e escolha uma forma de entrega, de preferência o <b>e-mail</b>. Sem isso, o botão "Iniciar exportação" fica apagado</li>
-                <li>Em <b>Personalizar informações</b>, deixe marcado apenas <b>Seguidores e seguindo</b>, toque em <b>Salvar</b> e volte</li>
-                <li>Em <b>Formato</b>, escolha <b>JSON</b>, salve e volte</li>
-                <li>Toque em <b>Iniciar exportação</b></li>
-              </ol>
-            </div>
-
-            <div class="passo passo-2">
-              <div class="passo-cab"><span class="passo-num">2</span><h3>Fique de olho no e-mail</h3></div>
-              <p class="passo-nota">📧 O Instagram avisa <b>por e-mail</b> quando o arquivo fica pronto — é o aviso mais confiável, porque a notificação nem sempre chega. O link para baixar fica disponível por 4 dias. O tempo para o arquivo ficar pronto varia.</p>
-            </div>
-
-            <div class="passo passo-3">
-              <div class="passo-cab"><span class="passo-num">3</span><h3>Baixe e mande para cá</h3></div>
-              <ol>
-                <li>Baixe o arquivo pelo link do e-mail</li>
-                <li>No Chrome do Android, toque no menu <b>⋮</b> → <b>Transferências</b></li>
-                <li>Toque nos <b>três pontinhos</b> ao lado do arquivo → <b>Compartilhar</b></li>
-                <li>Escolha o <b>Quem Saiu</b> — ele abre já com a sua lista pronta</li>
-              </ol>
-              <p class="passo-nota">🚀 Esse caminho mais rápido precisa do Quem Saiu instalado e só existe no Android. Sem ele, use o botão <b>Ver a minha lista</b> aqui em cima e escolha o arquivo na pasta Downloads.</p>
-            </div>
-
-            <div class="passo passo-3 so-computador">
-              <div class="passo-cab"><span class="passo-num">3</span><h3>Baixe e escolha o arquivo aqui</h3></div>
-              <ol>
-                <li>Baixe o arquivo pelo link do e-mail</li>
-                <li>Volte para esta página e clique em <b>Ver a minha lista</b></li>
-                <li>Escolha o arquivo na pasta <b>Downloads</b> — o nome começa com <b>instagram-</b></li>
-              </ol>
-            </div>
+            <ol class="etapas" id="listaEtapas">
+              <li class="etapa" data-fase="pedir" data-tela="perfil">
+                <h3>Abra o menu</h3>
+                <p>No Instagram, abra o seu perfil e toque no menu <b>☰</b>, no canto de cima à direita.</p>
+              </li>
+              <li class="etapa" data-fase="pedir" data-tela="menu">
+                <h3>Central de Contas</h3>
+                <p>Toque em <b>Central de Contas</b>. Em alguns celulares ela aparece como <b>Conta Meta</b>.</p>
+              </li>
+              <li class="etapa" data-fase="pedir" data-tela="central">
+                <h3>Exportar suas informações</h3>
+                <p>Toque em <b>Suas informações e permissões</b> e depois em <b>Exportar suas informações</b>.</p>
+              </li>
+              <li class="etapa" data-fase="pedir" data-tela="criar">
+                <h3>Criar exportação</h3>
+                <p>Toque em <b>Criar exportação</b> e escolha a sua conta.</p>
+              </li>
+              <li class="etapa" data-fase="pedir" data-tela="destino">
+                <h3>Exportar para o aparelho</h3>
+                <p>Escolha <b>Exportar para dispositivo</b> — e não "serviço externo".</p>
+              </li>
+              <li class="etapa" data-fase="pedir" data-tela="notificar">
+                <h3>Notificar</h3>
+                <p>Toque em <b>Notificar</b> e escolha uma forma de aviso, de preferência o <b>e-mail</b>.</p>
+                <p class="etapa-nota">Sem isso, o botão "Iniciar exportação" fica apagado.</p>
+              </li>
+              <li class="etapa" data-fase="pedir" data-tela="personalizar">
+                <h3>Só seguidores e seguindo</h3>
+                <p>Em <b>Personalizar informações</b>, deixe marcado apenas <b>Seguidores e seguindo</b>. Toque em <b>Salvar</b> e volte.</p>
+              </li>
+              <li class="etapa" data-fase="pedir" data-tela="formato">
+                <h3>Formato JSON</h3>
+                <p>Em <b>Formato</b>, escolha <b>JSON</b>, salve e volte.</p>
+              </li>
+              <li class="etapa" data-fase="pedir" data-tela="iniciar">
+                <h3>Iniciar a exportação</h3>
+                <p>Toque em <b>Iniciar exportação</b>. Agora é só esperar.</p>
+              </li>
+              <li class="etapa" data-fase="esperar" data-tela="email">
+                <h3>Espere o e-mail</h3>
+                <p>O Instagram manda um <b>e-mail</b> quando o arquivo fica pronto — é o aviso mais confiável, porque a notificação nem sempre chega. O link vale por 4 dias. O tempo para o arquivo ficar pronto varia.</p>
+              </li>
+              <li class="etapa" data-fase="enviar" data-tela="baixar">
+                <h3>Baixe o arquivo</h3>
+                <p>Abra o e-mail e baixe o arquivo pelo link.</p>
+              </li>
+              <li class="etapa so-celular" data-fase="enviar" data-tela="compartilhar">
+                <h3>Mande para o Quem Saiu</h3>
+                <p>No Chrome do Android: <b>⋮</b> → <b>Transferências</b> → <b>três pontinhos</b> do arquivo → <b>Compartilhar</b> → <b>Quem Saiu</b>.</p>
+                <p class="etapa-nota">Precisa do Quem Saiu instalado e só existe no Android. Sem ele, use o botão <b>Ver a minha lista</b> aqui em cima e escolha o arquivo em Downloads.</p>
+              </li>
+              <li class="etapa so-computador" data-fase="enviar" data-tela="pc">
+                <h3>Escolha o arquivo aqui</h3>
+                <p>Volte para esta página, clique em <b>Ver a minha lista</b> e escolha o arquivo na pasta <b>Downloads</b> — o nome começa com <b>instagram-</b>.</p>
+              </li>
+            </ol>
+            <p class="passo-aviso">Os desenhos são só um guia: a tela do seu celular pode ser um pouco diferente.</p>
           </div>
         </div>
       </div>
@@ -550,7 +569,7 @@
   <button class="fechar" id="btnFecharFaixa" aria-label="Fechar aviso">&times;</button>
 </div>
 
-<script src="script.js?v=20261027b"></script>
+<script src="script.js?v=20261027d"></script>
 
 </body>
 </html>

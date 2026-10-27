@@ -120,23 +120,48 @@
   .expansivel-topo { width: 100%; background: #f8fafc; border: none; padding: 14px; text-align: left; font-size: 13px; font-weight: 700; color: #0f172a; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 10px; font-family: inherit; }
   .expansivel-corpo { padding: 0 16px 16px; }
   .expansivel-corpo ol { margin: 12px 0 0; }
-  .passo { border-radius:14px; padding:15px; margin-top:14px; }
-.expansivel-corpo > .passo:first-child { margin-top:14px; }
-  .passo-1 { background:#eff6ff; border:1px solid #bfdbfe; }
-  .passo-2 { background:#f0fdf4; border:1px solid #bbf7d0; }
-  .passo-3 { background:#faf5ff; border:1px solid #e9d5ff; }
-  .passo-cab { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
-  .passo-num { width:26px; height:26px; border-radius:50%; color:#fff; font-size:12px; font-weight:800; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
-  .passo-1 .passo-num { background:#2563eb; }
-  .passo-2 .passo-num { background:#16a34a; }
-  .passo-3 .passo-num { background:#9333ea; }
-  .so-computador { display:none; }
-  .passo-cab h3 { margin:0; font-size:13.5px; font-weight:800; color:#0f172a; }
-  .passo ol { margin:0; padding-left:18px; font-size:13px; color:#374151; line-height:1.85; display:flex; flex-direction:column; gap:7px; }
-  .passo-nota { font-size:12px; margin:10px 0 0; line-height:1.55; padding:9px 11px; border-radius:8px; }
-  .passo-2 .passo-nota { color:#166534; background:#dcfce7; }
-  .passo-3 .passo-nota { color:#6b21a8; background:#f3e8ff; }
-  .passo ol a { color: #0369a1; font-weight: 700; }
+  /* ===== passo a passo: um passo por vez (o script monta o topo, a barra e os botões; sem script, aparece a lista inteira) ===== */
+  .expansivel-corpo .etapas { list-style: none; margin: 14px 0 0; padding: 0; display: flex; flex-direction: column; gap: 18px; }
+  .etapa.so-computador { display: none; }
+  .etapa h3 { margin: 0 0 6px; font-size: 18px; font-weight: 800; color: #0f172a; letter-spacing: -.2px; }
+  .etapa p { margin: 0; font-size: 14.5px; line-height: 1.6; color: #334155; }
+  .etapa .etapa-nota { margin-top: 10px; font-size: 12.5px; line-height: 1.55; padding: 9px 12px; border-radius: 10px; background: #f1f5f9; color: #475569; }
+  .passo-aviso { margin: 14px 2px 0; font-size: 11.5px; line-height: 1.5; color: #64748b; text-align: center; }
+  .etapa-desenho { display: flex; justify-content: center; border-radius: 16px; padding: 14px 0; margin: 0 0 14px; background: #eff6ff; }
+  .etapa-desenho svg { width: 172px; height: auto; display: block; }
+  .alvo-anel { animation: pulso 1.5s ease-in-out infinite; }
+  @keyframes pulso { 0%, 100% { stroke-opacity: 1; } 50% { stroke-opacity: .25; } }
+
+  .passo-topo { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin: 14px 0 9px; }
+  .passo-fase { font-size: 12px; font-weight: 800; padding: 5px 11px; border-radius: 999px; background: #dbeafe; color: #1d4ed8; }
+  .passo-contagem { font-size: 12px; font-weight: 700; color: #64748b; }
+  .passo-trilha { height: 8px; border-radius: 999px; background: #e2e8f0; overflow: hidden; }
+  .passo-trilha-fill { height: 100%; border-radius: 999px; background: #2563eb; transition: width .3s ease; }
+  .passo-nav { display: flex; gap: 10px; margin-top: 16px; }
+  .passo-nav button { border: none; border-radius: 12px; min-height: 48px; font-size: 15px; font-weight: 800; cursor: pointer; font-family: inherit; }
+  .passo-nav [hidden] { display: none; }
+  .passo-voltar { flex: 0 0 auto; padding: 0 18px; background: #f1f5f9; color: #334155; }
+  .passo-proximo { flex: 1; background: #0369a1; color: #fff; }
+
+  #corpoPasso[data-fase="esperar"] .etapa-desenho { background: #f0fdf4; }
+  #corpoPasso[data-fase="esperar"] .passo-fase { background: #dcfce7; color: #166534; }
+  #corpoPasso[data-fase="esperar"] .passo-trilha-fill { background: #16a34a; }
+  #corpoPasso[data-fase="enviar"] .etapa-desenho { background: #faf5ff; }
+  #corpoPasso[data-fase="enviar"] .passo-fase { background: #f3e8ff; color: #6b21a8; }
+  #corpoPasso[data-fase="enviar"] .passo-trilha-fill { background: #9333ea; }
+
+  /* todos os passos ocupam o mesmo lugar: a caixa tem a altura do maior, e os botões não pulam de um passo para outro */
+  .com-passos .etapas { margin-top: 14px; display: grid; }
+  .com-passos .etapas .etapa { display: block; grid-area: 1 / 1; visibility: hidden; }
+  .com-passos .etapas .etapa.atual { visibility: visible; animation: etapa-entra .28s ease both; }
+  .com-passos .etapas .etapa.so-computador { display: none; }
+  .com-passos .etapas .etapa.atual.voltando { animation-name: etapa-volta; }
+  @keyframes etapa-entra { from { opacity: 0; transform: translateX(14px); } to { opacity: 1; transform: none; } }
+  @keyframes etapa-volta { from { opacity: 0; transform: translateX(-14px); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) {
+    .alvo-anel, .com-passos .etapas .etapa.atual { animation: none; }
+    .passo-trilha-fill { transition: none; }
+  }
 .abas-resultado { display: flex; gap: 8px; margin: 4px 0 12px; flex-wrap: wrap; }
   .aba-res { border: none; border-radius: 999px; padding: 8px 12px; font-size: 12px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
   .aba-res .bolha { border-radius: 999px; min-width: 20px; height: 20px; padding: 0 6px; font-size: 11px; font-weight: 800; display: inline-flex; align-items: center; justify-content: center; }
@@ -252,10 +277,12 @@
 
     section:not(#inicio) { max-width: 680px; margin: 0 auto; }
     .revelado, .secao-app, #ferramenta { max-width: 680px; margin-left: auto; margin-right: auto; }
-    .passo-3:not(.so-computador) { display: none; }
-    .passo-3.so-computador { display: block; }
+    .etapa.so-celular { display: none; }
+    .etapa.so-computador { display: block; }
+    .com-passos .etapas .etapa.so-celular { display: none; }
+    .com-passos .etapas .etapa.so-computador { display: block; }
     .card { padding: 26px; }
-    .card ol, .card li, .passo ol { font-size: 14px; }
+    .card ol, .card li { font-size: 14px; }
 
     .gancho { display: grid; grid-template-columns: 1fr 1.15fr; column-gap: 64px; align-items: center; text-align: left; padding: 88px 0 80px; }
     .btn-compartilhar { top: 22px; font-size: 13px; padding: 8px 15px; gap: 6px; }
