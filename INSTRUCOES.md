@@ -320,7 +320,7 @@ organizado" para os detalhes.
     mais "Qualquer navegador".
   - **A Ajuda agora é HTML puro** (`<details>` no `index.html`), e não mais montada
     por JavaScript: as IAs não liam as respostas. O JSON-LD (FAQPage) tem as
-    mesmas 17 perguntas e respostas. Para mudar uma resposta: edite o
+    mesmas 18 perguntas e respostas. Para mudar uma resposta: edite o
     `<details>` e copie o texto igual para o JSON-LD.
   - ~~Bloco "O que vale saber antes de começar" na home~~ — **removido em 27/out/2026 por
     decisão da dona do site.** Os mesmos avisos continuam na Ajuda ("Quantas listas ficam
@@ -421,6 +421,12 @@ propositalmente deixado para perto do lançamento).
 de um servidor, que ainda não existe. (Hospedagem já está na Cloudflare.)
 
 ## Descobertas de campo (testadas no aparelho, não supostas)
+
+- **"Notificar" no Instagram (27/out/2026, print de um amigo):** na tela de exportação, o botão
+  "Iniciar exportação" fica apagado enquanto "Notificar — Escolha uma forma de entrega" não for
+  escolhido. O passo a passo não citava isso e a pessoa não conseguia terminar; agora o passo existe
+  (depois de "Exportar para dispositivo") e há uma pergunta na Ajuda. Foi visto em um único print,
+  não testado por nós; o Instagram muda a tela de vez em quando.
 
 - O compartilhamento de .zip do Android para o PWA **funciona**. Caminho mais
   curto testado: Chrome → menu ⋮ → Transferências → três pontinhos no arquivo →

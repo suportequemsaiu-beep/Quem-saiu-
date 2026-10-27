@@ -40,17 +40,17 @@ with sync_playwright() as p:
     ok("jszip.min.js" in cru,"N1 JSZip vem do próprio site")
     for frase in ["Funciona no iPhone?","Quantas listas ficam guardadas?","O Quem Saiu acessa a minha conta do Instagram?","E se o Instagram mudar o formato do arquivo?",
                   "No Chrome do Android","O tempo para o arquivo ficar pronto varia",
-                  "Remove as listas guardadas e as contas escondidas","Peça um novo arquivo ao Instagram"]:
+                  "Remove as listas guardadas e as contas escondidas","Peça um novo arquivo ao Instagram","Toque em <b>Notificar</b>","está apagado. O que faço?"]:
         ok(frase in cru,"N1 HTML cru contém: "+frase)
     ok("adamsandler" not in cru and "adamsandler" not in open(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),"script.js"),encoding="utf-8").read().lower(),"N1 @adamsandler removido")
 
-    # N2 Ajuda: 17 <details>, respostas no HTML cru iguais às do JSON-LD
+    # N2 Ajuda: 18 <details>, respostas no HTML cru iguais às do JSON-LD
     det=re.findall(r'<summary class="faq-q">(.*?)<span aria-hidden="true">\+</span></summary>\s*<p class="faq-a">(.*?)</p>',cru,re.S)
-    ok(len(det)==17,"N2 17 perguntas da Ajuda escritas em HTML (%d)"%len(det))
+    ok(len(det)==18,"N2 18 perguntas da Ajuda escritas em HTML (%d)"%len(det))
     ld=json.loads(re.search(r'<script type="application/ld\+json">\n(.*?)\n</script>',cru,re.S).group(1))
     ent=ld[1]["mainEntity"]
     iguais=all(H.unescape(q)==e["name"] and H.unescape(a)==e["acceptedAnswer"]["text"] for (q,a),e in zip(det,ent)) and len(ent)==len(det)
-    ok(iguais,"N2 JSON-LD tem exatamente as mesmas 17 perguntas e respostas da Ajuda")
+    ok(iguais,"N2 JSON-LD tem exatamente as mesmas 18 perguntas e respostas da Ajuda")
     ok("Navegadores modernos" in ld[0]["operatingSystem"] and "Qualquer navegador" not in cru,"N2 operatingSystem sem 'Qualquer navegador'")
 
     # N3 página: sem requisições externas, sem erros, bloco visível, amostra
