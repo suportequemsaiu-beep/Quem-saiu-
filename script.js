@@ -185,13 +185,25 @@ document.getElementById("togglePasso").addEventListener("click", function () {
         '<rect x="16" y="184" width="52" height="42" rx="6" fill="#f1f5f9"/><rect x="74" y="184" width="52" height="42" rx="6" fill="#f1f5f9"/><rect x="132" y="184" width="52" height="42" rx="6" fill="#f1f5f9"/>');
     },
     menu: function () {
-      return moldura(titulo("Menu") + linha(58, null) + linha(94, null) + linha(130, "Central de Contas", { alvo: true }) + linha(166, null) + linha(202, null));
+      function peq(y, nome) {
+        return '<rect x="16" y="' + y + '" width="168" height="24" rx="8" fill="#f1f5f9"/><circle cx="31" cy="' + (y + 12) + '" r="6" fill="#e2e8f0"/>' + barra(46, y + 9, 40 + nome * 18);
+      }
+      return moldura(titulo("Configurações e atividade") +
+        '<rect x="16" y="52" width="168" height="20" rx="10" fill="#f1f5f9"/><circle cx="30" cy="62" r="4" fill="none" stroke="#94a3b8" stroke-width="1.5"/>' + barra(40, 59, 40) +
+        '<text x="18" y="90" font-size="8.5" font-family="sans-serif" font-weight="700" fill="#94a3b8">Sua conta</text>' +
+        '<rect x="16" y="98" width="168" height="46" rx="12" fill="#e0f2fe" stroke="#0369a1" stroke-width="1.5"/>' +
+        '<circle cx="35" cy="121" r="9" fill="none" stroke="#0369a1" stroke-width="2.5"/>' +
+        '<text x="54" y="115" font-size="10" font-family="sans-serif" font-weight="700" fill="#0c4a6e">Conta Meta</text>' +
+        '<rect x="54" y="122" width="110" height="4" rx="2" fill="#7dd3fc"/><rect x="54" y="131" width="76" height="4" rx="2" fill="#7dd3fc"/>' +
+        anel(16, 98, 168, 46, 12) +
+        '<text x="18" y="166" font-size="8.5" font-family="sans-serif" font-weight="700" fill="#94a3b8">Como você usa o Instagram</text>' +
+        peq(174, 1) + peq(202, 2));
     },
     central: function () {
-      return moldura(titulo("Central de Contas") + linha(58, null) +
-        linha(94, "Suas informações e permissões", { alvo: true }) +
-        '<text x="100" y="142" font-size="13" text-anchor="middle" font-family="sans-serif" font-weight="800" fill="#0369a1">↓</text>' +
-        linha(150, "Exportar suas informações", { alvo: true }) + linha(194, null));
+      return moldura(titulo("Conta Meta") + linha(58, null) + linha(94, "Suas informações e permissões", { alvo: true }) + linha(130, null) + linha(166, null));
+    },
+    exportar: function () {
+      return moldura(titulo("Suas informações e permissões") + linha(58, null) + linha(94, "Exportar suas informações", { alvo: true }) + linha(130, null) + linha(166, null));
     },
     criar: function () {
       return moldura(titulo("Exportar informações") +
@@ -208,16 +220,6 @@ document.getElementById("togglePasso").addEventListener("click", function () {
       return moldura(titulo("Exportar informações") +
         linha(62, "Notificar", { alvo: true, valor: "E-mail" }) +
         linha(102, "Personalizar informações") + linha(142, "Formato") + botao(190, "Iniciar exportação", false));
-    },
-    personalizar: function () {
-      function opcao(y, marcada, texto) {
-        return '<rect x="16" y="' + y + '" width="168" height="30" rx="10" fill="' + (marcada ? "#e0f2fe" : "#f1f5f9") + '"' + (marcada ? ' stroke="#0369a1" stroke-width="1.5"' : "") + '/>' +
-          '<rect x="26" y="' + (y + 8) + '" width="14" height="14" rx="4" fill="' + (marcada ? "#0369a1" : "#fff") + '" stroke="' + (marcada ? "#0369a1" : "#cbd5e1") + '" stroke-width="1.5"/>' +
-          (marcada ? '<path d="M29 ' + (y + 15.5) + ' l3 3 l5 -6" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>' : "") +
-          (texto ? '<text x="48" y="' + (y + 19) + '" font-size="10" font-family="sans-serif" font-weight="700" fill="#0c4a6e">' + texto + '</text>' : barra(48, y + 12, 60)) +
-          (marcada ? anel(16, y, 168, 30, 10) : "");
-      }
-      return moldura(titulo("Personalizar informações") + opcao(58, true, "Seguidores e seguindo") + opcao(94, false) + opcao(130, false) + botao(184, "Salvar", false));
     },
     formato: function () {
       function radio(y, marcada, texto) {
@@ -573,20 +575,33 @@ async function processarArquivos(arquivos) {
 
     if (ehZip) {
       mostrarProgresso(15, "Abrindo o arquivo…");
-      if (typeof JSZip === "undefined") throw erroAmigavel('Não consegui carregar o leitor de arquivos .zip. Recarregue a página e tente de novo — ou escolha direto os arquivos <b>followers_1.json</b> e <b>following.json</b>.');
-      var zip = await JSZip.loadAsync(arquivo);
-      var entradas = Object.keys(zip.files);
+      var entradas = [];
+      if (arquivo.size > LIMITE_ZIP_NA_MEMORIA) {
+        try {
+          entradas = (await listarEntradasZipGrande(arquivo)).map(function (en) {
+            return { caminho: en.caminho, ler: function () { return lerEntradaZipGrande(arquivo, en).catch(function () { throw erroZipGrande(); }); } };
+          });
+        } catch (err) {
+          throw erroZipGrande();
+        }
+      } else {
+        if (typeof JSZip === "undefined") throw erroAmigavel('Não consegui carregar o leitor de arquivos .zip. Recarregue a página e tente de novo — ou escolha direto os arquivos <b>followers_1.json</b> e <b>following.json</b>.');
+        var zip = await JSZip.loadAsync(arquivo);
+        entradas = Object.keys(zip.files).map(function (c) {
+          return { caminho: c, ler: function () { return zip.files[c].async("string"); } };
+        });
+      }
       for (var e = 0; e < entradas.length; e++) {
-        var caminho = entradas[e];
+        var caminho = entradas[e].caminho;
         var base = caminho.split("/").pop().toLowerCase();
         if (ehArquivoSeguidores(base)) {
           mostrarProgresso(45, "Lendo seus seguidores…");
-          var t1 = await zip.files[caminho].async("string");
+          var t1 = await entradas[e].ler();
           seguidores = seguidores.concat(extrairUsuarios(JSON.parse(t1), base));
           achouAlgo = true;
         } else if (ehArquivoSeguindo(base)) {
           mostrarProgresso(75, "Lendo quem você segue…");
-          var t2 = await zip.files[caminho].async("string");
+          var t2 = await entradas[e].ler();
           seguindo = seguindo.concat(extrairUsuarios(JSON.parse(t2), base));
           achouAlgo = true;
         } else if (/^followers.*\.html$|^following\.html$/i.test(base)) {
@@ -620,6 +635,81 @@ async function processarArquivos(arquivos) {
   var nova = { v: VERSAO_DADOS, data: new Date().toISOString(), seguidores: unicos(seguidores), seguindo: unicos(seguindo) };
   if (dataArquivo) nova.dataArquivo = dataArquivo;
   return nova;
+}
+
+/* ===== .zip grande =====
+   Se a pessoa exporta TUDO (fotos e vídeos incluídos), o .zip pode ter centenas de MB ou GB. O JSZip carrega o arquivo
+   inteiro na memória e o celular não aguenta. Para arquivos grandes, este leitor lê só o índice do .zip (no fim do arquivo)
+   e depois só os poucos arquivos de seguidores, sem tocar no resto. Entende .zip comum e Zip64. */
+var LIMITE_ZIP_NA_MEMORIA = 100 * 1024 * 1024;
+
+async function listarEntradasZipGrande(arquivo) {
+  var tam = arquivo.size;
+  var cauda = Math.min(tam, 65536 + 22 + 20);
+  var base = tam - cauda;
+  var buf = new DataView(await arquivo.slice(base, tam).arrayBuffer());
+  var eocd = -1;
+  for (var i = cauda - 22; i >= 0; i--) {
+    if (buf.getUint32(i, true) === 0x06054b50) { eocd = i; break; }
+  }
+  if (eocd < 0) throw new Error("zip: sem índice");
+  var total = buf.getUint16(eocd + 10, true);
+  var cdTam = buf.getUint32(eocd + 12, true);
+  var cdOff = buf.getUint32(eocd + 16, true);
+  if (total === 0xFFFF || cdTam === 0xFFFFFFFF || cdOff === 0xFFFFFFFF) {
+    if (eocd < 20 || buf.getUint32(eocd - 20, true) !== 0x07064b50) throw new Error("zip: zip64 sem localizador");
+    var off64 = Number(buf.getBigUint64(eocd - 20 + 8, true));
+    var d64 = new DataView(await arquivo.slice(off64, off64 + 56).arrayBuffer());
+    if (d64.getUint32(0, true) !== 0x06064b50) throw new Error("zip: zip64 inválido");
+    total = Number(d64.getBigUint64(32, true));
+    cdTam = Number(d64.getBigUint64(40, true));
+    cdOff = Number(d64.getBigUint64(48, true));
+  }
+  if (cdOff + cdTam > tam) throw new Error("zip: índice fora do arquivo");
+  var cdBuf = await arquivo.slice(cdOff, cdOff + cdTam).arrayBuffer();
+  var cd = new DataView(cdBuf), bytes = new Uint8Array(cdBuf);
+  var dec = new TextDecoder("utf-8");
+  var out = [], p = 0;
+  while (p + 46 <= cdBuf.byteLength && cd.getUint32(p, true) === 0x02014b50) {
+    var flags = cd.getUint16(p + 8, true), metodo = cd.getUint16(p + 10, true);
+    var comp = cd.getUint32(p + 20, true), orig = cd.getUint32(p + 24, true);
+    var nl = cd.getUint16(p + 28, true), el = cd.getUint16(p + 30, true), cl = cd.getUint16(p + 32, true);
+    var loc = cd.getUint32(p + 42, true);
+    var nome = dec.decode(bytes.subarray(p + 46, p + 46 + nl));
+    if (comp === 0xFFFFFFFF || orig === 0xFFFFFFFF || loc === 0xFFFFFFFF) {
+      var q = p + 46 + nl, fimExtra = q + el;
+      while (q + 4 <= fimExtra) {
+        var id = cd.getUint16(q, true), len = cd.getUint16(q + 2, true);
+        if (id === 0x0001) {
+          var r = q + 4;
+          if (orig === 0xFFFFFFFF) { orig = Number(cd.getBigUint64(r, true)); r += 8; }
+          if (comp === 0xFFFFFFFF) { comp = Number(cd.getBigUint64(r, true)); r += 8; }
+          if (loc === 0xFFFFFFFF) { loc = Number(cd.getBigUint64(r, true)); r += 8; }
+          break;
+        }
+        q += 4 + len;
+      }
+    }
+    out.push({ caminho: nome, metodo: metodo, comp: comp, loc: loc, cifrado: (flags & 1) === 1 });
+    p += 46 + nl + el + cl;
+  }
+  return out;
+}
+
+function erroZipGrande() {
+  return erroAmigavel('Este arquivo é muito grande e o seu celular não conseguiu abri-lo. Refaça a exportação no Instagram marcando só <b>Seguidores e seguindo</b> em "Personalizar informações" (o arquivo fica pequeno) e escolha o novo .zip.');
+}
+
+async function lerEntradaZipGrande(arquivo, ent) {
+  if (ent.cifrado) throw new Error("zip: arquivo protegido por senha");
+  var cab = new DataView(await arquivo.slice(ent.loc, ent.loc + 30).arrayBuffer());
+  if (cab.getUint32(0, true) !== 0x04034b50) throw new Error("zip: cabeçalho inválido");
+  var ini = ent.loc + 30 + cab.getUint16(26, true) + cab.getUint16(28, true);
+  var dados = arquivo.slice(ini, ini + ent.comp);
+  if (ent.metodo === 0) return await dados.text();
+  if (ent.metodo !== 8) throw new Error("zip: compressão não suportada");
+  if (typeof DecompressionStream === "undefined") throw new Error("zip: sem DecompressionStream");
+  return await new Response(dados.stream().pipeThrough(new DecompressionStream("deflate-raw"))).text();
 }
 
 /* o .zip do Instagram costuma trazer a data no nome (instagram-usuario-2026-10-14-xxxx.zip);

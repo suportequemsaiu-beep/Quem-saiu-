@@ -436,6 +436,17 @@ de um servidor, que ainda não existe. (Hospedagem já está na Cloudflare.)
   ficam todos na mesma célula de uma grade, para os botões não pularem de lugar. No computador
   (≥ 900 px) o último passo é `.so-computador`; no celular é `.so-celular`. Para mudar um passo,
   edite o `<li>` (texto) e a função de `DESENHOS` (desenho). Teste: `tests/passo_a_passo.py`.
+- **Exportar tudo (28/out/2026, decisão da criadora):** o passo "Personalizar informações / só Seguidores e
+  seguindo" saiu do passo a passo: a pessoa exporta tudo (padrão do Instagram) e o site lê só os arquivos
+  `followers_*.json` e `following.json` dentro do .zip, ignorando o resto. Como um .zip com fotos e vídeos
+  pode ter GB, acima de 100 MB o `script.js` não usa o JSZip (que carrega tudo na memória): lê só o índice
+  do .zip e os poucos arquivos necessários (`listarEntradasZipGrande`, com Zip64 e `DecompressionStream`).
+  Não testado em celular real nem com .zip de GB de verdade; também **não testado**: o caminho Compartilhar
+  do Android com arquivo enorme (o service worker copia o arquivo para o cache). Se der problema, a saída é
+  voltar o passo "só Seguidores e seguindo" (está no histórico do git).
+- **Nome "Conta Meta" (28/out/2026):** no passo a passo e na Ajuda o nome principal é "Conta Meta", como
+  aparece na tela "Configurações e atividade" do celular da criadora; "Central de Contas" fica só como
+  alternativa citada no passo 2.
 
 - O compartilhamento de .zip do Android para o PWA **funciona**. Caminho mais
   curto testado: Chrome → menu ⋮ → Transferências → três pontinhos no arquivo →

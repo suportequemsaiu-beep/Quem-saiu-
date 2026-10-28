@@ -4,7 +4,7 @@
 
 ## Como funciona
 
-- Na primeira vez, o usuário pede ao Instagram a exportação oficial (só "Seguidores e seguindo", formato JSON), baixa o arquivo e o escolhe no site. Isso cria o ponto de partida.
+- Na primeira vez, o usuário pede ao Instagram a exportação oficial (formato JSON; o site lê só os arquivos de seguidores e de quem você segue e ignora o resto), baixa o arquivo e o escolhe no site. Isso cria o ponto de partida.
 - O app guarda até as últimas 10 listas, só no navegador do aparelho do usuário (armazenamento local). O navegador limita o espaço (cerca de 5 MB): se as listas forem grandes, o app guarda menos listas e mantém sempre as duas mais recentes, que são as comparadas; em contas com mais de uns 150 mil seguidores nem duas cabem, e a lista vale só enquanto a página estiver aberta (o app avisa). Não há prazo para sumirem: ficam até o usuário usar "Apagar meus dados" ou limpar os dados do navegador. O histórico não passa para outro aparelho ou navegador e, depois de apagado, não pode ser recuperado.
 - Nas próximas vezes, o usuário não precisa refazer a primeira lista, mas precisa pedir uma nova exportação ao Instagram (o tempo varia; o Instagram avisa por e-mail) e importar o arquivo novo. O site compara as duas listas mais recentes, na ordem em que foram importadas: por isso é preciso importar sempre o arquivo mais novo.
 - Na primeira importação o site mostra quem o usuário segue e não o segue de volta. A partir da segunda, mostra também quem deixou de seguir e quem começou a seguir.

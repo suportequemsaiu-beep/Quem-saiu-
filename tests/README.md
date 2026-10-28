@@ -34,6 +34,7 @@ crie um teste para ele.
 | `dados_guardados.py` | dado ruim no armazenamento não quebra a página; versão das listas |
 | `aparencia.py` | o site avisa ao navegador para não escurecer a página sozinho (modo escuro forçado de alguns celulares) |
 | `passo_a_passo.py` | o passo a passo: um passo por vez, Voltar/Próximo, barra de progresso, variante do computador, texto presente sem JavaScript |
+| `zip_grande.py` | .zip de mais de 100 MB (inclusive Zip64 com 70 mil arquivos): lê só seguidores e seguindo; erros claros. Demora ~1 minuto |
 | `ajustes_menores.py` | nomes com "(1)", limpeza da cópia temporária e Compartilhar |
 
 ## O que **não** é testado aqui
