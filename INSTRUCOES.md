@@ -411,7 +411,7 @@ organizado" para os detalhes.
   possível reproduzir o escurecimento no computador; a confirmação é pedir um print de um celular
   afetado. Se um dia o site ganhar um tema claro de verdade, revisar essas duas linhas.
 - Cache: o `index.html` chama `style.css?v=…` e `script.js?v=…`. **Sempre que
-  mudar o CSS ou o JS, troque o número depois de `?v=`** (hoje `20261027d`), senão
+  mudar o CSS ou o JS, troque o número depois de `?v=`** (hoje `20261029b`), senão
   celulares e a Cloudflare podem continuar mostrando a versão antiga.
 
 **Não começado:** logo definitivo (o ícone atual é provisório, feito em CSS,
@@ -429,7 +429,7 @@ de um servidor, que ainda não existe. (Hospedagem já está na Cloudflare.)
   não testado por nós; o Instagram muda a tela de vez em quando.
 - **Passo a passo novo (27/out/2026, pedido da criadora: "dar uma cara nova"):** os 12 passos agora
   aparecem **um por vez**, com barra de progresso, botões Voltar/Próximo e uma telinha desenhada em
-  cada passo. Os passos ficam escritos no `index.html` (`<ol id="listaEtapas">`, um `<li class="etapa">`
+  cada passo. Os passos ficam escritos no `index.html` (`<ol id="listaEtapas">`, um `<li class="passo-etapa">`
   por passo, com `data-fase` e `data-tela`), então robôs e quem estiver sem JavaScript veem a lista
   inteira. O `script.js` só monta a barra, os botões e os desenhos (desenhos feitos à mão em SVG,
   telas genéricas, sem logo nem cores do Instagram; aviso "os desenhos são só um guia"). Os passos
@@ -444,6 +444,13 @@ de um servidor, que ainda não existe. (Hospedagem já está na Cloudflare.)
   Não testado em celular real nem com .zip de GB de verdade; também **não testado**: o caminho Compartilhar
   do Android com arquivo enorme (o service worker copia o arquivo para o cache). Se der problema, a saída é
   voltar o passo "só Seguidores e seguindo" (está no histórico do git).
+- **Tela "Sua lista" e cartão de instalar (29/out/2026):** quem ainda não tem lista vê o passo a passo
+  aberto, na frente (etapa 1) e o botão "Ver a minha lista" depois (etapa 2); com lista guardada o passo a
+  passo fica recolhido e o botão vem primeiro (classe `sem-lista` no `#cardLista`, definida em
+  `atualizarStatus`). A classe dos passos é `passo-etapa` (não usar `.etapa`: é da lista "Como funciona"
+  da tela inicial e a mistura deixou aquela lista com letra escura). "Prefiro usar sem instalar" virou
+  botão com borda; títulos das vantagens: "Abra em um clique", "Com atalho para o Instagram", "Mesma
+  segurança, mais praticidade". `?v=` atual: `20261029b`.
 - **Nome "Conta Meta" (28/out/2026):** no passo a passo e na Ajuda o nome principal é "Conta Meta", como
   aparece na tela "Configurações e atividade" do celular da criadora; "Central de Contas" fica só como
   alternativa citada no passo 2.

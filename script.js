@@ -119,12 +119,13 @@ document.getElementById("btnComecar").addEventListener("click", function () {
 });
 
 /* ===== passo a passo expansível ===== */
+function definirPasso(abrir) {
+  document.getElementById("corpoPasso").style.display = abrir ? "block" : "none";
+  document.getElementById("setaPasso").textContent = abrir ? "▲" : "▼";
+  document.getElementById("togglePasso").setAttribute("aria-expanded", abrir ? "true" : "false");
+}
 document.getElementById("togglePasso").addEventListener("click", function () {
-  var c = document.getElementById("corpoPasso");
-  var aberto = c.style.display !== "none";
-  c.style.display = aberto ? "none" : "block";
-  document.getElementById("setaPasso").textContent = aberto ? "▼" : "▲";
-  this.setAttribute("aria-expanded", aberto ? "false" : "true");
+  definirPasso(document.getElementById("corpoPasso").style.display === "none");
 });
 
 /* ===== passo a passo: um passo por vez =====
@@ -360,7 +361,7 @@ document.getElementById("togglePasso").addEventListener("click", function () {
       if (pos < visiveis().length - 1) { mostrar(pos + 1, false); return; }
       /* último passo: fecha o passo a passo e leva até o botão de escolher o arquivo */
       mostrar(0, false);
-      document.getElementById("togglePasso").click();
+      definirPasso(false);
       var b = document.getElementById("btnImportar");
       if (b) {
         b.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -773,8 +774,18 @@ function guardarNova(nova) {
   return true;
 }
 
+var primeiraVezStatus = true;
 function atualizarStatus() {
   var dados = lerDados();
+  /* sem nenhuma lista guardada: o passo a passo aparece aberto, na frente; com lista, fica recolhido */
+  var cardLista = document.getElementById("cardLista");
+  if (cardLista) {
+    var estavaVazio = cardLista.classList.contains("sem-lista");
+    cardLista.classList.toggle("sem-lista", dados.length === 0);
+    if (primeiraVezStatus && dados.length === 0) definirPasso(true);
+    else if (estavaVazio && dados.length > 0) definirPasso(false);
+  }
+  primeiraVezStatus = false;
   if (dados.length === 0) {
     statusImport.textContent = "Nenhuma lista guardada ainda.";
     btnComparar.disabled = true;

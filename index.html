@@ -199,7 +199,7 @@
 <meta name="theme-color" content="#0f172a" />
 <link rel="apple-touch-icon" href="icone-192.png" />
 <script src="jszip.min.js?v=3.10.1"></script>
-<link rel="stylesheet" href="style.css?v=20261027f" />
+<link rel="stylesheet" href="style.css?v=20261029b" />
 </head>
 <body>
 
@@ -310,9 +310,9 @@
       <p class="desc-app">Instale em segundos e ele fica ali, junto dos seus apps — pronto para quando bater aquela dúvida.</p>
 
       <div class="vantagens">
-        <div class="vantagem"><span class="tick">&check;</span><span><b>Um toque para abrir.</b> Sem digitar endereço, sem procurar no navegador.</span></div>
-        <div class="vantagem"><span class="tick">&check;</span><span><b>O arquivo vai direto.</b> No Android, toque em Compartilhar no arquivo do Instagram e escolha o Quem Saiu.</span></div>
-        <div class="vantagem"><span class="tick">&check;</span><span><b>Continua sendo só seu.</b> Mesmos dados no seu aparelho, nada enviado para servidor.</span></div>
+        <div class="vantagem"><span class="tick">&check;</span><span><b>Abra em um clique.</b> Sem digitar endereço, sem procurar no navegador.</span></div>
+        <div class="vantagem"><span class="tick">&check;</span><span><b>Com atalho para o Instagram.</b> No Android, toque em Compartilhar no arquivo do Instagram e escolha o Quem Saiu.</span></div>
+        <div class="vantagem"><span class="tick">&check;</span><span><b>Mesma segurança, mais praticidade.</b> Seus dados continuam só no seu aparelho, nada é enviado para servidor.</span></div>
       </div>
 
       <button class="btn-instalar-grande" id="btnInstalar">Instalar o Quem Saiu</button>
@@ -324,9 +324,11 @@
     <!-- FERRAMENTA (aparece ao tocar em Começar agora) -->
     <div id="ferramenta" style="display:none; padding-top:26px;">
       <h2>Sua lista</h2>
-      <p class="sub">Escolha o arquivo que você baixou do Instagram — a leitura acontece aqui no seu navegador.</p>
+      <p class="sub">Peça o arquivo ao Instagram e escolha-o aqui — a leitura acontece no seu navegador.</p>
 
-      <div class="card">
+      <div class="card card-lista" id="cardLista">
+        <div class="bloco-escolher">
+        <p class="bloco-titulo"><span class="bloco-num" aria-hidden="true">2</span>Escolha o arquivo aqui</p>
         <button class="botao-importar" id="btnImportar">📄 Ver a minha lista</button>
         <button class="botao-secundario" id="btnComparar" disabled>🔁 Ver o que mudou</button>
         <input type="file" id="inputArquivo" multiple style="display:none" aria-label="Escolher o arquivo do Instagram" />
@@ -338,65 +340,66 @@
         <div id="erroImport" role="alert"></div>
         <p id="avisoLeitor" class="so-leitor" role="status" aria-live="polite"></p>
         <p class="status-import" id="statusImport">Nenhuma lista guardada ainda.</p>
+        </div>
 
         <div class="expansivel">
           <button class="expansivel-topo" id="togglePasso" aria-expanded="false" aria-controls="corpoPasso">
-            <span>Ainda não tenho o arquivo — como pego?</span>
+            <span><span class="toggle-num" aria-hidden="true">1</span><span class="toggle-novo">Peça o arquivo ao Instagram</span><span class="toggle-velho">Ainda não tenho o arquivo — como pego?</span></span>
             <span id="setaPasso" aria-hidden="true">▼</span>
           </button>
           <div class="expansivel-corpo" id="corpoPasso" style="display:none">
             <ol class="etapas" id="listaEtapas">
-              <li class="etapa" data-fase="pedir" data-tela="perfil">
+              <li class="passo-etapa" data-fase="pedir" data-tela="perfil">
                 <h3>Abra o menu</h3>
                 <p>No Instagram, abra o seu perfil e toque no menu <b>☰</b>, no canto de cima à direita. Vai abrir a tela <b>Configurações e atividade</b>.</p>
               </li>
-              <li class="etapa" data-fase="pedir" data-tela="menu">
+              <li class="passo-etapa" data-fase="pedir" data-tela="menu">
                 <h3>Conta Meta</h3>
                 <p>Na tela que abrir, toque em <b>Conta Meta</b>, logo no começo da lista. Em alguns celulares ela aparece como <b>Central de Contas</b>.</p>
               </li>
-              <li class="etapa" data-fase="pedir" data-tela="central">
+              <li class="passo-etapa" data-fase="pedir" data-tela="central">
                 <h3>Suas informações e permissões</h3>
                 <p>Dentro da Conta Meta, toque em <b>Suas informações e permissões</b>.</p>
               </li>
-              <li class="etapa" data-fase="pedir" data-tela="exportar">
+              <li class="passo-etapa" data-fase="pedir" data-tela="exportar">
                 <h3>Exportar suas informações</h3>
                 <p>Toque em <b>Exportar suas informações</b>.</p>
               </li>
-              <li class="etapa" data-fase="pedir" data-tela="criar">
+              <li class="passo-etapa" data-fase="pedir" data-tela="criar">
                 <h3>Criar exportação</h3>
                 <p>Toque em <b>Criar exportação</b> e escolha a sua conta.</p>
               </li>
-              <li class="etapa" data-fase="pedir" data-tela="destino">
+              <li class="passo-etapa" data-fase="pedir" data-tela="destino">
                 <h3>Exportar para o aparelho</h3>
                 <p>Escolha <b>Exportar para dispositivo</b> — e não "serviço externo".</p>
               </li>
-              <li class="etapa" data-fase="pedir" data-tela="notificar">
+              <li class="passo-etapa" data-fase="pedir" data-tela="notificar">
                 <h3>Notificar</h3>
                 <p>Toque em <b>Notificar</b> e escolha uma forma de aviso, de preferência o <b>e-mail</b>.</p>
                 <p class="etapa-nota">Sem isso, o botão "Iniciar exportação" fica apagado.</p>
               </li>
-              <li class="etapa" data-fase="pedir" data-tela="formato">
+              <li class="passo-etapa" data-fase="pedir" data-tela="formato">
                 <h3>Formato JSON</h3>
                 <p>Em <b>Formato</b>, escolha <b>JSON</b>, salve e volte.</p>
               </li>
-              <li class="etapa" data-fase="pedir" data-tela="iniciar">
+              <li class="passo-etapa" data-fase="pedir" data-tela="iniciar">
                 <h3>Iniciar a exportação</h3>
                 <p>Toque em <b>Iniciar exportação</b>. Agora é só esperar.</p>
               </li>
-              <li class="etapa" data-fase="esperar" data-tela="email">
+              <li class="passo-etapa" data-fase="esperar" data-tela="email">
                 <h3>Espere o e-mail</h3>
                 <p>O Instagram manda um <b>e-mail</b> quando o arquivo fica pronto — é o aviso mais confiável, porque a notificação nem sempre chega. O link vale por 4 dias. O tempo para o arquivo ficar pronto varia.</p>
               </li>
-              <li class="etapa" data-fase="enviar" data-tela="baixar">
+              <li class="passo-etapa" data-fase="enviar" data-tela="baixar">
                 <h3>Baixe o arquivo</h3>
                 <p>Abra o e-mail e baixe o arquivo pelo link.</p>
               </li>
-              <li class="etapa so-celular" data-fase="enviar" data-tela="compartilhar">
+              <li class="passo-etapa so-celular" data-fase="enviar" data-tela="compartilhar">
                 <h3>Mande para o Quem Saiu</h3>
                 <p>No Chrome do Android: <b>⋮</b> → <b>Transferências</b> → <b>três pontinhos</b> do arquivo → <b>Compartilhar</b> → <b>Quem Saiu</b>.</p>
                 <p class="etapa-nota">Precisa do Quem Saiu instalado e só existe no Android. Sem ele, use o botão <b>Ver a minha lista</b> aqui em cima e escolha o arquivo em Downloads.</p>
               </li>
-              <li class="etapa so-computador" data-fase="enviar" data-tela="pc">
+              <li class="passo-etapa so-computador" data-fase="enviar" data-tela="pc">
                 <h3>Escolha o arquivo aqui</h3>
                 <p>Volte para esta página, clique em <b>Ver a minha lista</b> e escolha o arquivo na pasta <b>Downloads</b> — o nome começa com <b>instagram-</b>.</p>
               </li>
@@ -569,7 +572,7 @@
   <button class="fechar" id="btnFecharFaixa" aria-label="Fechar aviso">&times;</button>
 </div>
 
-<script src="script.js?v=20261027f"></script>
+<script src="script.js?v=20261029b"></script>
 
 </body>
 </html>
