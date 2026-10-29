@@ -19,13 +19,9 @@ with sync_playwright() as p:
     ctx = br.new_context(viewport={"width": 390, "height": 844}); pg = ctx.new_page(); errs = []
     pg.on("pageerror", lambda e: errs.append(str(e)))
     abrir(pg)
-    ok(pg.is_visible("#corpoPasso"), "1 sem nenhuma lista guardada, o passo a passo já começa aberto, na frente")
-    ok(pg.evaluate("document.getElementById('cardLista').classList.contains('sem-lista')"), "1b a tela está no modo 'sem lista'")
-    ok(pg.evaluate("document.querySelector('.card-lista .expansivel').getBoundingClientRect().top < document.getElementById('btnImportar').getBoundingClientRect().top"), "1c o passo a passo vem antes do botão 'Ver a minha lista'")
+    ok(not pg.is_visible("#corpoPasso"), "1 o passo a passo começa fechado")
     pg.click("#togglePasso"); pg.wait_for_timeout(300)
-    ok(not pg.is_visible("#corpoPasso"), "2 fecha ao tocar no botão")
-    pg.click("#togglePasso"); pg.wait_for_timeout(300)
-    ok(pg.is_visible("#corpoPasso"), "2b e abre de novo")
+    ok(pg.is_visible("#corpoPasso"), "2 abre ao tocar no botão")
     ok(pg.evaluate("document.getElementById('togglePasso').getAttribute('aria-expanded')") == "true", "3 aria-expanded fica true")
     v = etapa_visivel(pg)
     ok(len(v) == 1 and v[0] == "Abra o menu", "4 mostra só um passo por vez, começando pelo primeiro | %r" % v)
@@ -61,22 +57,13 @@ with sync_playwright() as p:
     ctx = br.new_context(viewport={"width": 1280, "height": 800}); pg = ctx.new_page(); errs = []
     pg.on("pageerror", lambda e: errs.append(str(e)))
     abrir(pg)
+    pg.click("#togglePasso"); pg.wait_for_timeout(300)
     ok("de 12" in pg.inner_text(".passo-contagem"), "22 no computador também são 12 passos (o final muda)")
     for i in range(11):
         pg.click(".passo-proximo"); pg.wait_for_timeout(100)
     v = etapa_visivel(pg)
     ok(v == ["Escolha o arquivo aqui"], "23 no computador o último passo é o de escolher o arquivo | %r" % v)
     ok(errs == [], "24 sem erros de JavaScript no computador")
-    ctx.close()
-
-    # com lista guardada: passo a passo recolhido e botão em primeiro
-    ctx = br.new_context(viewport={"width": 390, "height": 844}); pg = ctx.new_page()
-    pg.add_init_script("localStorage.setItem('quemsaiu_exportacoes', JSON.stringify([{v:1,data:'2026-10-01T10:00:00Z',seguidores:['a','b','c'],seguindo:['a']}]))")
-    abrir(pg)
-    ok(not pg.is_visible("#corpoPasso"), "26 com lista guardada, o passo a passo começa recolhido")
-    ok(not pg.evaluate("document.getElementById('cardLista').classList.contains('sem-lista')"), "27 e a tela não está no modo 'sem lista'")
-    ok(pg.evaluate("document.getElementById('btnImportar').getBoundingClientRect().top < document.querySelector('.card-lista .expansivel').getBoundingClientRect().top"), "28 o botão 'Ver a minha lista' vem primeiro")
-    ok("Ainda não tenho o arquivo" in pg.inner_text("#togglePasso"), "29 o botão do passo a passo tem o texto de quem já usa")
     ctx.close()
 
     # sem JavaScript: a lista inteira aparece

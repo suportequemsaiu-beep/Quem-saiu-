@@ -119,28 +119,21 @@
   .expansivel { border: 1px solid #e2e8f0; border-radius: 12px; margin-top: 12px; overflow: hidden; }
   .expansivel-topo { width: 100%; background: #f8fafc; border: none; padding: 14px; text-align: left; font-size: 13px; font-weight: 700; color: #0f172a; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 10px; font-family: inherit; }
   /* tela "Sua lista": quem ainda não tem lista vê primeiro o passo a passo aberto (1) e depois o botão de escolher o arquivo (2) */
-  .lista-topo { display: flex; align-items: center; gap: 14px; margin: 0 0 14px; }
-  .lista-topo h2 { margin: 0 0 3px; }
-  .lista-topo .sub { margin: 0; }
-  .lista-icone { width: 48px; height: 48px; border-radius: 14px; background: linear-gradient(160deg,#0ea5e9,#0369a1); display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 6px 18px rgba(3,105,161,.35); }
-  .chips-confianca { display: none; list-style: none; margin: 0 0 18px; padding: 0; flex-wrap: wrap; gap: 8px; }
-  #ferramenta.sem-lista .chips-confianca { display: flex; }
-  .chips-confianca li { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 999px; background: #142033; border: 1px solid #1e3a5f; color: #bae6fd; font-size: 12px; font-weight: 600; }
-  .chips-confianca li span { color: #38bdf8; font-weight: 800; }
-  #ferramenta:not(.sem-lista) .lista-topo { margin-bottom: 20px; }
-  .card-lista { display: flex; flex-direction: column; }
-  .card-lista .expansivel { order: 1; }
-  .bloco-titulo, .toggle-num, .toggle-novo { display: none; }
-  .bloco-num, .toggle-num { width: 24px; height: 24px; border-radius: 50%; background: #0369a1; color: #fff; font-size: 12px; font-weight: 800; align-items: center; justify-content: center; flex-shrink: 0; }
-  .card-lista.sem-lista .expansivel { order: -1; margin: 0 0 18px; border-color: #bfdbfe; }
-  .card-lista.sem-lista .expansivel-topo { background: #eff6ff; font-size: 14.5px; }
-  .card-lista.sem-lista .expansivel-topo > span:first-child { display: flex; align-items: center; gap: 10px; }
-  .card-lista.sem-lista .toggle-num { display: inline-flex; }
-  .card-lista.sem-lista .toggle-novo { display: inline; }
-  .card-lista.sem-lista .toggle-velho { display: none; }
-  .card-lista.sem-lista .bloco-titulo { display: flex; align-items: center; gap: 10px; margin: 0 0 12px; font-size: 14.5px; font-weight: 800; color: #0f172a; }
-  .card-lista.sem-lista .bloco-num { display: inline-flex; }
-  .card-lista.sem-lista #btnComparar, .card-lista.sem-lista .status-import { display: none; }
+  /* tela "Sua lista": mesmo visual escuro do restante do site (cartão azul-marinho, brilho, botões arredondados) */
+  .card-lista { position: relative; overflow: hidden; background: linear-gradient(165deg,#14243d,#101a2e); border: 1px solid #1e3a5f; border-radius: 22px; padding: 22px 20px; color: #f1f5f9; }
+  .card-lista::before { content: ""; position: absolute; top: -90px; left: 50%; transform: translateX(-50%); width: 260px; height: 260px; border-radius: 50%; background: radial-gradient(circle, rgba(14,165,233,.2), transparent 70%); pointer-events: none; }
+  .card-lista > * { position: relative; }
+  .card-lista .botao-importar { border-radius: 999px; padding: 17px; font-size: 16px; font-weight: 800; box-shadow: 0 8px 24px rgba(14,165,233,.3); }
+  .card-lista .botao-secundario { background: transparent; border: 1px solid #1e3a5f; border-radius: 999px; padding: 13px; margin-top: 10px; color: #cbd5e1; font-size: 13.5px; font-weight: 700; }
+  .card-lista .botao-secundario:disabled { opacity: .45; }
+  .card-lista .dica-arquivo { margin: 14px 4px 0; text-align: center; font-size: 12.5px; color: #94a3b8; }
+  .card-lista .dica-arquivo b { color: #e2e8f0; }
+  .card-lista .status-import { color: #94a3b8; margin-top: 14px; }
+  .card-lista .progresso-trilho { background: #1e293b; }
+  .card-lista .progresso-texto { color: #94a3b8; }
+  .card-lista .expansivel { margin-top: 18px; background: #0f1b2e; border: 1px solid #1e3a5f; border-radius: 16px; }
+  .card-lista .expansivel-topo { background: transparent; color: #f1f5f9; padding: 16px; font-size: 14px; }
+  .card-lista .expansivel-corpo { background: #fff; border-radius: 14px; margin: 0 10px 10px; padding-top: 14px; }
   .expansivel-corpo { padding: 0 16px 16px; }
   .expansivel-corpo ol { margin: 12px 0 0; }
   /* ===== passo a passo: um passo por vez (o script monta o topo, a barra e os botões; sem script, aparece a lista inteira) ===== */

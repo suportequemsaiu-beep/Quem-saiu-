@@ -774,20 +774,8 @@ function guardarNova(nova) {
   return true;
 }
 
-var primeiraVezStatus = true;
 function atualizarStatus() {
   var dados = lerDados();
-  /* sem nenhuma lista guardada: o passo a passo aparece aberto, na frente; com lista, fica recolhido */
-  var cardLista = document.getElementById("cardLista");
-  if (cardLista) {
-    var estavaVazio = cardLista.classList.contains("sem-lista");
-    cardLista.classList.toggle("sem-lista", dados.length === 0);
-    var painelFerramenta = document.getElementById("ferramenta");
-    if (painelFerramenta) painelFerramenta.classList.toggle("sem-lista", dados.length === 0);
-    if (primeiraVezStatus && dados.length === 0) definirPasso(true);
-    else if (estavaVazio && dados.length > 0) definirPasso(false);
-  }
-  primeiraVezStatus = false;
   if (dados.length === 0) {
     statusImport.textContent = "Nenhuma lista guardada ainda.";
     btnComparar.disabled = true;

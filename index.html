@@ -199,7 +199,7 @@
 <meta name="theme-color" content="#0f172a" />
 <link rel="apple-touch-icon" href="icone-192.png" />
 <script src="jszip.min.js?v=3.10.1"></script>
-<link rel="stylesheet" href="style.css?v=20261029c" />
+<link rel="stylesheet" href="style.css?v=20261029e" />
 </head>
 <body>
 
@@ -323,22 +323,10 @@
 
     <!-- FERRAMENTA (aparece ao tocar em Começar agora) -->
     <div id="ferramenta" style="display:none; padding-top:26px;">
-      <div class="lista-topo">
-        <span class="lista-icone" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><circle cx="5" cy="7" r="1.2" fill="#fff"/><circle cx="5" cy="12" r="1.2" fill="#fff"/><circle cx="5" cy="17" r="1.2" fill="#fff"/><path d="M10 7h10M10 12h10M10 17h7"/></svg></span>
-        <div>
-          <h2>Sua lista</h2>
-          <p class="sub">Peça o arquivo ao Instagram e escolha-o aqui.</p>
-        </div>
-      </div>
-      <ul class="chips-confianca" aria-label="Privacidade">
-        <li><span aria-hidden="true">&check;</span>Sem login</li>
-        <li><span aria-hidden="true">&check;</span>Sem senha</li>
-        <li><span aria-hidden="true">&check;</span>Nada sai do seu aparelho</li>
-      </ul>
+      <h2>Sua lista</h2>
+      <p class="sub">Escolha o arquivo que você baixou do Instagram — a leitura acontece aqui no seu navegador.</p>
 
       <div class="card card-lista" id="cardLista">
-        <div class="bloco-escolher">
-        <p class="bloco-titulo"><span class="bloco-num" aria-hidden="true">2</span>Escolha o arquivo aqui</p>
         <button class="botao-importar" id="btnImportar">📄 Ver a minha lista</button>
         <button class="botao-secundario" id="btnComparar" disabled>🔁 Ver o que mudou</button>
         <input type="file" id="inputArquivo" multiple style="display:none" aria-label="Escolher o arquivo do Instagram" />
@@ -350,11 +338,10 @@
         <div id="erroImport" role="alert"></div>
         <p id="avisoLeitor" class="so-leitor" role="status" aria-live="polite"></p>
         <p class="status-import" id="statusImport">Nenhuma lista guardada ainda.</p>
-        </div>
 
         <div class="expansivel">
           <button class="expansivel-topo" id="togglePasso" aria-expanded="false" aria-controls="corpoPasso">
-            <span><span class="toggle-num" aria-hidden="true">1</span><span class="toggle-novo">Peça o arquivo ao Instagram</span><span class="toggle-velho">Ainda não tenho o arquivo — como pego?</span></span>
+            <span>Ainda não tenho o arquivo — como pego?</span>
             <span id="setaPasso" aria-hidden="true">▼</span>
           </button>
           <div class="expansivel-corpo" id="corpoPasso" style="display:none">
@@ -582,7 +569,7 @@
   <button class="fechar" id="btnFecharFaixa" aria-label="Fechar aviso">&times;</button>
 </div>
 
-<script src="script.js?v=20261029c"></script>
+<script src="script.js?v=20261029e"></script>
 
 </body>
 </html>
