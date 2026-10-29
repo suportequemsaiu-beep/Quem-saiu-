@@ -199,7 +199,7 @@
 <meta name="theme-color" content="#0f172a" />
 <link rel="apple-touch-icon" href="icone-192.png" />
 <script src="jszip.min.js?v=3.10.1"></script>
-<link rel="stylesheet" href="style.css?v=20261029b" />
+<link rel="stylesheet" href="style.css?v=20261029c" />
 </head>
 <body>
 
@@ -310,9 +310,9 @@
       <p class="desc-app">Instale em segundos e ele fica ali, junto dos seus apps — pronto para quando bater aquela dúvida.</p>
 
       <div class="vantagens">
-        <div class="vantagem"><span class="tick">&check;</span><span><b>Abra em um clique.</b> Sem digitar endereço, sem procurar no navegador.</span></div>
-        <div class="vantagem"><span class="tick">&check;</span><span><b>Com atalho para o Instagram.</b> No Android, toque em Compartilhar no arquivo do Instagram e escolha o Quem Saiu.</span></div>
-        <div class="vantagem"><span class="tick">&check;</span><span><b>Mesma segurança, mais praticidade.</b> Seus dados continuam só no seu aparelho, nada é enviado para servidor.</span></div>
+        <div class="vantagem"><span class="tick">&check;</span><span><b>Abra em um clique</b></span></div>
+        <div class="vantagem"><span class="tick">&check;</span><span><b>Com atalho para o Instagram</b></span></div>
+        <div class="vantagem"><span class="tick">&check;</span><span><b>Mesma segurança, mais praticidade</b></span></div>
       </div>
 
       <button class="btn-instalar-grande" id="btnInstalar">Instalar o Quem Saiu</button>
@@ -323,8 +323,18 @@
 
     <!-- FERRAMENTA (aparece ao tocar em Começar agora) -->
     <div id="ferramenta" style="display:none; padding-top:26px;">
-      <h2>Sua lista</h2>
-      <p class="sub">Peça o arquivo ao Instagram e escolha-o aqui — a leitura acontece no seu navegador.</p>
+      <div class="lista-topo">
+        <span class="lista-icone" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><circle cx="5" cy="7" r="1.2" fill="#fff"/><circle cx="5" cy="12" r="1.2" fill="#fff"/><circle cx="5" cy="17" r="1.2" fill="#fff"/><path d="M10 7h10M10 12h10M10 17h7"/></svg></span>
+        <div>
+          <h2>Sua lista</h2>
+          <p class="sub">Peça o arquivo ao Instagram e escolha-o aqui.</p>
+        </div>
+      </div>
+      <ul class="chips-confianca" aria-label="Privacidade">
+        <li><span aria-hidden="true">&check;</span>Sem login</li>
+        <li><span aria-hidden="true">&check;</span>Sem senha</li>
+        <li><span aria-hidden="true">&check;</span>Nada sai do seu aparelho</li>
+      </ul>
 
       <div class="card card-lista" id="cardLista">
         <div class="bloco-escolher">
@@ -572,7 +582,7 @@
   <button class="fechar" id="btnFecharFaixa" aria-label="Fechar aviso">&times;</button>
 </div>
 
-<script src="script.js?v=20261029b"></script>
+<script src="script.js?v=20261029c"></script>
 
 </body>
 </html>

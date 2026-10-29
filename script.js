@@ -782,6 +782,8 @@ function atualizarStatus() {
   if (cardLista) {
     var estavaVazio = cardLista.classList.contains("sem-lista");
     cardLista.classList.toggle("sem-lista", dados.length === 0);
+    var painelFerramenta = document.getElementById("ferramenta");
+    if (painelFerramenta) painelFerramenta.classList.toggle("sem-lista", dados.length === 0);
     if (primeiraVezStatus && dados.length === 0) definirPasso(true);
     else if (estavaVazio && dados.length > 0) definirPasso(false);
   }

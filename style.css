@@ -119,6 +119,15 @@
   .expansivel { border: 1px solid #e2e8f0; border-radius: 12px; margin-top: 12px; overflow: hidden; }
   .expansivel-topo { width: 100%; background: #f8fafc; border: none; padding: 14px; text-align: left; font-size: 13px; font-weight: 700; color: #0f172a; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 10px; font-family: inherit; }
   /* tela "Sua lista": quem ainda não tem lista vê primeiro o passo a passo aberto (1) e depois o botão de escolher o arquivo (2) */
+  .lista-topo { display: flex; align-items: center; gap: 14px; margin: 0 0 14px; }
+  .lista-topo h2 { margin: 0 0 3px; }
+  .lista-topo .sub { margin: 0; }
+  .lista-icone { width: 48px; height: 48px; border-radius: 14px; background: linear-gradient(160deg,#0ea5e9,#0369a1); display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 6px 18px rgba(3,105,161,.35); }
+  .chips-confianca { display: none; list-style: none; margin: 0 0 18px; padding: 0; flex-wrap: wrap; gap: 8px; }
+  #ferramenta.sem-lista .chips-confianca { display: flex; }
+  .chips-confianca li { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 999px; background: #142033; border: 1px solid #1e3a5f; color: #bae6fd; font-size: 12px; font-weight: 600; }
+  .chips-confianca li span { color: #38bdf8; font-weight: 800; }
+  #ferramenta:not(.sem-lista) .lista-topo { margin-bottom: 20px; }
   .card-lista { display: flex; flex-direction: column; }
   .card-lista .expansivel { order: 1; }
   .bloco-titulo, .toggle-num, .toggle-novo { display: none; }
@@ -252,8 +261,7 @@
   .btn-instalar-grande { position:relative; width:100%; border:none; border-radius:14px; padding:16px; background:#0369a1; color:#fff; font-size:15px; font-weight:800; cursor:pointer; }
   .btn-instalar-grande:active { transform:scale(.97); }
   .nota-loja { position:relative; font-size:11.5px; color:#94a3b8; margin:13px 0 0; line-height:1.55; }
-  .link-sem-instalar { position:relative; display:block; width:100%; margin-top:14px; padding:14px; border-radius:14px; background:rgba(255,255,255,.05); border:1.5px solid #64748b; color:#f1f5f9; font-size:14px; font-weight:700; cursor:pointer; }
-  .link-sem-instalar:active { transform:scale(.97); }
+  .link-sem-instalar { position:relative; display:inline-block; margin-top:12px; padding:10px 14px; background:none; border:none; color:#7dd3fc; font-size:14px; font-weight:600; text-decoration:underline; text-underline-offset:3px; cursor:pointer; }
 
   /* ===== faixa fixa de instalação ===== */
   .faixa-app { display:none; position:fixed; left:0; right:0; bottom:0; z-index:60; background:rgba(15,23,42,.97); backdrop-filter:blur(10px); border-top:1px solid #1e3a5f; padding:8px 14px; align-items:center; gap:10px; }

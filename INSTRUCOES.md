@@ -411,7 +411,7 @@ organizado" para os detalhes.
   possível reproduzir o escurecimento no computador; a confirmação é pedir um print de um celular
   afetado. Se um dia o site ganhar um tema claro de verdade, revisar essas duas linhas.
 - Cache: o `index.html` chama `style.css?v=…` e `script.js?v=…`. **Sempre que
-  mudar o CSS ou o JS, troque o número depois de `?v=`** (hoje `20261029b`), senão
+  mudar o CSS ou o JS, troque o número depois de `?v=`** (hoje `20261029c`), senão
   celulares e a Cloudflare podem continuar mostrando a versão antiga.
 
 **Não começado:** logo definitivo (o ícone atual é provisório, feito em CSS,
@@ -448,9 +448,9 @@ de um servidor, que ainda não existe. (Hospedagem já está na Cloudflare.)
   aberto, na frente (etapa 1) e o botão "Ver a minha lista" depois (etapa 2); com lista guardada o passo a
   passo fica recolhido e o botão vem primeiro (classe `sem-lista` no `#cardLista`, definida em
   `atualizarStatus`). A classe dos passos é `passo-etapa` (não usar `.etapa`: é da lista "Como funciona"
-  da tela inicial e a mistura deixou aquela lista com letra escura). "Prefiro usar sem instalar" virou
-  botão com borda; títulos das vantagens: "Abra em um clique", "Com atalho para o Instagram", "Mesma
-  segurança, mais praticidade". `?v=` atual: `20261029b`.
+  da tela inicial e a mistura deixou aquela lista com letra escura). "Prefiro usar sem instalar" é um link azul
+  claro (nem botão, nem quase invisível); títulos das vantagens: "Abra em um clique", "Com atalho para o Instagram", "Mesma
+  segurança, mais praticidade". `?v=` atual: `20261029c`.
 - **Nome "Conta Meta" (28/out/2026):** no passo a passo e na Ajuda o nome principal é "Conta Meta", como
   aparece na tela "Configurações e atividade" do celular da criadora; "Central de Contas" fica só como
   alternativa citada no passo 2.
