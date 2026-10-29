@@ -120,18 +120,18 @@
   .expansivel-topo { width: 100%; background: #f8fafc; border: none; padding: 14px; text-align: left; font-size: 13px; font-weight: 700; color: #0f172a; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 10px; font-family: inherit; }
   /* tela "Sua lista": quem ainda não tem lista vê primeiro o passo a passo aberto (1) e depois o botão de escolher o arquivo (2) */
   /* tela "Sua lista": mesmo visual escuro do restante do site (cartão azul-marinho, brilho, botões arredondados) */
-  .card-lista { position: relative; overflow: hidden; background: linear-gradient(165deg,#14243d,#101a2e); border: 1px solid #1e3a5f; border-radius: 22px; padding: 22px 20px; color: #f1f5f9; }
-  .card-lista::before { content: ""; position: absolute; top: -90px; left: 50%; transform: translateX(-50%); width: 260px; height: 260px; border-radius: 50%; background: radial-gradient(circle, rgba(14,165,233,.2), transparent 70%); pointer-events: none; }
+  .card-lista { position: relative; overflow: hidden; background: linear-gradient(165deg,#232634,#181b26); border: 1px solid #343a4e; border-radius: 22px; padding: 22px 20px; color: #f1f5f9; }
+  .card-lista::before { content: ""; position: absolute; top: -90px; left: 50%; transform: translateX(-50%); width: 260px; height: 260px; border-radius: 50%; background: radial-gradient(circle, rgba(148,163,184,.14), transparent 70%); pointer-events: none; }
   .card-lista > * { position: relative; }
   .card-lista .botao-importar { border-radius: 999px; padding: 17px; font-size: 16px; font-weight: 800; box-shadow: 0 8px 24px rgba(14,165,233,.3); }
-  .card-lista .botao-secundario { background: transparent; border: 1px solid #1e3a5f; border-radius: 999px; padding: 13px; margin-top: 10px; color: #cbd5e1; font-size: 13.5px; font-weight: 700; }
+  .card-lista .botao-secundario { background: transparent; border: 1px solid #3b4157; border-radius: 999px; padding: 13px; margin-top: 10px; color: #cbd5e1; font-size: 13.5px; font-weight: 700; }
   .card-lista .botao-secundario:disabled { opacity: .45; }
   .card-lista .dica-arquivo { margin: 14px 4px 0; text-align: center; font-size: 12.5px; color: #94a3b8; }
   .card-lista .dica-arquivo b { color: #e2e8f0; }
   .card-lista .status-import { color: #94a3b8; margin-top: 14px; }
-  .card-lista .progresso-trilho { background: #1e293b; }
+  .card-lista .progresso-trilho { background: #2b3042; }
   .card-lista .progresso-texto { color: #94a3b8; }
-  .card-lista .expansivel { margin-top: 18px; background: #0f1b2e; border: 1px solid #1e3a5f; border-radius: 16px; }
+  .card-lista .expansivel { margin-top: 18px; background: #14161f; border: 1px solid #343a4e; border-radius: 16px; }
   .card-lista .expansivel-topo { background: transparent; color: #f1f5f9; padding: 16px; font-size: 14px; }
   .card-lista .expansivel-corpo { background: #fff; border-radius: 14px; margin: 0 10px 10px; padding-top: 14px; }
   .expansivel-corpo { padding: 0 16px 16px; }
