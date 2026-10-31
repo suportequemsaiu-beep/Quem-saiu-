@@ -200,7 +200,7 @@
 <link rel="icon" type="image/png" sizes="192x192" href="icone-192.png" />
 <link rel="apple-touch-icon" href="icone-192.png" />
 <script src="jszip.min.js?v=3.10.1"></script>
-<link rel="stylesheet" href="style.css?v=20261031b" />
+<link rel="stylesheet" href="style.css?v=20261031c" />
 </head>
 <body>
 
@@ -306,8 +306,8 @@
 
       <div class="vantagens">
         <div class="vantagem"><span class="tick">&check;</span><span><b>Abra com um clique</b></span></div>
-        <div class="vantagem"><span class="tick">&check;</span><span><b>Atalho para o Instagram</b></span></div>
-        <div class="vantagem"><span class="tick">&check;</span><span><b>Mantenha a mesma privacidade com muito mais facilidade</b></span></div>
+        <div class="vantagem"><span class="tick">&check;</span><span><b>Mais facilidade para ver e enviar a sua lista</b></span></div>
+        <div class="vantagem"><span class="tick">&check;</span><span><b>A mesma privacidade com muito mais praticidade</b></span></div>
       </div>
 
       <button class="btn-instalar-grande" id="btnInstalar">Instalar o Quem Saiu</button>
@@ -319,11 +319,10 @@
     <!-- FERRAMENTA (aparece ao tocar em Começar agora) -->
     <div id="ferramenta" style="display:none; padding-top:26px;">
       <h2>Sua lista</h2>
-      <p class="sub">Escolha o arquivo que você baixou do Instagram — a leitura acontece aqui no seu navegador.</p>
 
       <div class="card card-lista" id="cardLista">
         <button class="botao-importar" id="btnImportar">📄 Mandar lista</button>
-        <button class="botao-secundario desativado" id="btnComparar" aria-disabled="true">📋 Ver minha lista</button>
+        <button class="botao-secundario desativado" id="btnComparar" aria-disabled="true">📋 Ver a comparação</button>
         <input type="file" id="inputArquivo" multiple style="display:none" aria-label="Escolher o arquivo do Instagram" />
         <p class="dica-arquivo">Procure em <b>Recentes</b> ou <b>Downloads</b> — o nome começa com <b>instagram-</b> e é o arquivo mais novo. Não precisa descompactar.</p>
         <div class="progresso" id="progresso">
@@ -336,7 +335,7 @@
 
         <div class="expansivel">
           <button class="expansivel-topo" id="togglePasso" aria-expanded="false" aria-controls="corpoPasso">
-            <span>Ainda não tenho o arquivo — como pego?</span>
+            <span>Ainda não tenho a lista — como pego?</span>
             <span id="setaPasso" aria-hidden="true">▼</span>
           </button>
           <div class="expansivel-corpo" id="corpoPasso" style="display:none">
@@ -389,11 +388,11 @@
               <li class="passo-etapa so-celular" data-fase="enviar" data-tela="compartilhar">
                 <h3>Mande para o Quem Saiu</h3>
                 <p>No Chrome do Android: <b>⋮</b> → <b>Transferências</b> → <b>três pontinhos</b> do arquivo → <b>Compartilhar</b> → <b>Quem Saiu</b>.</p>
-                <p class="etapa-nota">Precisa do Quem Saiu instalado e só existe no Android. Sem ele, use o botão <b>Ver a minha lista</b> aqui em cima e escolha o arquivo em Downloads.</p>
+                <p class="etapa-nota">Precisa do Quem Saiu instalado e só existe no Android. Sem ele, use o botão <b>Mandar lista</b> aqui em cima e escolha o arquivo em Downloads.</p>
               </li>
               <li class="passo-etapa so-computador" data-fase="enviar" data-tela="pc">
                 <h3>Escolha o arquivo aqui</h3>
-                <p>Volte para esta página, clique em <b>Ver a minha lista</b> e escolha o arquivo na pasta <b>Downloads</b> — o nome começa com <b>instagram-</b>.</p>
+                <p>Volte para esta página, clique em <b>Mandar lista</b> e escolha o arquivo na pasta <b>Downloads</b> — o nome começa com <b>instagram-</b>.</p>
               </li>
             </ol>
             <p class="passo-aviso">Os desenhos são só um guia: a tela do seu celular pode ser um pouco diferente.</p>
@@ -564,7 +563,7 @@
   <button class="fechar" id="btnFecharFaixa" aria-label="Fechar aviso">&times;</button>
 </div>
 
-<script src="script.js?v=20261031b"></script>
+<script src="script.js?v=20261031c"></script>
 
 </body>
 </html>

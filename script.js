@@ -272,7 +272,7 @@ document.getElementById("togglePasso").addEventListener("click", function () {
         '<rect x="8" y="46" width="184" height="18" rx="12" fill="#e2e8f0"/><rect x="8" y="56" width="184" height="8" fill="#e2e8f0"/>' +
         '<circle cx="22" cy="55" r="3" fill="#cbd5e1"/><circle cx="33" cy="55" r="3" fill="#cbd5e1"/><circle cx="44" cy="55" r="3" fill="#cbd5e1"/>' +
         '<rect x="30" y="88" width="140" height="34" rx="11" fill="#0369a1"/>' +
-        '<text x="100" y="109" font-size="11" font-family="sans-serif" font-weight="800" text-anchor="middle" fill="#fff">Ver a minha lista</text>' +
+        '<text x="100" y="109" font-size="11" font-family="sans-serif" font-weight="800" text-anchor="middle" fill="#fff">Mandar lista</text>' +
         anel(30, 88, 140, 34, 11) + barra(48, 142, 104) +
         '<path d="M70 174 L64 200 H136 L130 174" fill="#e2e8f0" stroke="#94a3b8" stroke-width="3" stroke-linejoin="round"/></svg>';
     }

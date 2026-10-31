@@ -453,7 +453,7 @@ de um servidor, que ainda não existe. (Hospedagem já está na Cloudflare.)
   a mesma privacidade com muito mais facilidade". `?v=` atual: `20261029c`.
 - **Cartão da "Sua lista" e passo do e-mail (29/out/2026):** o cartão da tela "Sua lista" é cinza-grafite
   (não azul), para não ficar tudo igual no site; o passo "Espere o e-mail" manda olhar a caixa de entrada
-  ou o spam. `?v=` atual: `20261031b`.
+  ou o spam. `?v=` atual: `20261031c`.
 - **Bloco "Já na primeira vez" (31/out/2026):** saiu da tela inicial a pedido da criadora (o texto sobre descobrir quem você segue e não te segue de volta). A função continua no site.
 - **Nome "Conta Meta" (28/out/2026):** no passo a passo e na Ajuda o nome principal é "Conta Meta", como
   aparece na tela "Configurações e atividade" do celular da criadora; "Central de Contas" fica só como
@@ -647,3 +647,12 @@ Não há testes automatizados. Antes de qualquer publicação, conferir no celul
   (`#avisoRapido`, `role="status"`).
 - Removida a frase "Seus dados são lidos aqui no seu navegador / Nada é enviado…"
   abaixo do "Começar agora".
+
+## Textos da "Sua lista" e do cartão de instalar (31/10/2026, 2ª rodada)
+
+- Cartão de instalar: "Abra com um clique" / "Mais facilidade para ver e enviar a sua lista"
+  (era "Atalho para o Instagram") / "A mesma privacidade com muito mais praticidade".
+- "Sua lista": removido o subtítulo "Escolha o arquivo que você baixou…". O botão de baixo
+  passou a se chamar "📋 Ver a comparação" (era "Ver minha lista"). O expansível agora diz
+  "Ainda não tenho a lista — como pego?".
+- Passos e desenho que citavam "Ver a minha lista" agora dizem "Mandar lista".

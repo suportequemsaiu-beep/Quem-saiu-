@@ -13,7 +13,7 @@ with sync_playwright() as p:
     ok("Nada é enviado para servidor nenhum" not in pg.inner_text("body").split("Sua lista")[0], "1 frase abaixo do 'Começar agora' foi removida")
     pg.click("#btnComecar"); pg.wait_for_timeout(300)
     ok("Mandar lista" in pg.inner_text("#btnImportar"), "2 botão de cima: 'Mandar lista'")
-    ok("Ver minha lista" in pg.inner_text("#btnComparar"), "3 botão de baixo: 'Ver minha lista'")
+    ok("Ver a comparação" in pg.inner_text("#btnComparar"), "3 botão de baixo: 'Ver a comparação'")
     ok(pg.get_attribute("#btnComparar", "aria-disabled") == "true", "4 sem lista, o botão de baixo fica apagado")
     ok(pg.query_selector("#avisoRapido") is None, "5 aviso ainda não aparece")
     pg.click("#btnComparar", force=True); pg.wait_for_timeout(400)
