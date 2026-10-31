@@ -453,7 +453,7 @@ de um servidor, que ainda não existe. (Hospedagem já está na Cloudflare.)
   a mesma privacidade com muito mais facilidade". `?v=` atual: `20261029c`.
 - **Cartão da "Sua lista" e passo do e-mail (29/out/2026):** o cartão da tela "Sua lista" é cinza-grafite
   (não azul), para não ficar tudo igual no site; o passo "Espere o e-mail" manda olhar a caixa de entrada
-  ou o spam. `?v=` atual: `20261031c`.
+  ou o spam. `?v=` atual: `20261031d`.
 - **Bloco "Já na primeira vez" (31/out/2026):** saiu da tela inicial a pedido da criadora (o texto sobre descobrir quem você segue e não te segue de volta). A função continua no site.
 - **Nome "Conta Meta" (28/out/2026):** no passo a passo e na Ajuda o nome principal é "Conta Meta", como
   aparece na tela "Configurações e atividade" do celular da criadora; "Central de Contas" fica só como
@@ -656,3 +656,22 @@ Não há testes automatizados. Antes de qualquer publicação, conferir no celul
   passou a se chamar "📋 Ver a comparação" (era "Ver minha lista"). O expansível agora diz
   "Ainda não tenho a lista — como pego?".
 - Passos e desenho que citavam "Ver a minha lista" agora dizem "Mandar lista".
+
+## Contagem anônima de uso (31/10/2026) — NÃO PUBLICADA até a Janaína mandar "publica"
+
+- Arquivo `contagem.js` (curto e legível de propósito) + pasta `m/` com 8 arquivos vazios
+  (`visita`, `app-aberto`, `ficou-10s/30s/60s/120s/300s`, `instalou`, todos `.txt`).
+- Como funciona: o navegador pede esses arquivos ao próprio site; quem conta é a Cloudflare.
+  Nada de backend, cookie, ID, terceiros ou conteúdo de lista.
+- Respeita "Não rastrear" (DNT) e Global Privacy Control (não faz nenhum pedido). Em localhost
+  não conta (os testes ligam `window.__QS_CONTAGEM_TESTE`).
+- Tempo só conta com a página visível; "visita" e "app-aberto" contam uma vez por sessão.
+  "instalou" vem do evento `appinstalled` (só Chrome/Android; iPhone não tem).
+- Onde ler os números: Cloudflare → quemsaiu.com.br → Análise → Solicitações → "Principais
+  caminhos" (ou "Adicionar filtro" → Caminho começa com `/m/`; filtro País = Brasil).
+  Só conta navegador que executa JavaScript, então robôs simples ficam de fora.
+- Textos alterados juntos (regra "política e textos andam juntos"): `privacy-policy.html`
+  (nova seção, data 31/10), FAQ "Meus dados ficam salvos em algum servidor?" (HTML + JSON-LD),
+  `llms.txt`, rodapé ("Contamos visitas e instalações de forma anônima, sem cookies"),
+  `robots.txt` (`Disallow: /m/`).
+- Pendente: revisão jurídica da LGPD antes de qualquer cobrança; avaliar se o aviso do rodapé basta.

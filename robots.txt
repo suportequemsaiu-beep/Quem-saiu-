@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
+Disallow: /m/
 
 Sitemap: https://quemsaiu.com.br/sitemap.xml
