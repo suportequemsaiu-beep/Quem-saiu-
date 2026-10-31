@@ -675,3 +675,22 @@ Não há testes automatizados. Antes de qualquer publicação, conferir no celul
   `llms.txt`, rodapé ("Contamos visitas e instalações de forma anônima, sem cookies"),
   `robots.txt` (`Disallow: /m/`).
 - Pendente: revisão jurídica da LGPD antes de qualquer cobrança; avaliar se o aviso do rodapé basta.
+
+### Nota interna sobre a base legal da contagem (31/10/2026) — não é parecer jurídico
+
+- Finalidade: medir uso do site (visitas, tempo, instalações) para operar e melhorar o serviço.
+- Por que o impacto tende a ser baixo: GET simples sem cookie, ID, parâmetro, lista ou arquivo;
+  sem backend próprio nem terceiros; DNT e GPC respeitados; só se consultam totais e gráficos.
+- Hipótese de trabalho (INTERPRETAÇÃO, certeza média): legítimo interesse. Não está nomeada
+  na política de propósito, até haver conferência jurídica.
+- A política NÃO diz "só totais agregados": o painel da Cloudflare pode listar IPs de
+  clientes. O texto correto é "não usamos IP, país ou dispositivo para identificar ou
+  acompanhar uma pessoa; consultamos totais e gráficos de uso".
+- NÃO VERIFICADO (levar ao advogado antes de cobrar): se `sessionStorage` com a marca "1"
+  conta como "tecnologia semelhante a cookie" para a ANPD; qual dataset/retenção da Cloudflare
+  alimenta "Solicitações → Principais caminhos" no plano Free (não escrever prazo na política);
+  papel da Cloudflare (controladora ou operadora); transferência internacional; Termos de Uso
+  do Instagram/Meta; CDC e Marco Civil para uma assinatura futura.
+- Fontes sugeridas pelo Perplexity (links NÃO conferidos por mim, só o endereço da política da
+  Cloudflare, achado em busca oficial): guias da ANPD sobre cookies e sobre legítimo interesse;
+  documentação da Cloudflare sobre retenção de logs.
