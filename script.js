@@ -778,7 +778,7 @@ function atualizarStatus() {
   var dados = lerDados();
   if (dados.length === 0) {
     statusImport.textContent = "Nenhuma lista guardada ainda.";
-    btnComparar.disabled = true;
+    marcarVerLista(false);
     return;
   }
   var u = dados[dados.length - 1];
@@ -786,7 +786,7 @@ function atualizarStatus() {
     " · última: " + formatarData(u.data) + " (" + u.seguidores.length + " seguidores)" +
     (dados.length === 1 ? " · importe um arquivo mais novo para comparar" : "") +
     (memoria[CHAVE] ? " · só enquanto esta página estiver aberta" : "");
-  btnComparar.disabled = dados.length < 2;
+  marcarVerLista(true);
 }
 var PALETA_AVATAR = ["#0369a1","#c2410c","#047857","#7c3aed","#db2777","#b45309","#0f766e","#4f46e5","#dc2626","#4d7c0f"];
 function corDoUsuario(u) {
@@ -966,12 +966,38 @@ inputArquivo.addEventListener("change", async function () {
     mostrarErro(erro && erro.amigavel ? erro.message : "Não consegui ler este arquivo. Confira se é a exportação do Instagram em formato JSON (não HTML).");
   } finally {
     btnImportar.disabled = false;
-    btnImportar.textContent = "📄 Ver a minha lista";
+    btnImportar.textContent = "📄 Mandar lista";
     inputArquivo.value = "";
   }
 });
 
-btnComparar.addEventListener("click", function () { abaAtual = "saiu"; renderizarResultado(); });
+/* "Ver minha lista": sem nenhuma lista enviada, em vez de ficar travado mostra um aviso rápido (3 s) */
+var avisoRapidoTimer = null;
+function avisoRapido(msg) {
+  var el = document.getElementById("avisoRapido");
+  if (!el) {
+    el = document.createElement("div");
+    el.id = "avisoRapido";
+    el.className = "aviso-rapido";
+    el.setAttribute("role", "status");
+    el.setAttribute("aria-live", "polite");
+    document.body.appendChild(el);
+  }
+  el.textContent = msg;
+  el.classList.add("visivel");
+  clearTimeout(avisoRapidoTimer);
+  avisoRapidoTimer = setTimeout(function () { el.classList.remove("visivel"); }, 3000);
+}
+function marcarVerLista(temLista) {
+  btnComparar.classList.toggle("desativado", !temLista);
+  btnComparar.setAttribute("aria-disabled", temLista ? "false" : "true");
+}
+btnComparar.addEventListener("click", function () {
+  if (lerDados().length === 0) { avisoRapido("Você ainda não enviou a primeira lista"); return; }
+  if (lerDados().length >= 2) abaAtual = "saiu";
+  renderizarResultado();
+  cardResultado.scrollIntoView({ behavior: "smooth", block: "start" });
+});
 
 document.getElementById("btnApagar").addEventListener("click", function () {
   if (!window.confirm("Apagar a sua lista e o histórico guardados neste aparelho? Depois não dá para voltar.")) return;
@@ -1112,7 +1138,7 @@ async function verificarArquivoCompartilhado() {
       mostrarErro(erro && erro.amigavel ? erro.message : "Não consegui ler o arquivo compartilhado. Confira se é a exportação do Instagram em formato JSON (não HTML).");
     } finally {
       btnImportar.disabled = false;
-      btnImportar.textContent = "📄 Ver a minha lista";
+      btnImportar.textContent = "📄 Mandar lista";
     }
   } catch (e) {
     mostrarErro("Não consegui abrir o arquivo compartilhado. Tente pelo botão de importar.");

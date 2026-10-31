@@ -46,7 +46,7 @@ with sync_playwright() as p:
     ok(pg.evaluate("document.getElementById('corpoPasso').getAttribute('data-fase')") == "enviar", "16 a fase do último passo é 'enviar'")
     pg.click(".passo-proximo"); pg.wait_for_timeout(400)
     ok(not pg.is_visible("#corpoPasso"), "17 'Já tenho o arquivo' fecha o passo a passo")
-    ok(pg.evaluate("document.activeElement && document.activeElement.id") == "btnImportar", "18 e leva o foco ao botão 'Ver a minha lista'")
+    ok(pg.evaluate("document.activeElement && document.activeElement.id") == "btnImportar", "18 e leva o foco ao botão 'Mandar lista'")
     pg.click("#togglePasso"); pg.wait_for_timeout(300)
     ok(pg.is_visible("#corpoPasso") and etapa_visivel(pg) == ["Abra o menu"], "19 ao reabrir, volta ao primeiro passo")
     ok(pg.evaluate("document.documentElement.scrollWidth <= window.innerWidth"), "20 sem rolagem lateral")

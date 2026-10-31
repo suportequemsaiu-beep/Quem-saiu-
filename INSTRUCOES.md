@@ -126,8 +126,8 @@ lançamento, não depois.
 Atenção: a mensagem de privacidade vive em **dois lugares**, e os dois precisam
 ser atualizados juntos, senão o site se contradiz:
 1. `privacy-policy.html`
-2. O texto dentro do site ("Seus dados são lidos aqui no seu navegador. Nada é
-   enviado para servidor nenhum.")
+2. O texto dentro do site (subtítulo de "Sua lista": "a leitura acontece aqui no seu
+   navegador", e o FAQ). A frase solta abaixo do "Começar agora" foi removida a pedido.
 
 A política é datada. Toda revisão atualiza a data (última: 19 de outubro de 2026,
 quando passou a constar que o navegador não informa ao Instagram de qual site o usuário veio;
@@ -453,7 +453,7 @@ de um servidor, que ainda não existe. (Hospedagem já está na Cloudflare.)
   a mesma privacidade com muito mais facilidade". `?v=` atual: `20261029c`.
 - **Cartão da "Sua lista" e passo do e-mail (29/out/2026):** o cartão da tela "Sua lista" é cinza-grafite
   (não azul), para não ficar tudo igual no site; o passo "Espere o e-mail" manda olhar a caixa de entrada
-  ou o spam. `?v=` atual: `20261031a`.
+  ou o spam. `?v=` atual: `20261031b`.
 - **Bloco "Já na primeira vez" (31/out/2026):** saiu da tela inicial a pedido da criadora (o texto sobre descobrir quem você segue e não te segue de volta). A função continua no site.
 - **Nome "Conta Meta" (28/out/2026):** no passo a passo e na Ajuda o nome principal é "Conta Meta", como
   aparece na tela "Configurações e atividade" do celular da criadora; "Central de Contas" fica só como
@@ -637,3 +637,13 @@ Não há testes automatizados. Antes de qualquer publicação, conferir no celul
 8. No computador (tela larga): início em duas colunas, "Sua lista" na mesma
    coluna do resto, e o passo 3 mostrando a versão para computador. No celular,
    conferir que nada disso mudou.
+
+## Botões da "Sua lista" (31/10/2026)
+
+- Botão de cima: "📄 Mandar lista" (era "Ver a minha lista"). Botão de baixo:
+  "📋 Ver minha lista" (era "Ver o que mudou"); mostra a lista/resultado já guardado.
+- Sem nenhuma lista enviada, o botão de baixo fica apagado (`aria-disabled`, não
+  `disabled`) e ao tocar mostra por 3 s o aviso "Você ainda não enviou a primeira lista"
+  (`#avisoRapido`, `role="status"`).
+- Removida a frase "Seus dados são lidos aqui no seu navegador / Nada é enviado…"
+  abaixo do "Começar agora".
