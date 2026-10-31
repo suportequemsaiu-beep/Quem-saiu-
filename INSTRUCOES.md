@@ -453,7 +453,8 @@ de um servidor, que ainda não existe. (Hospedagem já está na Cloudflare.)
   a mesma privacidade com muito mais facilidade". `?v=` atual: `20261029c`.
 - **Cartão da "Sua lista" e passo do e-mail (29/out/2026):** o cartão da tela "Sua lista" é cinza-grafite
   (não azul), para não ficar tudo igual no site; o passo "Espere o e-mail" manda olhar a caixa de entrada
-  ou o spam. `?v=` atual: `20261030a`.
+  ou o spam. `?v=` atual: `20261030b`.
+- **Bloco "Já na primeira vez" (31/out/2026):** saiu da tela inicial a pedido da criadora (o texto sobre descobrir quem você segue e não te segue de volta). A função continua no site.
 - **Nome "Conta Meta" (28/out/2026):** no passo a passo e na Ajuda o nome principal é "Conta Meta", como
   aparece na tela "Configurações e atividade" do celular da criadora; "Central de Contas" fica só como
   alternativa citada no passo 2.
