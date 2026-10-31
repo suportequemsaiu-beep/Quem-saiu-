@@ -448,12 +448,12 @@ de um servidor, que ainda não existe. (Hospedagem já está na Cloudflare.)
   aberto, na frente (etapa 1) e o botão "Ver a minha lista" depois (etapa 2); com lista guardada o passo a
   passo fica recolhido e o botão vem primeiro (classe `sem-lista` no `#cardLista`, definida em
   `atualizarStatus`). A classe dos passos é `passo-etapa` (não usar `.etapa`: é da lista "Como funciona"
-  da tela inicial e a mistura deixou aquela lista com letra escura). "Prefiro usar sem instalar" é um link azul
-  claro (nem botão, nem quase invisível); títulos das vantagens: "Abra com um clique", "Atalho para o Instagram", "Mantenha
+  da tela inicial e a mistura deixou aquela lista com letra escura). "Prefiro usar sem instalar" é um link em tom areia
+  (não azul, para o site não ficar enjoativo) (nem botão, nem quase invisível); títulos das vantagens: "Abra com um clique", "Atalho para o Instagram", "Mantenha
   a mesma privacidade com muito mais facilidade". `?v=` atual: `20261029c`.
 - **Cartão da "Sua lista" e passo do e-mail (29/out/2026):** o cartão da tela "Sua lista" é cinza-grafite
   (não azul), para não ficar tudo igual no site; o passo "Espere o e-mail" manda olhar a caixa de entrada
-  ou o spam. `?v=` atual: `20261029f`.
+  ou o spam. `?v=` atual: `20261030a`.
 - **Nome "Conta Meta" (28/out/2026):** no passo a passo e na Ajuda o nome principal é "Conta Meta", como
   aparece na tela "Configurações e atividade" do celular da criadora; "Central de Contas" fica só como
   alternativa citada no passo 2.
