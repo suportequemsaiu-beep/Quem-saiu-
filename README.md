@@ -9,7 +9,7 @@ de dados que o próprio Instagram fornece ao titular da conta.
 
 ## Como funciona
 
-- Não pede o login do Instagram, para proteger a conta da pessoa.
+- Não pede o login do Instagram.
 - Toda a leitura acontece no navegador; nada é enviado a servidor.
 - Funciona no celular (pensado primeiro para Android, instalável como app) e no
   computador, pelo navegador.

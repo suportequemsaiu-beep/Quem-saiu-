@@ -1,7 +1,7 @@
 {
   "name": "Quem Saiu — quem deixou de te seguir",
   "short_name": "Quem Saiu",
-  "description": "Descubra quem deixou de te seguir no Instagram. Sem pedir o login do Instagram, para proteger a sua conta. Tudo no seu aparelho.",
+  "description": "Descubra quem deixou de te seguir no Instagram. Sem pedir o login do Instagram. Tudo no seu aparelho.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

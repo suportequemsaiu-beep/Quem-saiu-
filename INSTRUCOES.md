@@ -714,3 +714,9 @@ Não há testes automatizados. Antes de qualquer publicação, conferir no celul
 - Na pergunta do botão "Iniciar exportação" apagado, tirei a menção a "Personalizar informações
   (só Seguidores e seguindo)", que não vale mais desde que a pessoa exporta tudo.
 - Regra da Janaína: a Ajuda só traz resposta que ajuda de verdade.
+
+## Sem "para proteger a sua conta" (01/11/2026)
+
+- A Janaína pediu para NÃO dizer que o site não pede o login "para proteger a conta". Todos os
+  textos técnicos (meta, og/twitter, JSON-LD, FAQ, política, llms.txt, manifest, README) dizem
+  apenas que o site não pede o login/senha do Instagram. Vale esta regra, não a da seção anterior.
