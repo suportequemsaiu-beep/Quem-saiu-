@@ -694,3 +694,12 @@ Não há testes automatizados. Antes de qualquer publicação, conferir no celul
 - Fontes sugeridas pelo Perplexity (links NÃO conferidos por mim, só o endereço da política da
   Cloudflare, achado em busca oficial): guias da ANPD sobre cookies e sobre legítimo interesse;
   documentação da Cloudflare sobre retenção de logs.
+
+## Como falamos do login do Instagram (31/10/2026)
+
+- Nos textos técnicos (meta description, og/twitter, JSON-LD, FAQ, política, llms.txt, manifest,
+  README) a frase é: **"não pede o login do Instagram, para proteger a sua conta"**.
+- Não citamos outros apps nem afirmamos nada sobre eles (removida do FAQ a frase sobre apps que
+  "violam os Termos de Uso", que não tínhamos como comprovar).
+- Mantidos como estavam, por serem a cara do site: selo "Gratuito · sem login, sem senha", aviso
+  no suporte ("Nunca peça nem envie sua senha…") e texto do botão Compartilhar.
