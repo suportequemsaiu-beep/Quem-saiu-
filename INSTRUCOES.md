@@ -320,7 +320,7 @@ organizado" para os detalhes.
     mais "Qualquer navegador".
   - **A Ajuda agora é HTML puro** (`<details>` no `index.html`), e não mais montada
     por JavaScript: as IAs não liam as respostas. O JSON-LD (FAQPage) tem as
-    mesmas 18 perguntas e respostas. Para mudar uma resposta: edite o
+    mesmas 16 perguntas e respostas. Para mudar uma resposta: edite o
     `<details>` e copie o texto igual para o JSON-LD.
   - ~~Bloco "O que vale saber antes de começar" na home~~ — **removido em 27/out/2026 por
     decisão da dona do site.** Os mesmos avisos continuam na Ajuda ("Quantas listas ficam
@@ -699,7 +699,18 @@ Não há testes automatizados. Antes de qualquer publicação, conferir no celul
 
 - Nos textos técnicos (meta description, og/twitter, JSON-LD, FAQ, política, llms.txt, manifest,
   README) a frase é: **"não pede o login do Instagram, para proteger a sua conta"**.
-- Não citamos outros apps nem afirmamos nada sobre eles (removida do FAQ a frase sobre apps que
-  "violam os Termos de Uso", que não tínhamos como comprovar).
+- Não citamos outros apps pelo nome nem falamos de apps de outros assuntos. A frase do FAQ sobre
+  apps que exigem login "violarem os Termos de Uso do Instagram" foi MANTIDA (a Janaína pediu).
 - Mantidos como estavam, por serem a cara do site: selo "Gratuito · sem login, sem senha", aviso
   no suporte ("Nunca peça nem envie sua senha…") e texto do botão Compartilhar.
+
+## Ajuda (FAQ) enxuta (01/11/2026)
+
+- Saíram da Ajuda: "Existe um app de unfollow do Instagram que não pede senha?" (não falamos
+  de outros apps) e "Funciona no iPhone?" (não tínhamos resposta útil; o "não testado" continua
+  só nos dados técnicos e no `llms.txt`). Agora são 16 perguntas.
+- "Preciso informar minha senha do Instagram?" responde só: "Não. O Quem Saiu não pede a senha
+  do Instagram, para proteger a sua conta."
+- Na pergunta do botão "Iniciar exportação" apagado, tirei a menção a "Personalizar informações
+  (só Seguidores e seguindo)", que não vale mais desde que a pessoa exporta tudo.
+- Regra da Janaína: a Ajuda só traz resposta que ajuda de verdade.

@@ -38,19 +38,19 @@ with sync_playwright() as p:
     ok("sem risco de banimento" not in cru.lower(),"N1 'sem risco de banimento' não aparece em lugar nenhum do index.html")
     ok("cdnjs" not in cru,"N1 index.html não chama mais o CDN")
     ok("jszip.min.js" in cru,"N1 JSZip vem do próprio site")
-    for frase in ["Funciona no iPhone?","Quantas listas ficam guardadas?","O Quem Saiu acessa a minha conta do Instagram?","E se o Instagram mudar o formato do arquivo?",
+    for frase in ["Preciso informar minha senha do Instagram?","Quantas listas ficam guardadas?","O Quem Saiu acessa a minha conta do Instagram?","E se o Instagram mudar o formato do arquivo?",
                   "No Chrome do Android","verifique a sua <b>caixa de entrada</b> ou o <b>spam</b>",
                   "Remove as listas guardadas e as contas escondidas","Peça um novo arquivo ao Instagram","Toque em <b>Notificar</b>","está apagado. O que faço?"]:
         ok(frase in cru,"N1 HTML cru contém: "+frase)
     ok("adamsandler" not in cru and "adamsandler" not in open(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),"script.js"),encoding="utf-8").read().lower(),"N1 @adamsandler removido")
 
-    # N2 Ajuda: 18 <details>, respostas no HTML cru iguais às do JSON-LD
+    # N2 Ajuda: 16 <details>, respostas no HTML cru iguais às do JSON-LD
     det=re.findall(r'<summary class="faq-q">(.*?)<span aria-hidden="true">\+</span></summary>\s*<p class="faq-a">(.*?)</p>',cru,re.S)
-    ok(len(det)==18,"N2 18 perguntas da Ajuda escritas em HTML (%d)"%len(det))
+    ok(len(det)==16,"N2 16 perguntas da Ajuda escritas em HTML (%d)"%len(det))
     ld=json.loads(re.search(r'<script type="application/ld\+json">\n(.*?)\n</script>',cru,re.S).group(1))
     ent=ld[1]["mainEntity"]
     iguais=all(H.unescape(q)==e["name"] and H.unescape(a)==e["acceptedAnswer"]["text"] for (q,a),e in zip(det,ent)) and len(ent)==len(det)
-    ok(iguais,"N2 JSON-LD tem exatamente as mesmas 18 perguntas e respostas da Ajuda")
+    ok(iguais,"N2 JSON-LD tem exatamente as mesmas 16 perguntas e respostas da Ajuda")
     ok("Navegadores modernos" in ld[0]["operatingSystem"] and "Qualquer navegador" not in cru,"N2 operatingSystem sem 'Qualquer navegador'")
 
     # N3 página: sem requisições externas, sem erros, bloco visível, amostra
@@ -66,11 +66,11 @@ with sync_playwright() as p:
     pg.click("[data-tab=ajuda]"); pg.wait_for_timeout(300)
     s=pg.locator("#ajuda summary.faq-q").first
     ok(pg.evaluate("document.querySelectorAll('#ajuda details[open]').length")==0,"N3 Ajuda começa toda recolhida")
-    pg.locator("#ajuda summary", has_text="Funciona no iPhone?").click(); pg.wait_for_timeout(250)
-    ok(pg.is_visible("text=Ainda não testamos no iPhone"),"N3 tocar na pergunta abre a resposta")
+    pg.locator("#ajuda summary", has_text="Quantas listas ficam guardadas?").click(); pg.wait_for_timeout(250)
+    ok(pg.is_visible("text=Até as últimas 10"),"N3 tocar na pergunta abre a resposta")
     pg.screenshot(path=B+"avaliacao/telas/n_ajuda_aberta.png",full_page=True)
-    pg.locator("#ajuda summary", has_text="Funciona no iPhone?").click(); pg.wait_for_timeout(250)
-    ok(not pg.is_visible("text=Ainda não testamos no iPhone"),"N3 tocar de novo recolhe")
+    pg.locator("#ajuda summary", has_text="Quantas listas ficam guardadas?").click(); pg.wait_for_timeout(250)
+    ok(not pg.is_visible("text=Até as últimas 10"),"N3 tocar de novo recolhe")
     ok(pg.evaluate("document.documentElement.scrollWidth-document.documentElement.clientWidth")==0,"N3 Ajuda sem rolagem lateral")
     ok(pg.externos==[],"N3 nenhuma requisição para fora do site | %s"%pg.externos)
     ok(pg.erros==[],"N3 sem erros de JavaScript/console | %s"%pg.erros)
