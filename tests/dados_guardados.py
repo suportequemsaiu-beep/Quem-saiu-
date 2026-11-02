@@ -22,7 +22,7 @@ with sync_playwright() as p:
         ctx,pg,errs=novo(CH,val)
         reg=pg.evaluate("navigator.serviceWorker.getRegistration().then(r=>!!r)")
         st=pg.evaluate("document.querySelector('#statusImport').innerText")
-        ok(errs==[] and reg and st.startswith("Nenhuma lista"),"4a dado ruim (%s): sem erro, service worker registrado, status normal | erros=%s reg=%s"%(nome,errs[:1],reg))
+        ok(errs==[] and reg and st.startswith("Você ainda não enviou nenhuma lista"),"4a dado ruim (%s): sem erro, service worker registrado, status normal | erros=%s reg=%s"%(nome,errs[:1],reg))
         pg.click("#btnDescobrir"); pg.click("#btnComecar"); pg.wait_for_timeout(200)
         pg.set_input_files("#inputArquivo",[w("followers_1.json",[seg("a"),seg("b")])]); pg.wait_for_timeout(1200)
         st=pg.evaluate("document.querySelector('#statusImport').innerText"); vis=pg.evaluate("document.querySelector('#btnApagar').offsetParent!==null")

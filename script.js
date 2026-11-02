@@ -396,6 +396,21 @@ function listaValida(x) {
   return !!x && typeof x === "object" && typeof x.data === "string" && soTextos(x.seguidores) &&
     (x.seguindo === undefined || soTextos(x.seguindo));
 }
+/* ===== "Já pedi": só a data em que a pessoa tocou, guardada neste aparelho ===== */
+var CHAVE_PEDIDO = "quemsaiu_pedido";
+function lerPedido() {
+  try {
+    var v = JSON.parse(localStorage.getItem(CHAVE_PEDIDO));
+    if (v && typeof v.data === "string" && !isNaN(new Date(v.data).getTime())) return v;
+  } catch (e) {}
+  return null;
+}
+function gravarPedido() {
+  try { localStorage.setItem(CHAVE_PEDIDO, JSON.stringify({ data: new Date().toISOString() })); } catch (e) {}
+}
+function limparPedido() {
+  try { localStorage.removeItem(CHAVE_PEDIDO); } catch (e) {}
+}
 function lerDados() {
   if (memoria[CHAVE]) return memoria[CHAVE];
   try {
@@ -409,7 +424,7 @@ function gravarDados(v) {
   catch (e) { memoria[CHAVE] = v; return false; }
 }
 function apagarDadosLocais() {
-  try { localStorage.removeItem(CHAVE); localStorage.removeItem(CHAVE_IGNORADAS); } catch (e) {}
+  try { localStorage.removeItem(CHAVE); localStorage.removeItem(CHAVE_IGNORADAS); localStorage.removeItem(CHAVE_PEDIDO); } catch (e) {}
   delete memoria[CHAVE];
   delete memoria[CHAVE_IGNORADAS];
 }
@@ -777,7 +792,7 @@ function guardarNova(nova) {
 function atualizarStatus() {
   var dados = lerDados();
   if (dados.length === 0) {
-    statusImport.textContent = "Nenhuma lista guardada ainda.";
+    statusImport.textContent = "Você ainda não enviou nenhuma lista. Para descobrir quem saiu, primeiro envie a lista mais recente do Instagram.";
     marcarVerLista(false);
     return;
   }
@@ -873,10 +888,12 @@ function ligarBotoesLista() {
 
 function renderizarResultado() {
   var dados = lerDados();
+  var pontoPartida = document.getElementById("pontoPartida");
   if (dados.length === 0) { cardResultado.style.display = "none"; return; }
 
   var atual = dados[dados.length - 1];
   var anterior = dados.length >= 2 ? dados[dados.length - 2] : null;
+  if (pontoPartida) pontoPartida.hidden = !!anterior;
   var seguindoSet = new Set(atual.seguindo || []);
   var seguidoresSet = new Set(atual.seguidores || []);
 
@@ -900,7 +917,7 @@ function renderizarResultado() {
   }
 
   if (!anterior) {
-    tituloResultado.textContent = "Sua lista está guardada";
+    tituloResultado.textContent = "Ponto de partida salvo";
     if (abaAtual === "saiu" || abaAtual === "entrou") abaAtual = "naoSegue";
   } else {
     tituloResultado.textContent = "Comparando " + formatarData(anterior.data) + " → " + formatarData(atual.data);
@@ -945,6 +962,67 @@ function renderizarResultado() {
   listaResultado.insertAdjacentHTML("afterbegin", '<p class="explica-aba">' + explicaAba + "</p>");
 }
 
+/* ===== "Já pedi", aviso ao voltar e lembrete no calendário ===== */
+var avisoVolta = document.getElementById("avisoVolta");
+var voltaDispensado = false;
+function diaMes(iso) { return new Date(iso).toLocaleDateString("pt-BR", { day: "numeric", month: "long" }); }
+function atualizarPedido() {
+  var p = lerPedido();
+  var btn = document.getElementById("btnJaPedi");
+  document.getElementById("jaPediFeito").hidden = !p;
+  btn.hidden = !!p;
+  document.getElementById("notaJaPedi").hidden = !!p;
+  avisoVolta.hidden = !p || voltaDispensado;
+  if (p) document.getElementById("textoPedidoEm").textContent = "Você pediu o arquivo em " + diaMes(p.data) + ".";
+  var noite = document.getElementById("btnLembrarNoite");
+  noite.disabled = new Date().getHours() * 60 + new Date().getMinutes() >= 19 * 60 + 30;
+}
+function dois(n) { return (n < 10 ? "0" : "") + n; }
+function fmtLocal(d) { return d.getFullYear() + dois(d.getMonth() + 1) + dois(d.getDate()) + "T" + dois(d.getHours()) + dois(d.getMinutes()) + "00"; }
+function fmtUtc(d) { return d.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, ""); }
+function inicioLembrete(tipo) {
+  var d = new Date();
+  if (tipo === "1h") { d.setMinutes(d.getMinutes() + 60, 0, 0); }
+  else if (tipo === "noite") { d.setHours(20, 0, 0, 0); }
+  else { d.setDate(d.getDate() + 1); d.setHours(9, 0, 0, 0); }
+  return d;
+}
+function montarIcs(inicio) {
+  var fim = new Date(inicio.getTime() + 15 * 60000);
+  var uid = "quemsaiu-" + inicio.getTime() + "@quemsaiu.com.br";
+  return [
+    "BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Quem Saiu//Lembrete//PT", "CALSCALE:GREGORIAN",
+    "BEGIN:VEVENT", "UID:" + uid, "DTSTAMP:" + fmtUtc(new Date()),
+    "DTSTART:" + fmtLocal(inicio), "DTEND:" + fmtLocal(fim),
+    "SUMMARY:Quem Saiu: o arquivo do Instagram pode já ter chegado",
+    "DESCRIPTION:Abra o Quem Saiu e toque em Mandar lista: https://quemsaiu.com.br",
+    "BEGIN:VALARM", "ACTION:DISPLAY", "DESCRIPTION:O arquivo do Instagram pode já ter chegado. Abra o Quem Saiu.", "TRIGGER:PT0S", "END:VALARM",
+    "END:VEVENT", "END:VCALENDAR", ""
+  ].join("\r\n");
+}
+function baixarLembrete(tipo) {
+  var nota = document.getElementById("notaLembrete");
+  try {
+    var blob = new Blob([montarIcs(inicioLembrete(tipo))], { type: "text/calendar;charset=utf-8" });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url; a.download = "lembrete-quem-saiu.ics";
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function () { URL.revokeObjectURL(url); }, 4000);
+    nota.textContent = "Baixei o lembrete. Abra o arquivo para salvar no seu calendário. Ele é só um aviso: o Instagram não garante quando o arquivo fica pronto.";
+  } catch (e) {
+    nota.textContent = "Não consegui criar o lembrete neste navegador. Você pode marcar um alarme no seu celular.";
+  }
+}
+document.getElementById("btnJaPedi").addEventListener("click", function () { gravarPedido(); voltaDispensado = true; atualizarPedido(); });
+document.getElementById("btnDesfazerPedido").addEventListener("click", function () { limparPedido(); voltaDispensado = false; atualizarPedido(); });
+document.querySelectorAll("[data-lembrar]").forEach(function (b) {
+  b.addEventListener("click", function () { baixarLembrete(b.dataset.lembrar); });
+});
+document.getElementById("btnAvisoVolta").addEventListener("click", function () { inputArquivo.click(); });
+document.getElementById("btnAindaNaoChegou").addEventListener("click", function () { voltaDispensado = true; atualizarPedido(); });
+atualizarPedido();
+
 btnImportar.addEventListener("click", function () { inputArquivo.click(); });
 
 inputArquivo.addEventListener("change", async function () {
@@ -957,6 +1035,7 @@ inputArquivo.addEventListener("change", async function () {
   try {
     var nova = await processarArquivos(arquivos);
     if (!guardarNova(nova)) { esconderProgresso(); return; }
+    limparPedido(); atualizarPedido();
     mostrarProgresso(100, "Pronto!");
     atualizarStatus();
     renderizarResultado();
@@ -1008,7 +1087,7 @@ document.getElementById("btnApagar").addEventListener("click", function () {
 });
 
 /* se já houver dados salvos, abre a ferramenta direto */
-if (lerDados().length > 0) {
+if (lerDados().length > 0 || lerPedido()) {
   document.getElementById("ferramenta").style.display = "block";
 }
 atualizarStatus();
@@ -1129,6 +1208,7 @@ async function verificarArquivoCompartilhado() {
     try {
       var nova = await processarArquivos([arquivo]);
       if (!guardarNova(nova)) { esconderProgresso(); return; }
+      limparPedido(); atualizarPedido();
       mostrarProgresso(100, "Pronto!");
       atualizarStatus();
       renderizarResultado();

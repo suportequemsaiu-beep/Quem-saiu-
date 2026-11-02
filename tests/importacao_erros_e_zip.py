@@ -32,13 +32,13 @@ with sync_playwright() as p:
     pg.evaluate("window.__x=0"); pg.reload(); pg.wait_for_timeout(600); ok(pg.evaluate("window.__x||0")==0,"T1 ao reabrir com a lista guardada continua seguro"); pg.close()
     pg=novo(b); pg.evaluate("window.__x=0")
     enviar(pg,[w("followers_1.json",seg(["<img src=x onerror=window.__x=1>","normal"]))])
-    ok(pg.evaluate("window.__x")==0 and "Nenhuma lista" in st(pg) and "formato do arquivo" in er(pg),"T1b lista metade maliciosa: recusada com aviso, nada executa e nada é guardado"); pg.close()
+    ok(pg.evaluate("window.__x")==0 and "ainda não enviou nenhuma lista" in st(pg) and "formato do arquivo" in er(pg),"T1b lista metade maliciosa: recusada com aviso, nada executa e nada é guardado"); pg.close()
     # T2 só following
     pg=novo(b); enviar(pg,[w("following.json",sgd(["ana"]))])
-    ok("Nenhuma lista" in st(pg) and "seguidores" in er(pg),"T2 só following.json: erro claro, nada guardado | %r"%er(pg)[:80]); pg.close()
+    ok("ainda não enviou nenhuma lista" in st(pg) and "seguidores" in er(pg),"T2 só following.json: erro claro, nada guardado | %r"%er(pg)[:80]); pg.close()
     # T3 json qualquer
     pg=novo(b); enviar(pg,[w("blocked_profiles.json",seg(["fulano"]))])
-    ok("Nenhuma lista" in st(pg) and er(pg)!="","T3 blocked_profiles.json recusado | %r"%er(pg)[:70]); pg.close()
+    ok("ainda não enviou nenhuma lista" in st(pg) and er(pg)!="","T3 blocked_profiles.json recusado | %r"%er(pg)[:70]); pg.close()
     # T4 gravação falha
     pg=novo(b,init="Storage.prototype.setItem=function(){throw new Error('Quota')}")
     enviar(pg,[w("followers_1.json",seg(["a","b","c"])),w("following.json",sgd(["a"]))])
@@ -59,7 +59,7 @@ with sync_playwright() as p:
     pg.once("dialog",lambda d:d.dismiss()); pg.locator("#btnApagar").scroll_into_view_if_needed(); pg.click("#btnApagar"); pg.wait_for_timeout(300)
     ok("1 lista guardada" in st(pg),"T6 cancelar NÃO apaga")
     pg.once("dialog",lambda d:d.accept()); pg.click("#btnApagar"); pg.wait_for_timeout(600)
-    ok("Nenhuma lista" in st(pg),"T6 confirmar apaga a lista")
+    ok("ainda não enviou nenhuma lista" in st(pg),"T6 confirmar apaga a lista")
     ok(pg.evaluate("caches.has('quemsaiu-compartilhado')")==False,"T6 apaga também a cópia do arquivo recebido pelo Compartilhar"); pg.close()
     # T7 × na aba saiu
     pg=novo(b)

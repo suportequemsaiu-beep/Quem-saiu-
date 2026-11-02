@@ -184,7 +184,7 @@
 <link rel="icon" type="image/png" sizes="192x192" href="icone-192.png" />
 <link rel="apple-touch-icon" href="icone-192.png" />
 <script src="jszip.min.js?v=3.10.1"></script>
-<link rel="stylesheet" href="style.css?v=20261031d" />
+<link rel="stylesheet" href="style.css?v=20261102a" />
 </head>
 <body>
 
@@ -305,6 +305,13 @@
       <h2>Sua lista</h2>
 
       <div class="card card-lista" id="cardLista">
+        <div class="aviso-volta" id="avisoVolta" hidden>
+          <button class="aviso-volta-btn" id="btnAvisoVolta" type="button">
+            <b>Baixou o arquivo?</b> Toque aqui e escolha o mais recente.
+            <small id="textoPedidoEm"></small>
+          </button>
+          <button class="aviso-volta-fechar" id="btnAindaNaoChegou" type="button">Ainda não chegou</button>
+        </div>
         <button class="botao-importar" id="btnImportar">📄 Mandar lista</button>
         <button class="botao-secundario desativado" id="btnComparar" aria-disabled="true">📋 Ver a comparação</button>
         <input type="file" id="inputArquivo" multiple style="display:none" aria-label="Escolher o arquivo do Instagram" />
@@ -380,12 +387,28 @@
               </li>
             </ol>
             <p class="passo-aviso">Os desenhos são só um guia: a tela do seu celular pode ser um pouco diferente.</p>
+            <div class="ja-pedi" id="jaPedi">
+              <button class="botao-ja-pedi" id="btnJaPedi" type="button">Já pedi o arquivo ao Instagram</button>
+              <p class="ja-pedi-nota" id="notaJaPedi">Vamos anotar a data só neste aparelho, para te lembrar quando você voltar.</p>
+              <div class="ja-pedi-feito" id="jaPediFeito" hidden>
+                <p><b>Anotado.</b> Quando o Instagram avisar por e-mail, volte aqui.</p>
+                <p class="lembrar-titulo">Quer um lembrete no calendário?</p>
+                <div class="lembrar-opcoes">
+                  <button type="button" data-lembrar="1h">Em 1 hora</button>
+                  <button type="button" data-lembrar="noite" id="btnLembrarNoite">Esta noite</button>
+                  <button type="button" data-lembrar="manha">Amanhã</button>
+                </div>
+                <p class="ja-pedi-nota" id="notaLembrete">O lembrete é só um aviso: o Instagram não garante quando o arquivo fica pronto.</p>
+                <button class="link-desfazer" id="btnDesfazerPedido" type="button">Desfazer</button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
       <div class="card" id="cardResultado" style="display:none;">
         <h3 id="tituloResultado">Resultado</h3>
+        <p class="ponto-partida" id="pontoPartida" hidden><b>Ponto de partida salvo.</b> Na próxima vez que você enviar uma lista nova, o Quem Saiu mostra quem deixou de te seguir.</p>
         <div class="abas-resultado" id="abasResultado"></div>
         <div id="listaResultado"></div>
 
@@ -540,8 +563,8 @@
   <button class="fechar" id="btnFecharFaixa" aria-label="Fechar aviso">&times;</button>
 </div>
 
-<script src="script.js?v=20261031d"></script>
-<script src="contagem.js?v=20261031d"></script>
+<script src="script.js?v=20261102a"></script>
+<script src="contagem.js?v=20261102a"></script>
 
 </body>
 </html>

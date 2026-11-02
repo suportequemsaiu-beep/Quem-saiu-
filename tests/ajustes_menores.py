@@ -23,7 +23,7 @@ with sync_playwright() as p:
     ctx.close()
     ctx,pg,errs=novo(); pg.click("#btnDescobrir"); pg.click("#btnComecar"); pg.wait_for_timeout(200)
     pg.set_input_files("#inputArquivo",[w("followers_1 (1).json",[seg("a")]),w("followers_1.json",[seg("b")])]); pg.wait_for_timeout(1200)
-    ok("mais de uma vez" in t("#erroImport") and "Nenhuma lista" in t("#statusImport"),"5b followers_1.json + followers_1 (1).json juntos: recusa como repetido")
+    ok("mais de uma vez" in t("#erroImport") and "ainda não enviou nenhuma lista" in t("#statusImport"),"5b followers_1.json + followers_1 (1).json juntos: recusa como repetido")
     ctx.close()
     # cópia temporária órfã
     ctx,pg,errs=novo()

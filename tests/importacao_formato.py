@@ -45,7 +45,7 @@ with sync_playwright() as p:
     pg.click("#btnDescobrir"); pg.wait_for_timeout(400); pg.click("#btnComecar"); pg.wait_for_timeout(300)
     pg.set_input_files("#inputArquivo",[w("followers_1.json",[segitem("a"),segitem("b")]),w("following.json",{"aaa":[item("u1")],"bbb":[item("z")]})]); pg.wait_for_timeout(1200)
     txt=pg.evaluate("document.querySelector('#erroImport').innerText"); st=pg.evaluate("document.querySelector('#statusImport').innerText")
-    ok("formato do arquivo following.json" in txt and "Nenhuma lista" in st,"K pela tela: aviso com o nome do arquivo e nada guardado | %r"%txt[:70])
+    ok("formato do arquivo following.json" in txt and "ainda não enviou nenhuma lista" in st,"K pela tela: aviso com o nome do arquivo e nada guardado | %r"%txt[:70])
     pg.set_input_files("#inputArquivo",[w("followers_1.json",[segitem("a"),segitem("b")]),w("following.json",{"relationships_following":[item("a")]})]); pg.wait_for_timeout(1200)
     st=pg.evaluate("document.querySelector('#statusImport').innerText"); ok("1 lista guardada" in st and "2 seguidores" in st,"L pela tela: arquivo normal continua funcionando | %s"%st)
     ok(errs==[],"M sem erros de JavaScript | %s"%errs)

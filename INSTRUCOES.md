@@ -720,3 +720,21 @@ Não há testes automatizados. Antes de qualquer publicação, conferir no celul
 - A Janaína pediu para NÃO dizer que o site não pede o login "para proteger a conta". Todos os
   textos técnicos (meta, og/twitter, JSON-LD, FAQ, política, llms.txt, manifest, README) dizem
   apenas que o site não pede o login/senha do Instagram. Vale esta regra, não a da seção anterior.
+
+## "Já pedi", aviso ao voltar e lembrete (02/11/2026) — NÃO PUBLICADO até a Janaína mandar "publica"
+
+- Botão "Já pedi o arquivo ao Instagram" no fim do guia ("Ainda não tenho a lista"). Guarda só a
+  data (`quemsaiu_pedido`) no aparelho; some ao enviar uma lista, em "Desfazer" ou em "Apagar meus dados".
+- Quem volta com pedido guardado: a ferramenta abre sozinha e mostra "Baixou o arquivo? Toque aqui
+  e escolha o mais recente." (abre o seletor de arquivos) + "Ainda não chegou".
+- Lembrete opcional (.ics criado no aparelho, sem servidor): "Em 1 hora", "Esta noite" (20h; some depois das
+  19h30) e "Amanhã" (9h). Texto: "O arquivo do Instagram pode já ter chegado. Abra o Quem Saiu."
+  NÃO prometer que o arquivo está pronto nem prazo do Instagram.
+  **CONDIÇÃO: só publicar essa parte depois de a Janaína testar o download e o alarme no Android dela.**
+- Depois da 1ª lista: "Ponto de partida salvo. Na próxima vez que você enviar uma lista nova, o Quem Saiu
+  mostra quem deixou de te seguir." Estado vazio: "Você ainda não enviou nenhuma lista. Para descobrir
+  quem saiu, primeiro envie a lista mais recente do Instagram."
+- Política atualizada (2 de novembro de 2026): data do "Já pedi" e .ics criado no aparelho.
+- Teste: `tests/ja_pedi.py` (25 verificações). Descartado: "Ver um exemplo completo" e juntar passos.
+- Ainda não feito: marcos anônimos de uso (exigem atualizar a política antes) e trocar a janela de
+  confirmação do arquivo antigo por aviso dentro da página.
