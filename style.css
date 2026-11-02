@@ -253,6 +253,10 @@
   .btn-instalar-grande { position:relative; width:100%; border:none; border-radius:14px; padding:16px; background:#0369a1; color:#fff; font-size:15px; font-weight:800; cursor:pointer; }
   .btn-instalar-grande:active { transform:scale(.97); }
   .nota-loja { position:relative; font-size:11.5px; color:#94a3b8; margin:13px 0 0; line-height:1.55; }
+  .link-exemplo { display:block; margin:14px auto 0; padding:10px 14px; background:none; border:none; color:#fdeedb; font-size:14px; font-weight:600; text-decoration:underline; text-underline-offset:3px; cursor:pointer; }
+  .aviso-exemplo { display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; margin:0 0 14px; padding:10px 12px; border-radius:12px; background:#fff7ed; border:1px solid #fed7aa; color:#7c2d12; font-size:12.5px; line-height:1.4; }
+  .aviso-exemplo[hidden] { display:none; }
+  .aviso-exemplo button { border:none; background:none; color:#9a3412; font-size:12.5px; font-weight:800; text-decoration:underline; cursor:pointer; padding:4px 2px; }
   .link-sem-instalar { position:relative; display:inline-block; margin-top:12px; padding:10px 14px; background:none; border:none; color:#fdeedb; font-size:14px; font-weight:600; text-decoration:underline; text-underline-offset:3px; cursor:pointer; }
 
   /* ===== faixa fixa de instalação ===== */

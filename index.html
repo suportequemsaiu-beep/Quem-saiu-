@@ -184,7 +184,7 @@
 <link rel="icon" type="image/png" sizes="192x192" href="icone-192.png" />
 <link rel="apple-touch-icon" href="icone-192.png" />
 <script src="jszip.min.js?v=3.10.1"></script>
-<link rel="stylesheet" href="style.css?v=20261031d" />
+<link rel="stylesheet" href="style.css?v=20261102a" />
 </head>
 <body>
 
@@ -241,6 +241,7 @@
         <div id="listaProva"></div>
         <div class="fade"></div>
       </div>
+      <button class="link-exemplo" id="btnExemplo">Ver um exemplo completo</button>
 
       <h2 class="so-leitor">Como funciona</h2>
       <div class="mecanica">
@@ -385,6 +386,10 @@
       </div>
 
       <div class="card" id="cardResultado" style="display:none;">
+        <div class="aviso-exemplo" id="avisoExemplo" hidden>
+          <span><b>Exemplo</b> com contas fictícias. Nada foi guardado.</span>
+          <button id="btnSairExemplo">Sair do exemplo</button>
+        </div>
         <h3 id="tituloResultado">Resultado</h3>
         <div class="abas-resultado" id="abasResultado"></div>
         <div id="listaResultado"></div>
@@ -540,8 +545,8 @@
   <button class="fechar" id="btnFecharFaixa" aria-label="Fechar aviso">&times;</button>
 </div>
 
-<script src="script.js?v=20261031d"></script>
-<script src="contagem.js?v=20261031d"></script>
+<script src="script.js?v=20261102a"></script>
+<script src="contagem.js?v=20261102a"></script>
 
 </body>
 </html>

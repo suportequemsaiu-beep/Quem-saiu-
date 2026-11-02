@@ -396,7 +396,27 @@ function listaValida(x) {
   return !!x && typeof x === "object" && typeof x.data === "string" && soTextos(x.seguidores) &&
     (x.seguindo === undefined || soTextos(x.seguindo));
 }
+/* ===== exemplo com contas fictícias (nada é lido do aparelho nem guardado) ===== */
+var modoExemplo = false;
+var ignoradasExemplo = [];
+function dadosExemplo() {
+  var agora = Date.now();
+  function dia(n) { return new Date(agora - n * 86400000).toISOString(); }
+  var base = ["marina.exemplo", "caio.exemplo", "bia.exemplo", "rafa.exemplo", "duda.exemplo", "lucas.exemplo",
+    "ju.exemplo", "theo.exemplo", "lara.exemplo", "nando.exemplo", "sol.exemplo", "pedro.exemplo"];
+  var sairam = ["bia.exemplo", "ju.exemplo", "nando.exemplo"];
+  var novos = ["vivi.exemplo", "gabi.exemplo"];
+  var seguindo = ["marina.exemplo", "caio.exemplo", "bia.exemplo", "duda.exemplo", "ju.exemplo", "theo.exemplo",
+    "sol.exemplo", "leo.exemplo", "vivi.exemplo", "bruna.exemplo"];
+  var agoraSeguidores = base.filter(function (u) { return sairam.indexOf(u) === -1; }).concat(novos);
+  return [
+    { data: dia(30), seguidores: base.slice(), seguindo: seguindo.slice() },
+    { data: dia(0), seguidores: agoraSeguidores, seguindo: seguindo.slice() }
+  ];
+}
+var DADOS_EXEMPLO = null;
 function lerDados() {
+  if (modoExemplo) { if (!DADOS_EXEMPLO) DADOS_EXEMPLO = dadosExemplo(); return DADOS_EXEMPLO; }
   if (memoria[CHAVE]) return memoria[CHAVE];
   try {
     var v = JSON.parse(localStorage.getItem(CHAVE));
@@ -414,6 +434,7 @@ function apagarDadosLocais() {
   delete memoria[CHAVE_IGNORADAS];
 }
 function lerIgnoradas() {
+  if (modoExemplo) return ignoradasExemplo;
   if (memoria[CHAVE_IGNORADAS]) return memoria[CHAVE_IGNORADAS];
   try {
     var v = JSON.parse(localStorage.getItem(CHAVE_IGNORADAS));
@@ -421,6 +442,7 @@ function lerIgnoradas() {
   } catch (e) { return []; }
 }
 function gravarIgnoradas(v) {
+  if (modoExemplo) { ignoradasExemplo = v; return; }
   try { localStorage.setItem(CHAVE_IGNORADAS, JSON.stringify(v)); delete memoria[CHAVE_IGNORADAS]; }
   catch (e) { memoria[CHAVE_IGNORADAS] = v; }
 }
@@ -775,6 +797,11 @@ function guardarNova(nova) {
 }
 
 function atualizarStatus() {
+  if (modoExemplo) {
+    statusImport.textContent = "Mostrando um exemplo com contas fictícias. Nada foi guardado.";
+    marcarVerLista(true);
+    return;
+  }
   var dados = lerDados();
   if (dados.length === 0) {
     statusImport.textContent = "Nenhuma lista guardada ainda.";
@@ -872,6 +899,7 @@ function ligarBotoesLista() {
 }
 
 function renderizarResultado() {
+  document.getElementById("avisoExemplo").hidden = !modoExemplo;
   var dados = lerDados();
   if (dados.length === 0) { cardResultado.style.display = "none"; return; }
 
@@ -937,17 +965,54 @@ function renderizarResultado() {
   } else {
     renderizarLista(naoSeguemVolta, "naoSegue", null, "Todo mundo que você segue também te segue.");
     explicaAba = "Quem você segue e não te segue de volta.";
-    var dica = document.createElement("p");
-    dica.style.cssText = "font-size:11px; color:#475569; margin:10px 0 0; line-height:1.5;";
-    dica.innerHTML = 'Toque no nome para abrir o perfil. Se abrir uma página em branco, a conta não existe mais — use o <b>&times;</b> para escondê-la desta lista.';
-    listaResultado.appendChild(dica);
+    if (!modoExemplo) {
+      var dica = document.createElement("p");
+      dica.style.cssText = "font-size:11px; color:#475569; margin:10px 0 0; line-height:1.5;";
+      dica.innerHTML = 'Toque no nome para abrir o perfil. Se abrir uma página em branco, a conta não existe mais — use o <b>&times;</b> para escondê-la desta lista.';
+      listaResultado.appendChild(dica);
+    }
   }
   listaResultado.insertAdjacentHTML("afterbegin", '<p class="explica-aba">' + explicaAba + "</p>");
+  if (modoExemplo) {
+    /* contas fictícias: nada de link para perfis de verdade */
+    listaResultado.querySelectorAll("a").forEach(function (a) {
+      var s = document.createElement("span");
+      s.textContent = a.textContent;
+      a.replaceWith(s);
+    });
+  }
 }
 
-btnImportar.addEventListener("click", function () { inputArquivo.click(); });
+function entrarExemplo() {
+  modoExemplo = true;
+  ignoradasExemplo = [];
+  painelEscondidasAberto = false;
+  abaAtual = "saiu";
+  var f = document.getElementById("ferramenta");
+  f.style.display = "block";
+  limparErro();
+  atualizarStatus();
+  renderizarResultado();
+  setTimeout(function () { cardResultado.scrollIntoView({ behavior: "smooth", block: "start" }); }, 60);
+}
+function sairExemplo() {
+  if (!modoExemplo) return;
+  modoExemplo = false;
+  ignoradasExemplo = [];
+  painelEscondidasAberto = false;
+  abaAtual = "saiu";
+  atualizarStatus();
+  renderizarResultado();
+  var f = document.getElementById("ferramenta");
+  setTimeout(function () { f.scrollIntoView({ behavior: "smooth", block: "start" }); }, 60);
+}
+document.getElementById("btnExemplo").addEventListener("click", entrarExemplo);
+document.getElementById("btnSairExemplo").addEventListener("click", sairExemplo);
+
+btnImportar.addEventListener("click", function () { if (modoExemplo) sairExemplo(); inputArquivo.click(); });
 
 inputArquivo.addEventListener("change", async function () {
+  if (modoExemplo) sairExemplo();
   limparErro();
   var arquivos = Array.prototype.slice.call(inputArquivo.files || []);
   if (arquivos.length === 0) return;
@@ -1000,6 +1065,7 @@ btnComparar.addEventListener("click", function () {
 });
 
 document.getElementById("btnApagar").addEventListener("click", function () {
+  if (modoExemplo) { sairExemplo(); return; }
   if (!window.confirm("Apagar a sua lista e o histórico guardados neste aparelho? Depois não dá para voltar.")) return;
   apagarDadosLocais();
   if (window.caches) caches.delete("quemsaiu-compartilhado").catch(function () {});
