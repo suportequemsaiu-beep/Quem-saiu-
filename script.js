@@ -1065,7 +1065,7 @@ function avisoRapido(msg) {
   el.textContent = msg;
   el.classList.add("visivel");
   clearTimeout(avisoRapidoTimer);
-  avisoRapidoTimer = setTimeout(function () { el.classList.remove("visivel"); }, 3000);
+  avisoRapidoTimer = setTimeout(function () { el.classList.remove("visivel"); }, 2400);
 }
 function marcarVerLista(temLista) {
   btnComparar.classList.toggle("desativado", !temLista);

@@ -643,7 +643,7 @@ Não há testes automatizados. Antes de qualquer publicação, conferir no celul
 - Botão de cima: "📄 Mandar lista" (era "Ver a minha lista"). Botão de baixo:
   "📋 Ver minha lista" (era "Ver o que mudou"); mostra a lista/resultado já guardado.
 - Sem nenhuma lista enviada, o botão de baixo fica apagado (`aria-disabled`, não
-  `disabled`) e ao tocar mostra por 3 s o aviso "Você ainda não enviou a primeira lista"
+  `disabled`) e ao tocar mostra por 2,4 s (fino, numa linha só) o aviso "Você ainda não enviou a primeira lista"
   (`#avisoRapido`, `role="status"`).
 - Removida a frase "Seus dados são lidos aqui no seu navegador / Nada é enviado…"
   abaixo do "Começar agora".
@@ -738,3 +738,7 @@ Não há testes automatizados. Antes de qualquer publicação, conferir no celul
 - Teste: `tests/ja_pedi.py` (25 verificações). Descartado: "Ver um exemplo completo" e juntar passos.
 - Ainda não feito: marcos anônimos de uso (exigem atualizar a política antes) e trocar a janela de
   confirmação do arquivo antigo por aviso dentro da página.
+
+## Textos da home e aviso mais discreto (02/11/2026) — NÃO PUBLICADO
+- Passo 1: "Você manda a sua lista pela primeira vez." Passo 2: "...Peça uma nova lista ao Instagram e mande, igual na primeira vez." Passo 3: "O Quem Saiu compara as duas listas e te conta exatamente o que você quer saber."
+- Aviso "Você ainda não enviou a primeira lista": 2,4 s, uma linha só, mais fino e menor.
