@@ -768,3 +768,4 @@ Não há testes automatizados. Antes de qualquer publicação, conferir no celul
 ## Respiro no passo a passo (03/11/2026) — NÃO PUBLICADO (ramificação espaco-passos)
 - Espaço acima do "Próximo": 16 → 28 px. Acima de "Já pedi": 18 → 28 px (e 16 → 22 px dentro, depois da linha).
 - Removida a frase "Vamos anotar a data só neste aparelho, para te lembrar quando você voltar." abaixo do botão "Já pedi". A política de privacidade continua explicando o que é guardado.
+- Removida a frase "Os desenhos são só um guia: a tela do seu celular pode ser um pouco diferente." abaixo do "Próximo" (03/11/2026).
