@@ -764,3 +764,6 @@ Não há testes automatizados. Antes de qualquer publicação, conferir no celul
 - A caixa dos passos tinha a altura do passo mais comprido (o 12, ~500 px no celular), deixando um vazio
   branco entre o texto e o "Próximo" nos outros. Agora cada passo tem a própria altura.
   Consequência aceita: o botão "Próximo" muda de lugar entre passos (varia ~90 px).
+
+## Respiro no passo a passo (03/11/2026) — NÃO PUBLICADO (ramificação espaco-passos)
+- Espaço acima do "Próximo": 16 → 28 px. Acima de "Já pedi": 18 → 28 px (e 16 → 22 px dentro, depois da linha).
