@@ -15,7 +15,7 @@ RAIZ = os.path.dirname(PASTA)
 PORTA = 8765
 ARQUIVOS = [
     "importacao_formato.py", "importacao_erros_e_zip.py", "fluxo_geral.py", "importacao_segura.py",
-    "link_do_perfil.py", "textos_e_contadores.py", "dados_guardados.py", "ajustes_menores.py", "aparencia.py", "passo_a_passo.py", "zip_grande.py", "botoes_lista.py", "contagem_anonima.py", "ja_pedi.py",
+    "link_do_perfil.py", "textos_e_contadores.py", "dados_guardados.py", "ajustes_menores.py", "aparencia.py", "passo_a_passo.py", "zip_grande.py", "botoes_lista.py", "contagem_anonima.py", "ja_pedi.py", "abas_exemplo.py",
 ]
 
 

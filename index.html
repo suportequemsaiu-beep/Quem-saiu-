@@ -184,7 +184,7 @@
 <link rel="icon" type="image/png" sizes="192x192" href="icone-192.png" />
 <link rel="apple-touch-icon" href="icone-192.png" />
 <script src="jszip.min.js?v=3.10.1"></script>
-<link rel="stylesheet" href="style.css?v=20261102b" />
+<link rel="stylesheet" href="style.css?v=20261102e" />
 </head>
 <body>
 
@@ -224,7 +224,6 @@
       <h1>Alguém <em>saiu</em><br>sem avisar.</h1>
       <p>O Instagram nunca conta quando alguém deixa de te seguir. O Quem Saiu conta.</p>
       <button class="cta-principal" id="btnDescobrir">Quero descobrir</button>
-      <span class="selo-gratis">Gratuito · sem login, sem senha</span>
     </div>
 
     <div class="revelado" id="revelado">
@@ -392,13 +391,15 @@
               <p class="ja-pedi-nota" id="notaJaPedi">Vamos anotar a data só neste aparelho, para te lembrar quando você voltar.</p>
               <div class="ja-pedi-feito" id="jaPediFeito" hidden>
                 <p><b>Anotado.</b> Quando o Instagram avisar por e-mail, volte aqui.</p>
-                <p class="lembrar-titulo">Quer um lembrete no calendário?</p>
-                <div class="lembrar-opcoes">
-                  <button type="button" data-lembrar="1h">Em 1 hora</button>
-                  <button type="button" data-lembrar="noite" id="btnLembrarNoite">Esta noite</button>
-                  <button type="button" data-lembrar="manha">Amanhã</button>
+                <div id="blocoLembrete" hidden>
+                  <p class="lembrar-titulo">Quer um lembrete no calendário?</p>
+                  <div class="lembrar-opcoes">
+                    <button type="button" data-lembrar="1h">Em 1 hora</button>
+                    <button type="button" data-lembrar="noite" id="btnLembrarNoite">Esta noite</button>
+                    <button type="button" data-lembrar="manha">Amanhã</button>
+                  </div>
+                  <p class="ja-pedi-nota" id="notaLembrete">O lembrete é só um aviso: o Instagram não garante quando o arquivo fica pronto.</p>
                 </div>
-                <p class="ja-pedi-nota" id="notaLembrete">O lembrete é só um aviso: o Instagram não garante quando o arquivo fica pronto.</p>
                 <button class="link-desfazer" id="btnDesfazerPedido" type="button">Desfazer</button>
               </div>
             </div>
@@ -552,7 +553,6 @@
 
 <footer>
   Quem Saiu · não afiliado ao Instagram/Meta<br />
-  Contamos visitas e instalações de forma anônima, sem cookies.<br />
   <a href="privacy-policy.html">Política de privacidade</a> · <a href="mailto:suporte.quemsaiu@gmail.com">suporte.quemsaiu@gmail.com</a>
 </footer>
 
@@ -563,8 +563,8 @@
   <button class="fechar" id="btnFecharFaixa" aria-label="Fechar aviso">&times;</button>
 </div>
 
-<script src="script.js?v=20261102b"></script>
-<script src="contagem.js?v=20261102b"></script>
+<script src="script.js?v=20261102e"></script>
+<script src="contagem.js?v=20261102e"></script>
 
 </body>
 </html>

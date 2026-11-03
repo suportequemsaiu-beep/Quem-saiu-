@@ -15,7 +15,7 @@ def abrir_guia(pg):
 
 with sync_playwright() as p:
     br = p.chromium.launch()
-    ctx = br.new_context(viewport={"width": 390, "height": 844}, accept_downloads=True); pg = ctx.new_page(); errs = []
+    ctx = br.new_context(viewport={"width": 390, "height": 844}, accept_downloads=True); ctx.add_init_script("window.__QS_LEMBRETE_TESTE = true"); pg = ctx.new_page(); errs = []
     pg.on("pageerror", lambda e: errs.append(str(e)))
     pg.goto(U); pg.wait_for_timeout(300)
     abrir_guia(pg)
@@ -80,7 +80,7 @@ with sync_playwright() as p:
     pg.goto(U); pg.wait_for_timeout(300); abrir_guia(pg); pg.click("#btnJaPedi"); pg.wait_for_timeout(200)
     ok(pg.is_disabled("#btnLembrarNoite"), "23 às 21h o lembrete 'Esta noite' fica indisponível")
     ctx.close()
-    ctx = br.new_context(viewport={"width": 390, "height": 844}, accept_downloads=True); pg = ctx.new_page()
+    ctx = br.new_context(viewport={"width": 390, "height": 844}, accept_downloads=True); ctx.add_init_script("window.__QS_LEMBRETE_TESTE = true"); pg = ctx.new_page()
     pg.clock.install(time=datetime.datetime(2026, 11, 2, 10, 0, 0))
     pg.goto(U); pg.wait_for_timeout(300); abrir_guia(pg); pg.click("#btnJaPedi"); pg.wait_for_timeout(200)
     with pg.expect_download() as d: pg.click('[data-lembrar="noite"]')

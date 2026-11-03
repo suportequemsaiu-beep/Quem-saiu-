@@ -107,7 +107,10 @@ function trocarAbaProva(chave) {
 }
 
 document.querySelectorAll(".aba-prova").forEach(function (b) {
-  b.addEventListener("click", function () { trocarAbaProva(b.dataset.lista); });
+  b.addEventListener("click", function () {
+    b.parentNode.classList.add("tocou");
+    trocarAbaProva(b.dataset.lista);
+  });
 });
 pintarLista("saiu");
 
@@ -965,6 +968,10 @@ function renderizarResultado() {
 /* ===== "Já pedi", aviso ao voltar e lembrete no calendário ===== */
 var avisoVolta = document.getElementById("avisoVolta");
 var voltaDispensado = false;
+/* Lembrete no calendário (.ics): fica DESLIGADO até a criadora testar o download e o alarme no Android dela.
+   Para ligar: troque false por true. */
+var LEMBRETE_ATIVO = false;
+document.getElementById("blocoLembrete").hidden = !(LEMBRETE_ATIVO || window.__QS_LEMBRETE_TESTE);
 function diaMes(iso) { return new Date(iso).toLocaleDateString("pt-BR", { day: "numeric", month: "long" }); }
 function atualizarPedido() {
   var p = lerPedido();

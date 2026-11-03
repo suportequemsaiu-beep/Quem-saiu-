@@ -742,3 +742,20 @@ Não há testes automatizados. Antes de qualquer publicação, conferir no celul
 ## Textos da home e aviso mais discreto (02/11/2026) — NÃO PUBLICADO
 - Passo 1: "Você manda a sua lista pela primeira vez." Passo 2: "...Peça uma nova lista ao Instagram e mande, igual na primeira vez." Passo 3: "O Quem Saiu compara as duas listas e te conta exatamente o que você quer saber."
 - Aviso "Você ainda não enviou a primeira lista": 2,4 s, uma linha só, mais fino e menor.
+
+## Botões do exemplo da home (02/11/2026) — NÃO PUBLICADO
+- Os 3 botões do "Uma amostra do que te espera" davam 2 pulinhos e paravam, parecendo não clicáveis.
+  Agora os que não estão selecionados pulam a cada ~4 s, sem parar (escalonados), até a pessoa tocar
+  em um deles (classe `.tocou` em `.abas-prova`). Sem movimento com "reduzir movimento" ligado.
+
+## Tela inicial mais limpa (02/11/2026) — NÃO PUBLICADO
+- Saíram a frase "Gratuito · sem login, sem senha" (abaixo do "Quero descobrir") e a linha do rodapé
+  "Contamos visitas e instalações de forma anônima, sem cookies." A contagem anônima continua
+  descrita na política de privacidade (seção "Contagem anônima de uso"), que é onde deve ficar.
+- A classe `.selo-gratis` ficou sem uso no CSS.
+
+## Lembrete .ics DESLIGADO na publicação (02/11/2026)
+- O bloco "Quer um lembrete no calendário?" está escondido (`#blocoLembrete`, `LEMBRETE_ATIVO = false` no script.js).
+  Para ligar, depois do teste da Janaína no Android (download + alarme): trocar para `true`, acrescentar à política
+  "Se você pedir um lembrete, o arquivo de calendário (.ics) é criado no seu aparelho e baixado por você; o Quem Saiu não o recebe." e subir o `?v=`.
+- Os testes ligam o bloco com `window.__QS_LEMBRETE_TESTE`.

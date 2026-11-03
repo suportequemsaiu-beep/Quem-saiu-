@@ -62,8 +62,12 @@
   .abas-prova { display: flex; gap: 6px; margin-bottom: 13px; flex-wrap: wrap; }
   .aba-prova { font-size: 11px; font-weight: 800; padding: 6px 11px; border-radius: 999px; white-space: nowrap; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; border: 1px solid #e2e8f0; background: #fff; color: #64748b; font-family: inherit; transition: transform .1s ease, background .15s ease, color .15s ease; }
   .aba-prova:active { transform: scale(.94); }
-  .revelado.on .aba-prova:not(.ativa) { animation: convite 1.5s ease-in-out .6s 2; }
-  @keyframes convite { 0%,100% { transform:none;} 35% { transform: translateY(-3px);} 60% { transform:none;} }
+  /* os botões do exemplo seguem dando um pulinho a cada ~4 s, sem parar, até a pessoa tocar em um deles */
+  .revelado.on .aba-prova:not(.ativa) { animation: convite 4s ease-in-out .6s infinite; }
+  .revelado.on .aba-prova:not(.ativa):nth-child(2) { animation-delay: 1s; }
+  .revelado.on .aba-prova:not(.ativa):nth-child(3) { animation-delay: 1.4s; }
+  .revelado.on .abas-prova.tocou .aba-prova:not(.ativa) { animation: none; }
+  @keyframes convite { 0%,14%,100% { transform:none;} 7% { transform: translateY(-4px);} }
   @media (prefers-reduced-motion: reduce) { .revelado.on .aba-prova:not(.ativa) { animation:none; } }
   .bolinha { width: 7px; height: 7px; border-radius: 50%; background: #cbd5e1; flex-shrink: 0; transition: background .2s ease, transform .2s ease; }
   .aba-prova.ativa { background: #0f172a; border-color: #0f172a; color: #fff; }
