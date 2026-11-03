@@ -978,7 +978,6 @@ function atualizarPedido() {
   var btn = document.getElementById("btnJaPedi");
   document.getElementById("jaPediFeito").hidden = !p;
   btn.hidden = !!p;
-  document.getElementById("notaJaPedi").hidden = !!p;
   avisoVolta.hidden = !p || voltaDispensado;
   if (p) document.getElementById("textoPedidoEm").textContent = "Você pediu o arquivo em " + diaMes(p.data) + ".";
   var noite = document.getElementById("btnLembrarNoite");
