@@ -1051,7 +1051,7 @@ inputArquivo.addEventListener("change", async function () {
     mostrarErro(erro && erro.amigavel ? erro.message : "Não consegui ler este arquivo. Confira se é a exportação do Instagram em formato JSON (não HTML).");
   } finally {
     btnImportar.disabled = false;
-    btnImportar.textContent = "📄 Mandar lista";
+    btnImportar.textContent = "Mandar lista";
     inputArquivo.value = "";
   }
 });
@@ -1224,7 +1224,7 @@ async function verificarArquivoCompartilhado() {
       mostrarErro(erro && erro.amigavel ? erro.message : "Não consegui ler o arquivo compartilhado. Confira se é a exportação do Instagram em formato JSON (não HTML).");
     } finally {
       btnImportar.disabled = false;
-      btnImportar.textContent = "📄 Mandar lista";
+      btnImportar.textContent = "Mandar lista";
     }
   } catch (e) {
     mostrarErro("Não consegui abrir o arquivo compartilhado. Tente pelo botão de importar.");
