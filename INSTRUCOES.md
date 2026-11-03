@@ -759,3 +759,8 @@ Não há testes automatizados. Antes de qualquer publicação, conferir no celul
   Para ligar, depois do teste da Janaína no Android (download + alarme): trocar para `true`, acrescentar à política
   "Se você pedir um lembrete, o arquivo de calendário (.ics) é criado no seu aparelho e baixado por você; o Quem Saiu não o recebe." e subir o `?v=`.
 - Os testes ligam o bloco com `window.__QS_LEMBRETE_TESTE`.
+
+## Passo a passo sem vazio branco (03/11/2026) — NÃO PUBLICADO
+- A caixa dos passos tinha a altura do passo mais comprido (o 12, ~500 px no celular), deixando um vazio
+  branco entre o texto e o "Próximo" nos outros. Agora cada passo tem a própria altura.
+  Consequência aceita: o botão "Próximo" muda de lugar entre passos (varia ~90 px).

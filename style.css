@@ -169,10 +169,10 @@
   #corpoPasso[data-fase="enviar"] .passo-fase { background: #f3e8ff; color: #6b21a8; }
   #corpoPasso[data-fase="enviar"] .passo-trilha-fill { background: #9333ea; }
 
-  /* todos os passos ocupam o mesmo lugar: a caixa tem a altura do maior, e os botões não pulam de um passo para outro */
-  .com-passos .etapas { margin-top: 14px; display: grid; }
-  .com-passos .etapas .passo-etapa { display: block; grid-area: 1 / 1; visibility: hidden; }
-  .com-passos .etapas .passo-etapa.atual { visibility: visible; animation: etapa-entra .28s ease both; }
+  /* cada passo tem a própria altura: sem vazio branco entre o texto e o botão "Próximo" */
+  .com-passos .etapas { margin-top: 14px; display: block; }
+  .com-passos .etapas .passo-etapa { display: none; }
+  .com-passos .etapas .passo-etapa.atual { display: block; animation: etapa-entra .28s ease both; }
   .com-passos .etapas .passo-etapa.so-computador { display: none; }
   .com-passos .etapas .passo-etapa.atual.voltando { animation-name: etapa-volta; }
   @keyframes etapa-entra { from { opacity: 0; transform: translateX(14px); } to { opacity: 1; transform: none; } }
