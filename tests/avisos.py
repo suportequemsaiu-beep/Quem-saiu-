@@ -149,4 +149,4 @@ with sync_playwright() as p:
     ok(resultado["fechou"] == 1 and resultado["abertas"] == ["./?aviso=1"], "28 tocar no aviso fecha e abre o site | %r" % resultado["abertas"])
     ctx.close(); br.close()
 
-print("FALHAS=%d" % falhas); raise SystemExit(1 if falhas else 0)
+print("OK=%d FALHAS=%d" % (0, falhas)); raise SystemExit(1 if falhas else 0)
