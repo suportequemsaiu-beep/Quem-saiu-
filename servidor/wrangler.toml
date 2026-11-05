@@ -15,6 +15,6 @@ VAPID_CONTATO = "mailto:suporte.quemsaiu@gmail.com"
 [[d1_databases]]
 binding = "DB"
 database_name = "quemsaiu-avisos"
-database_id = "COLE_AQUI_O_ID_DO_BANCO"
+database_id = "c9a0363c-6e5b-4dd0-8c18-bc421a5cf708"
 
 # Segredos (NÃO ficam neste arquivo): VAPID_PUBLICA e VAPID_PRIVADA_JWK, criados com `wrangler secret put`.
