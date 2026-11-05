@@ -147,6 +147,17 @@ with sync_playwright() as p:
     t, o = resultado["mostradas"][0]
     ok(t == "Quem Saiu" and o["body"] == "Seu arquivo do Instagram pode estar pronto. Toque para mandar a lista." and o["tag"] == "quemsaiu-aviso", "27 o aviso tem o texto fixo e não depende de conteúdo do servidor | %r" % o["body"])
     ok(resultado["fechou"] == 1 and resultado["abertas"] == ["./?aviso=1"], "28 tocar no aviso fecha e abre o site | %r" % resultado["abertas"])
+    # 29-31. modo de teste só neste aparelho: ?avisos=teste liga, ?avisos=desligar desliga
+    ctx, ch = novo_contexto(br, com_flag=False); pg = ctx.new_page()
+    pg.goto(U + "?avisos=teste"); pg.wait_for_timeout(400)
+    ok("avisos=" not in pg.url, "29 o endereço secreto some da barra depois de usado | %s" % pg.url)
+    abrir_guia(pg); pg.click("#btnJaPedi"); pg.wait_for_timeout(400)
+    ok(pg.is_visible("#blocoAviso"), "30 com ?avisos=teste o bloco de aviso aparece neste aparelho")
+    ok("pediu.txt" not in ch["m"], "31 no modo de teste o funil anônimo não é contado")
+    pg.goto(U); pg.wait_for_timeout(400)
+    ok(pg.evaluate("localStorage.getItem('quemsaiu_avisos_teste')") == "1", "32 o modo de teste continua ligado ao reabrir sem o parâmetro")
+    pg.goto(U + "?avisos=desligar"); pg.wait_for_timeout(400)
+    ok(pg.evaluate("localStorage.getItem('quemsaiu_avisos_teste')") is None, "33 ?avisos=desligar volta ao normal")
     ctx.close(); br.close()
 
 print("OK=%d FALHAS=%d" % (0, falhas)); raise SystemExit(1 if falhas else 0)

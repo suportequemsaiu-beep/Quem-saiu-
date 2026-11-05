@@ -791,3 +791,9 @@ Vem da ESPECIFICAÇÃO PARA O CLAUDE CODE (sessão de estratégia). Tudo atrás 
   (a build falhava com "root directory not found" enquanto a pasta não existia na `main`). Nada do site muda: os avisos seguem desligados (`AVISOS_ATIVO = false` na ramificação `avisos-fase1`, que NÃO está na main).
 - `_redirects` redireciona `/servidor`, `/tests`, `/INSTRUCOES.md` e `/README.md` para a página inicial, para essas pastas e notas não ficarem à vista no site.
   O Cloudflare Pages só aceita redirecionar (não dá para responder 404 por esse arquivo). Conferir depois da publicação abrindo `quemsaiu.com.br/INSTRUCOES.md`.
+
+## Modo de teste dos avisos (só no aparelho de quem abrir)
+- Abrir `quemsaiu.com.br/?avisos=teste` liga os avisos **só naquele navegador** (fica em `localStorage`, chave `quemsaiu_avisos_teste`). O parâmetro some da barra de endereço.
+- Abrir `quemsaiu.com.br/?avisos=desligar` volta ao normal.
+- Para os demais visitantes continua tudo desligado (`AVISOS_ATIVO = false`). No modo de teste o funil anônimo (`pediu`, `voltou`, `mandou-lista`) **não** é contado.
+- Teste real no Android: ligar o modo, importar uma lista, tocar em "Já pedi", "Ativar aviso" e permitir; no console do D1 rodar `UPDATE aparelhos SET proximo_envio = 0` entre 9h e 20h (fuso do aparelho); em até 30 minutos o aviso chega.

@@ -980,7 +980,17 @@ var AVISOS_ATIVO = false;
 var AVISOS_URL = "https://quemsaiu-avisos.suporte-quemsaiu.workers.dev";
 var AVISOS_CHAVE_PUBLICA = "BMhhrVDHgfk3Jh4-swZ6fch9mK_wPAZgxs78TVqQwb6kE8pyNFWkzk2iL_NHWxqiKuLChdb9lB5nRGYcuxUZAqs";
 var CHAVE_AVISO = "quemsaiu_aviso";
-function avisosLigados() { return !!(AVISOS_ATIVO || window.__QS_AVISOS_TESTE); }
+/* Modo de teste só neste aparelho: abrir o site com ?avisos=teste liga os avisos (e ?avisos=desligar volta ao normal).
+   Fica guardado só no navegador de quem abriu; para os outros visitantes continua desligado. Não conta funil. */
+var CHAVE_AVISO_TESTE = "quemsaiu_avisos_teste";
+try {
+  var pAv = new URLSearchParams(location.search).get("avisos");
+  if (pAv === "teste") localStorage.setItem(CHAVE_AVISO_TESTE, "1");
+  else if (pAv === "desligar") localStorage.removeItem(CHAVE_AVISO_TESTE);
+  if (pAv && history.replaceState) history.replaceState(null, "", location.pathname + location.hash);
+} catch (e) {}
+function avisosTesteLocal() { try { return localStorage.getItem(CHAVE_AVISO_TESTE) === "1"; } catch (e) { return false; } }
+function avisosLigados() { return !!(AVISOS_ATIVO || window.__QS_AVISOS_TESTE || avisosTesteLocal()); }
 function avisosSuportado() {
   return "serviceWorker" in navigator && "PushManager" in window && "Notification" in window;
 }
@@ -996,7 +1006,7 @@ function chaveParaBytes(b64) {
   return out;
 }
 function contarFunil(nome, umaVez) {
-  if (!avisosLigados()) return;
+  if (!(AVISOS_ATIVO || window.__QS_AVISOS_TESTE)) return;
   try { if (window.qsContar) window.qsContar(nome, umaVez); } catch (e) {}
 }
 function avisarServidor(rota, corpo) {
