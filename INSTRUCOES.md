@@ -786,3 +786,8 @@ Vem da ESPECIFICAÇÃO PARA O CLAUDE CODE (sessão de estratégia). Tudo atrás 
   (`servidor/RASCUNHO-politica.md`) no mesmo momento, revisão jurídica. iPhone: não testado.
 - A chave privada VAPID NUNCA entra no repositório. Foi gerada fora dele (a chave pública está no `script.js`).
 - 04/11/2026: banco D1 `quemsaiu-avisos` criado na Cloudflare (tabela `aparelhos`), Worker `quemsaiu-avisos` ligado ao GitHub com diretório raiz `servidor` e branch de produção `avisos-fase1` (builds de preview desligados). Endereço do servidor: https://quemsaiu-avisos.suporte-quemsaiu.workers.dev (já em `AVISOS_URL`; `AVISOS_ATIVO` continua false). Falta: segredos VAPID, conferir /saude, testar no Android.
+## Pasta `servidor` na main e arquivo `_redirects` (05/11/2026)
+- A pasta `servidor/` (Worker de avisos, SEM nenhum segredo) entrou na `main` só para a Cloudflare conseguir montar o servidor
+  (a build falhava com "root directory not found" enquanto a pasta não existia na `main`). Nada do site muda: os avisos seguem desligados (`AVISOS_ATIVO = false` na ramificação `avisos-fase1`, que NÃO está na main).
+- `_redirects` redireciona `/servidor`, `/tests`, `/INSTRUCOES.md` e `/README.md` para a página inicial, para essas pastas e notas não ficarem à vista no site.
+  O Cloudflare Pages só aceita redirecionar (não dá para responder 404 por esse arquivo). Conferir depois da publicação abrindo `quemsaiu.com.br/INSTRUCOES.md`.

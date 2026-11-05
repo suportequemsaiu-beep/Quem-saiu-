@@ -1,0 +1,8 @@
+# Esconde do site público as pastas e notas internas (quem abrir leva de volta para a página inicial).
+# O Cloudflare Pages não permite responder "página não encontrada" por aqui, só redirecionar.
+/servidor /  302
+/servidor/* /  302
+/tests /  302
+/tests/* /  302
+/INSTRUCOES.md /  302
+/README.md /  302
