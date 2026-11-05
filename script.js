@@ -825,6 +825,19 @@ function seloPara(u, seguindoSet, tipo) {
   return "";
 }
 
+/* Ao esconder/restaurar uma conta a lista é desenhada de novo; guardamos a rolagem de dentro dela para não voltar ao início */
+var rolagemGuardada = null;
+function guardarRolagem() {
+  var ul = listaResultado.querySelector(".lista-usuarios");
+  rolagemGuardada = ul ? ul.scrollTop : null;
+}
+function restaurarRolagem() {
+  if (rolagemGuardada === null) return;
+  var ul = listaResultado.querySelector(".lista-usuarios");
+  if (ul) ul.scrollTop = rolagemGuardada;
+  rolagemGuardada = null;
+}
+
 function renderizarLista(usuarios, tipo, seguindoSet, textoVazio) {
   var ignoradas = lerIgnoradas();
   var visiveis = usuarios.filter(function (u) { return ignoradas.indexOf(u) === -1; });
@@ -854,6 +867,7 @@ function renderizarLista(usuarios, tipo, seguindoSet, textoVazio) {
     var msgVazio = escondidas > 0 ? "Todas as contas desta lista estão escondidas." : textoVazio;
     listaResultado.innerHTML = '<p style="text-align:center; font-size:12px; color:#475569; padding:14px 0;">' + msgVazio + "</p>" + rodape;
     ligarBotoesLista();
+    rolagemGuardada = null;
     return;
   }
 
@@ -867,6 +881,7 @@ function renderizarLista(usuarios, tipo, seguindoSet, textoVazio) {
   }).join("") + "</ul>" + rodape;
 
   ligarBotoesLista();
+  restaurarRolagem();
 }
 
 function ligarBotoesLista() {
@@ -874,19 +889,20 @@ function ligarBotoesLista() {
     b.addEventListener("click", function () {
       var linha = b.closest("li");
       if (linha) linha.classList.add("saindo");
+      guardarRolagem();
       setTimeout(function () { ignorarConta(b.dataset.ignorar); renderizarResultado(); }, 180);
     });
   });
   var btnRest = document.getElementById("btnRestaurar");
   if (btnRest) btnRest.addEventListener("click", function () {
-    restaurarIgnoradas(); painelEscondidasAberto = false; renderizarResultado();
+    guardarRolagem(); restaurarIgnoradas(); painelEscondidasAberto = false; renderizarResultado();
   });
   var btnVer = document.getElementById("btnVerEscondidas");
   if (btnVer) btnVer.addEventListener("click", function () {
-    painelEscondidasAberto = !painelEscondidasAberto; renderizarResultado();
+    guardarRolagem(); painelEscondidasAberto = !painelEscondidasAberto; renderizarResultado();
   });
   listaResultado.querySelectorAll("[data-restaurar]").forEach(function (b) {
-    b.addEventListener("click", function () { restaurarConta(b.dataset.restaurar); renderizarResultado(); });
+    b.addEventListener("click", function () { guardarRolagem(); restaurarConta(b.dataset.restaurar); renderizarResultado(); });
   });
 }
 

@@ -797,3 +797,6 @@ Vem da ESPECIFICAÇÃO PARA O CLAUDE CODE (sessão de estratégia). Tudo atrás 
 - Abrir `quemsaiu.com.br/?avisos=desligar` volta ao normal.
 - Para os demais visitantes continua tudo desligado (`AVISOS_ATIVO = false`). No modo de teste o funil anônimo (`pediu`, `voltou`, `mandou-lista`) **não** é contado.
 - Teste real no Android: ligar o modo, importar uma lista, tocar em "Já pedi", "Ativar aviso" e permitir; no console do D1 rodar `UPDATE aparelhos SET proximo_envio = 0` entre 9h e 20h (fuso do aparelho); em até 30 minutos o aviso chega.
+
+## Lista não volta ao início ao esconder uma conta
+- A lista de nomes tem rolagem própria. Ao tocar no × (ou em "Restaurar", "Mostrar todas", abrir/fechar as escondidas) a lista era redesenhada e voltava ao topo. Agora a posição é guardada e devolvida (`guardarRolagem` / `restaurarRolagem` em `script.js`). Trocar de aba continua começando do início. Teste: `tests/rolagem_lista.py`.
