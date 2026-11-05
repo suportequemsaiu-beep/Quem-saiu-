@@ -785,3 +785,4 @@ Vem da ESPECIFICAÇÃO PARA O CLAUDE CODE (sessão de estratégia). Tudo atrás 
 - FALTA para ligar: implantar o servidor, colocar o endereço em `AVISOS_URL`, testar no Android, publicar a política nova
   (`servidor/RASCUNHO-politica.md`) no mesmo momento, revisão jurídica. iPhone: não testado.
 - A chave privada VAPID NUNCA entra no repositório. Foi gerada fora dele (a chave pública está no `script.js`).
+- 04/11/2026: banco D1 `quemsaiu-avisos` criado na Cloudflare (tabela `aparelhos`), Worker `quemsaiu-avisos` ligado ao GitHub com diretório raiz `servidor` e branch de produção `avisos-fase1` (builds de preview desligados). Endereço do servidor: https://quemsaiu-avisos.suporte-quemsaiu.workers.dev (já em `AVISOS_URL`; `AVISOS_ATIVO` continua false). Falta: segredos VAPID, conferir /saude, testar no Android.

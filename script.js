@@ -977,7 +977,7 @@ document.getElementById("blocoLembrete").hidden = !(LEMBRETE_ATIVO || window.__Q
    Para ligar: criar o servidor (veja servidor/README.md), colocar o endereço em AVISOS_URL e trocar false por true.
    O servidor guarda só: número aleatório do aparelho, endereço do aviso, fuso e data do "Já pedi". Nunca a lista. */
 var AVISOS_ATIVO = false;
-var AVISOS_URL = "https://quemsaiu-avisos.COLE-SEU-SUBDOMINIO.workers.dev";
+var AVISOS_URL = "https://quemsaiu-avisos.suporte-quemsaiu.workers.dev";
 var AVISOS_CHAVE_PUBLICA = "BMhhrVDHgfk3Jh4-swZ6fch9mK_wPAZgxs78TVqQwb6kE8pyNFWkzk2iL_NHWxqiKuLChdb9lB5nRGYcuxUZAqs";
 var CHAVE_AVISO = "quemsaiu_aviso";
 function avisosLigados() { return !!(AVISOS_ATIVO || window.__QS_AVISOS_TESTE); }

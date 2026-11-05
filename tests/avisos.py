@@ -7,7 +7,7 @@ T = tempfile.mkdtemp(prefix="quemsaiu-") + "/"
 Z = T + "z/"
 fixtures.criar_zips(Z)
 U = "http://127.0.0.1:8765/index.html"
-SERVIDOR = "https://quemsaiu-avisos.cole-seu-subdominio.workers.dev"
+SERVIDOR = "https://quemsaiu-avisos.suporte-quemsaiu.workers.dev"
 falhas = 0
 def ok(c, m):
     global falhas
