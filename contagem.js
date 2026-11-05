@@ -12,7 +12,8 @@
      /m/visita.txt        abriu o site (uma vez por sessão do navegador)
      /m/app-aberto.txt    abriu pelo app instalado (uma vez por sessão)
      /m/ficou-10s.txt ... /m/ficou-300s.txt   ficou esse tempo com a página aberta e visível
-     /m/instalou.txt      o navegador avisou que o app foi instalado */
+     /m/instalou.txt      o navegador avisou que o app foi instalado
+     (mais os três do funil de lembretes, listados mais abaixo) */
 (function () {
   "use strict";
 
@@ -60,4 +61,16 @@
   }, 1000);
 
   window.addEventListener("appinstalled", function () { marcar("instalou"); });
+
+  /* eventos do funil de lembretes (só o site chama, e só quando os avisos estão ligados):
+       /m/pediu.txt         tocou em "Já pedi"
+       /m/voltou.txt        abriu o site com um pedido anotado (uma vez por sessão)
+       /m/mandou-lista.txt  mandou uma lista
+     Sem identificar ninguém: é só um arquivo vazio pedido ao próprio site. */
+  var FUNIL = ["pediu", "voltou", "mandou-lista"];
+  window.qsContar = function (nome, umaVez) {
+    if (FUNIL.indexOf(nome) === -1) return;
+    if (umaVez && !umaVezPorSessao(nome)) return;
+    marcar(nome);
+  };
 })();

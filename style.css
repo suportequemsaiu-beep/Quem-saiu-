@@ -266,6 +266,9 @@
   .botao-ja-pedi { width: 100%; border: none; border-radius: 999px; padding: 13px; background: #0f172a; color: #f8fafc; font-size: 14px; font-weight: 700; cursor: pointer; }
   .ja-pedi-nota { margin: 8px 4px 0; font-size: 11.5px; line-height: 1.5; color: #64748b; }
   .ja-pedi-feito[hidden] { display: none; }
+  .botao-ativar-aviso { width: 100%; margin-top: 10px; border: none; border-radius: 999px; padding: 12px; background: #006ba1; color: #fff; font-size: 14px; font-weight: 700; cursor: pointer; }
+  .botao-ativar-aviso:disabled { opacity: .6; cursor: default; }
+  #blocoAviso { margin-top: 14px; text-align: center; }
   .ja-pedi-feito p { margin: 0 0 6px; font-size: 13.5px; color: #1e293b; line-height: 1.5; }
   .ja-pedi-feito .lembrar-titulo { margin-top: 12px; font-weight: 700; }
   .lembrar-opcoes { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 6px; }

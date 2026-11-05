@@ -427,6 +427,7 @@ function gravarDados(v) {
   catch (e) { memoria[CHAVE] = v; return false; }
 }
 function apagarDadosLocais() {
+  try { desligarAviso(); } catch (e) {}
   try { localStorage.removeItem(CHAVE); localStorage.removeItem(CHAVE_IGNORADAS); localStorage.removeItem(CHAVE_PEDIDO); } catch (e) {}
   delete memoria[CHAVE];
   delete memoria[CHAVE_IGNORADAS];
@@ -972,6 +973,92 @@ var voltaDispensado = false;
    Para ligar: troque false por true. */
 var LEMBRETE_ATIVO = false;
 document.getElementById("blocoLembrete").hidden = !(LEMBRETE_ATIVO || window.__QS_LEMBRETE_TESTE);
+/* ===== Avisos no celular (Fase 1): DESLIGADOS até o servidor existir =====
+   Para ligar: criar o servidor (veja servidor/README.md), colocar o endereço em AVISOS_URL e trocar false por true.
+   O servidor guarda só: número aleatório do aparelho, endereço do aviso, fuso e data do "Já pedi". Nunca a lista. */
+var AVISOS_ATIVO = false;
+var AVISOS_URL = "https://quemsaiu-avisos.COLE-SEU-SUBDOMINIO.workers.dev";
+var AVISOS_CHAVE_PUBLICA = "BMhhrVDHgfk3Jh4-swZ6fch9mK_wPAZgxs78TVqQwb6kE8pyNFWkzk2iL_NHWxqiKuLChdb9lB5nRGYcuxUZAqs";
+var CHAVE_AVISO = "quemsaiu_aviso";
+function avisosLigados() { return !!(AVISOS_ATIVO || window.__QS_AVISOS_TESTE); }
+function avisosSuportado() {
+  return "serviceWorker" in navigator && "PushManager" in window && "Notification" in window;
+}
+function lerAviso() {
+  try { var v = JSON.parse(localStorage.getItem(CHAVE_AVISO)); return v && typeof v.aparelho === "string" ? v : null; }
+  catch (e) { return null; }
+}
+function chaveParaBytes(b64) {
+  var pad = "=".repeat((4 - (b64.length % 4)) % 4);
+  var raw = atob((b64 + pad).replace(/-/g, "+").replace(/_/g, "/"));
+  var out = new Uint8Array(raw.length);
+  for (var i = 0; i < raw.length; i++) out[i] = raw.charCodeAt(i);
+  return out;
+}
+function contarFunil(nome, umaVez) {
+  if (!avisosLigados()) return;
+  try { if (window.qsContar) window.qsContar(nome, umaVez); } catch (e) {}
+}
+function avisarServidor(rota, corpo) {
+  return fetch(AVISOS_URL + rota, {
+    method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(corpo),
+    credentials: "omit", referrerPolicy: "no-referrer", keepalive: true
+  });
+}
+function atualizarAviso() {
+  var bloco = document.getElementById("blocoAviso");
+  var pedido = lerPedido();
+  bloco.hidden = !(avisosLigados() && avisosSuportado() && pedido);
+  var ligado = !!lerAviso();
+  document.getElementById("btnAtivarAviso").hidden = ligado;
+  document.getElementById("textoAviso").hidden = ligado;
+  document.getElementById("btnDesligarAviso").hidden = !ligado;
+  if (ligado) document.getElementById("notaAviso").textContent = "Aviso ligado neste aparelho. Ele para sozinho quando você mandar a lista.";
+}
+async function ativarAviso() {
+  var nota = document.getElementById("notaAviso");
+  var botao = document.getElementById("btnAtivarAviso");
+  var pedido = lerPedido();
+  if (!pedido) return;
+  botao.disabled = true; nota.textContent = "";
+  var reg = null;
+  try {
+    var perm = await Notification.requestPermission();
+    if (perm !== "granted") {
+      nota.textContent = "Sem a permissão do navegador não consigo avisar. Se mudar de ideia, libere as notificações deste site nas configurações do navegador.";
+      return;
+    }
+    reg = await navigator.serviceWorker.ready;
+    var sub = await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: chaveParaBytes(AVISOS_CHAVE_PUBLICA) });
+    var aparelho = (lerAviso() || {}).aparelho || (window.crypto && crypto.randomUUID ? crypto.randomUUID() : null);
+    if (!aparelho) throw new Error("sem identificador");
+    var fuso = "America/Sao_Paulo";
+    try { fuso = Intl.DateTimeFormat().resolvedOptions().timeZone || fuso; } catch (e) {}
+    var r = await avisarServidor("/registrar", { aparelho: aparelho, endpoint: sub.endpoint, fuso: fuso, pedido_em: pedido.data });
+    if (!r.ok) throw new Error("servidor");
+    try { localStorage.setItem(CHAVE_AVISO, JSON.stringify({ aparelho: aparelho })); } catch (e) {}
+  } catch (e) {
+    try { var s2 = reg && (await reg.pushManager.getSubscription()); if (s2) await s2.unsubscribe(); } catch (e2) {}
+    nota.textContent = "Não consegui ligar o aviso agora. Tente de novo mais tarde; o resto do Quem Saiu funciona normalmente.";
+  } finally {
+    botao.disabled = false; atualizarAviso();
+  }
+}
+/* desliga o aviso: apaga o registro no servidor e cancela a inscrição neste navegador */
+async function desligarAviso() {
+  var a = lerAviso();
+  try { localStorage.removeItem(CHAVE_AVISO); } catch (e) {}
+  if (a) { try { avisarServidor("/apagar", { aparelho: a.aparelho }).catch(function () {}); } catch (e) {} }
+  try {
+    if ("serviceWorker" in navigator) {
+      var reg = await navigator.serviceWorker.getRegistration();
+      var sub = reg && (await reg.pushManager.getSubscription());
+      if (sub) await sub.unsubscribe();
+    }
+  } catch (e) {}
+  var nota = document.getElementById("notaAviso"); if (nota) nota.textContent = "";
+  atualizarAviso();
+}
 function diaMes(iso) { return new Date(iso).toLocaleDateString("pt-BR", { day: "numeric", month: "long" }); }
 function atualizarPedido() {
   var p = lerPedido();
@@ -982,6 +1069,7 @@ function atualizarPedido() {
   if (p) document.getElementById("textoPedidoEm").textContent = "Você pediu o arquivo em " + diaMes(p.data) + ".";
   var noite = document.getElementById("btnLembrarNoite");
   noite.disabled = new Date().getHours() * 60 + new Date().getMinutes() >= 19 * 60 + 30;
+  atualizarAviso();
 }
 function dois(n) { return (n < 10 ? "0" : "") + n; }
 function fmtLocal(d) { return d.getFullYear() + dois(d.getMonth() + 1) + dois(d.getDate()) + "T" + dois(d.getHours()) + dois(d.getMinutes()) + "00"; }
@@ -1020,14 +1108,18 @@ function baixarLembrete(tipo) {
     nota.textContent = "Não consegui criar o lembrete neste navegador. Você pode marcar um alarme no seu celular.";
   }
 }
-document.getElementById("btnJaPedi").addEventListener("click", function () { gravarPedido(); voltaDispensado = true; atualizarPedido(); });
-document.getElementById("btnDesfazerPedido").addEventListener("click", function () { limparPedido(); voltaDispensado = false; atualizarPedido(); });
+document.getElementById("btnJaPedi").addEventListener("click", function () { gravarPedido(); voltaDispensado = true; atualizarPedido(); contarFunil("pediu"); });
+document.getElementById("btnDesfazerPedido").addEventListener("click", function () { limparPedido(); desligarAviso(); voltaDispensado = false; atualizarPedido(); });
+document.getElementById("btnAtivarAviso").addEventListener("click", function () { ativarAviso(); });
+document.getElementById("btnDesligarAviso").addEventListener("click", function () { desligarAviso(); });
 document.querySelectorAll("[data-lembrar]").forEach(function (b) {
   b.addEventListener("click", function () { baixarLembrete(b.dataset.lembrar); });
 });
 document.getElementById("btnAvisoVolta").addEventListener("click", function () { inputArquivo.click(); });
 document.getElementById("btnAindaNaoChegou").addEventListener("click", function () { voltaDispensado = true; atualizarPedido(); });
 atualizarPedido();
+/* "voltou": abriu o site com um pedido já anotado (conta uma vez por sessão; o contador carrega depois deste arquivo) */
+if (lerPedido()) window.addEventListener("load", function () { contarFunil("voltou", true); });
 
 btnImportar.addEventListener("click", function () { inputArquivo.click(); });
 
@@ -1041,7 +1133,7 @@ inputArquivo.addEventListener("change", async function () {
   try {
     var nova = await processarArquivos(arquivos);
     if (!guardarNova(nova)) { esconderProgresso(); return; }
-    limparPedido(); atualizarPedido();
+    limparPedido(); desligarAviso(); atualizarPedido(); contarFunil("mandou-lista");
     mostrarProgresso(100, "Pronto!");
     atualizarStatus();
     renderizarResultado();
@@ -1214,7 +1306,7 @@ async function verificarArquivoCompartilhado() {
     try {
       var nova = await processarArquivos([arquivo]);
       if (!guardarNova(nova)) { esconderProgresso(); return; }
-      limparPedido(); atualizarPedido();
+      limparPedido(); desligarAviso(); atualizarPedido(); contarFunil("mandou-lista");
       mostrarProgresso(100, "Pronto!");
       atualizarStatus();
       renderizarResultado();

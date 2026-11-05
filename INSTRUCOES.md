@@ -770,3 +770,18 @@ Não há testes automatizados. Antes de qualquer publicação, conferir no celul
 - Removida a frase "Vamos anotar a data só neste aparelho, para te lembrar quando você voltar." abaixo do botão "Já pedi". A política de privacidade continua explicando o que é guardado.
 - Removida a frase "Os desenhos são só um guia: a tela do seu celular pode ser um pouco diferente." abaixo do "Próximo" (03/11/2026).
 - Tirados os emojis dos botões "Mandar lista" e "Ver a comparação" (03/11/2026).
+
+## Avisos no celular, Fase 1 (04/11/2026) — NÃO PUBLICADO, DESLIGADO (ramificação avisos-fase1)
+Vem da ESPECIFICAÇÃO PARA O CLAUDE CODE (sessão de estratégia). Tudo atrás de `AVISOS_ATIVO = false` em `script.js`.
+- `servidor/`: Worker + D1 + Web Push sem conteúdo (VAPID). README com o passo a passo para implantar pelo celular.
+  Guarda só: número aleatório do aparelho, endereço do aviso, fuso, data do "Já pedi", estágio. NÃO guarda chaves p256dh/auth
+  (o aviso vai sem conteúdo) — um dado a menos que a especificação previa.
+- Avisos: +24h, +72h, +7d, +14d, só entre 9h e 20h no fuso do aparelho (hipótese a medir). Texto fixo no `service-worker.js`.
+- Site: depois do "Já pedi" aparece "Quer um aviso no celular?" com a explicação ANTES de pedir a permissão; o botão "Ativar aviso"
+  pede a permissão (um toque a mais que a especificação, para o consentimento ficar claro). "Desligar aviso", mandar lista,
+  "Desfazer" e "Apagar meus dados" apagam o registro no servidor. Sem a permissão ou com erro do servidor, nada fica guardado.
+- Eventos anônimos do funil (`/m/pediu.txt`, `/m/voltou.txt`, `/m/mandou-lista.txt`): só contam com a chave ligada.
+- Testes: `node --test servidor/teste/worker.test.mjs` (16) e `tests/avisos.py` (28, com servidor/permissão/inscrição de mentira).
+- FALTA para ligar: implantar o servidor, colocar o endereço em `AVISOS_URL`, testar no Android, publicar a política nova
+  (`servidor/RASCUNHO-politica.md`) no mesmo momento, revisão jurídica. iPhone: não testado.
+- A chave privada VAPID NUNCA entra no repositório. Foi gerada fora dele (a chave pública está no `script.js`).

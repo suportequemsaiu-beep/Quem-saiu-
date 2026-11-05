@@ -1,7 +1,8 @@
 /* Quem Saiu — service worker
-   Função principal: receber o arquivo compartilhado pelo Android
-   (Web Share Target) e guardá-lo temporariamente para a página ler.
-   Nada é enviado para servidor nenhum: tudo acontece dentro do aparelho. */
+   1) Receber o arquivo compartilhado pelo Android (Web Share Target) e guardá-lo
+      temporariamente para a página ler. Nada disso sai do aparelho.
+   2) Mostrar o aviso de lembrete, SE a pessoa ligou os avisos. O aviso chega sem conteúdo
+      nenhum: o texto abaixo é fixo e fica aqui, neste arquivo. */
 
 var CACHE_COMPARTILHADO = "quemsaiu-compartilhado";
 
@@ -47,4 +48,30 @@ self.addEventListener("fetch", function (evento) {
       })()
     );
   }
+});
+
+/* ---------- aviso de lembrete (só chega para quem ligou os avisos) ---------- */
+self.addEventListener("push", function (evento) {
+  evento.waitUntil(
+    self.registration.showNotification("Quem Saiu", {
+      body: "Seu arquivo do Instagram pode estar pronto. Toque para mandar a lista.",
+      icon: "icone-192.png",
+      badge: "icone-192.png",
+      tag: "quemsaiu-aviso",
+      data: { url: "./?aviso=1" }
+    })
+  );
+});
+
+self.addEventListener("notificationclick", function (evento) {
+  evento.notification.close();
+  evento.waitUntil(
+    (async function () {
+      var janelas = await self.clients.matchAll({ type: "window", includeUncontrolled: true });
+      for (var i = 0; i < janelas.length; i++) {
+        if ("focus" in janelas[i]) return janelas[i].focus();
+      }
+      return self.clients.openWindow("./?aviso=1");
+    })()
+  );
 });
