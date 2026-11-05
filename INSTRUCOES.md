@@ -770,3 +770,9 @@ Não há testes automatizados. Antes de qualquer publicação, conferir no celul
 - Removida a frase "Vamos anotar a data só neste aparelho, para te lembrar quando você voltar." abaixo do botão "Já pedi". A política de privacidade continua explicando o que é guardado.
 - Removida a frase "Os desenhos são só um guia: a tela do seu celular pode ser um pouco diferente." abaixo do "Próximo" (03/11/2026).
 - Tirados os emojis dos botões "Mandar lista" e "Ver a comparação" (03/11/2026).
+
+## Pasta `servidor` na main e arquivo `_redirects` (05/11/2026)
+- A pasta `servidor/` (Worker de avisos, SEM nenhum segredo) entrou na `main` só para a Cloudflare conseguir montar o servidor
+  (a build falhava com "root directory not found" enquanto a pasta não existia na `main`). Nada do site muda: os avisos seguem desligados (`AVISOS_ATIVO = false` na ramificação `avisos-fase1`, que NÃO está na main).
+- `_redirects` redireciona `/servidor`, `/tests`, `/INSTRUCOES.md` e `/README.md` para a página inicial, para essas pastas e notas não ficarem à vista no site.
+  O Cloudflare Pages só aceita redirecionar (não dá para responder 404 por esse arquivo). Conferir depois da publicação abrindo `quemsaiu.com.br/INSTRUCOES.md`.
