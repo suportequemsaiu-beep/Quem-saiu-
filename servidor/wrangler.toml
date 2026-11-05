@@ -1,7 +1,7 @@
 # Quem Saiu — avisos (Fase 1). Ainda NÃO implantado. Veja o README.md desta pasta.
 name = "quemsaiu-avisos"
 main = "src/index.js"
-compatibility_date = "2026-10-01"
+compatibility_date = "2025-09-01"
 
 # Roda a cada 30 minutos: envia os lembretes que já estão na hora (só entre 9h e 20h no fuso do aparelho).
 [triggers]
