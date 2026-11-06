@@ -800,3 +800,9 @@ Vem da ESPECIFICAÇÃO PARA O CLAUDE CODE (sessão de estratégia). Tudo atrás 
 
 ## Lista não volta ao início ao esconder uma conta
 - A lista de nomes tem rolagem própria. Ao tocar no × (ou em "Restaurar", "Mostrar todas", abrir/fechar as escondidas) a lista era redesenhada e voltava ao topo. Agora a posição é guardada e devolvida (`guardarRolagem` / `restaurarRolagem` em `script.js`). Trocar de aba continua começando do início. Teste: `tests/rolagem_lista.py`.
+
+## Aviso no celular agora é oferecido ao tocar em "Começar agora"
+- O bloco "Quer um aviso no celular?" fica na tela "Sua lista" (logo abaixo do estado das listas), não mais dentro do "Já pedi". Ativar liga a permissão e a inscrição neste aparelho, **sem falar com o servidor**. O servidor só fica sabendo do aparelho quando a pessoa toca em "Já pedi" (aí vai a data do pedido). Se o servidor estiver fora do ar naquela hora, o site tenta de novo na próxima abertura (`sincronizarAviso`).
+- Depois de "Já pedi" a tela mostra só: "Anotado. Quando o Instagram avisar por e-mail, volte aqui."
+- Mandar a lista ou "Desfazer" apagam só o registro no servidor; o aviso continua ligado para o próximo pedido. "Desligar aviso" e "Apagar meus dados" desligam tudo.
+- A caixa "Baixou o arquivo? / Ainda não chegou" foi removida.

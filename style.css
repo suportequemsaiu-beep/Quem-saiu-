@@ -257,18 +257,20 @@
   .btn-instalar-grande { position:relative; width:100%; border:none; border-radius:14px; padding:16px; background:#0369a1; color:#fff; font-size:15px; font-weight:800; cursor:pointer; }
   .btn-instalar-grande:active { transform:scale(.97); }
   .nota-loja { position:relative; font-size:11.5px; color:#94a3b8; margin:13px 0 0; line-height:1.55; }
-  .aviso-volta { margin: 0 0 14px; padding: 12px 14px; border-radius: 14px; background: rgba(253,238,219,.07); border: 1px solid rgba(253,238,219,.28); text-align: center; }
-  .aviso-volta[hidden] { display: none; }
-  .aviso-volta-btn { display: block; width: 100%; background: none; border: none; color: #fdeedb; font-size: 14.5px; line-height: 1.45; cursor: pointer; padding: 2px 0; }
-  .aviso-volta-btn small { display: block; margin-top: 4px; font-size: 12px; color: #cbb89f; }
-  .aviso-volta-fechar { background: none; border: none; color: #cbb89f; font-size: 12.5px; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; margin-top: 6px; padding: 6px 8px; }
   .ja-pedi { margin: 28px 0 2px; padding-top: 22px; border-top: 1px solid #e2e8f0; text-align: center; }
   .botao-ja-pedi { width: 100%; border: none; border-radius: 999px; padding: 13px; background: #0f172a; color: #f8fafc; font-size: 14px; font-weight: 700; cursor: pointer; }
   .ja-pedi-nota { margin: 8px 4px 0; font-size: 11.5px; line-height: 1.5; color: #64748b; }
   .ja-pedi-feito[hidden] { display: none; }
   .botao-ativar-aviso { width: 100%; margin-top: 10px; border: none; border-radius: 999px; padding: 12px; background: #006ba1; color: #fff; font-size: 14px; font-weight: 700; cursor: pointer; }
   .botao-ativar-aviso:disabled { opacity: .6; cursor: default; }
-  #blocoAviso { margin-top: 14px; text-align: center; }
+  #blocoAviso { margin-top: 18px; padding: 16px 16px 12px; border-radius: 16px; background: rgba(255,255,255,.04); border: 1px solid #343a4e; text-align: center; }
+  #blocoAviso[hidden] { display: none; }
+  #blocoAviso .aviso-titulo { margin: 0; font-size: 14.5px; font-weight: 700; color: #f1f5f9; }
+  #blocoAviso .aviso-texto { margin: 8px 2px 0; font-size: 12.5px; line-height: 1.55; color: #94a3b8; }
+  #blocoAviso .aviso-nota { margin: 8px 2px 0; font-size: 12.5px; line-height: 1.5; color: #94a3b8; }
+  #blocoAviso .aviso-nota:empty { display: none; }
+  .link-desligar-aviso { background: none; border: none; color: #94a3b8; font-size: 12.5px; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; margin-top: 6px; padding: 6px 8px; }
+  .link-desligar-aviso[hidden] { display: none; }
   .ja-pedi-feito p { margin: 0 0 6px; font-size: 13.5px; color: #1e293b; line-height: 1.5; }
   .ja-pedi-feito .lembrar-titulo { margin-top: 12px; font-weight: 700; }
   .lembrar-opcoes { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 6px; }

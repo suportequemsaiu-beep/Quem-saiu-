@@ -184,7 +184,7 @@
 <link rel="icon" type="image/png" sizes="192x192" href="icone-192.png" />
 <link rel="apple-touch-icon" href="icone-192.png" />
 <script src="jszip.min.js?v=3.10.1"></script>
-<link rel="stylesheet" href="style.css?v=20261105b" />
+<link rel="stylesheet" href="style.css?v=20261106a" />
 </head>
 <body>
 
@@ -304,13 +304,6 @@
       <h2>Sua lista</h2>
 
       <div class="card card-lista" id="cardLista">
-        <div class="aviso-volta" id="avisoVolta" hidden>
-          <button class="aviso-volta-btn" id="btnAvisoVolta" type="button">
-            <b>Baixou o arquivo?</b> Toque aqui e escolha o mais recente.
-            <small id="textoPedidoEm"></small>
-          </button>
-          <button class="aviso-volta-fechar" id="btnAindaNaoChegou" type="button">Ainda não chegou</button>
-        </div>
         <button class="botao-importar" id="btnImportar">Mandar lista</button>
         <button class="botao-secundario desativado" id="btnComparar" aria-disabled="true">Ver a comparação</button>
         <input type="file" id="inputArquivo" multiple style="display:none" aria-label="Escolher o arquivo do Instagram" />
@@ -322,6 +315,14 @@
         <div id="erroImport" role="alert"></div>
         <p id="avisoLeitor" class="so-leitor" role="status" aria-live="polite"></p>
         <p class="status-import" id="statusImport">Nenhuma lista guardada ainda.</p>
+
+        <div id="blocoAviso" hidden>
+          <p class="aviso-titulo">Quer um aviso no celular?</p>
+          <p class="aviso-texto" id="textoAviso">Depois que você pedir o arquivo ao Instagram, posso te avisar até 4 vezes nas duas semanas seguintes, sempre entre 9h e 20h, para você lembrar de voltar. Para isso guardo só o endereço do aviso deste aparelho e a data do pedido, nunca a sua lista. Você desliga quando quiser.</p>
+          <button class="botao-ativar-aviso" id="btnAtivarAviso" type="button">Ativar aviso</button>
+          <button class="link-desligar-aviso" id="btnDesligarAviso" type="button" hidden>Desligar aviso</button>
+          <p class="aviso-nota" id="notaAviso" role="status"></p>
+        </div>
 
         <div class="expansivel">
           <button class="expansivel-topo" id="togglePasso" aria-expanded="false" aria-controls="corpoPasso">
@@ -389,13 +390,6 @@
               <button class="botao-ja-pedi" id="btnJaPedi" type="button">Já pedi o arquivo ao Instagram</button>
               <div class="ja-pedi-feito" id="jaPediFeito" hidden>
                 <p><b>Anotado.</b> Quando o Instagram avisar por e-mail, volte aqui.</p>
-                <div id="blocoAviso" hidden>
-                  <p class="lembrar-titulo">Quer um aviso no celular?</p>
-                  <p class="ja-pedi-nota" id="textoAviso">Posso te avisar até 4 vezes nas próximas duas semanas, sempre entre 9h e 20h, para você lembrar de voltar. Para isso guardo só o endereço do aviso deste aparelho e a data do pedido, nunca a sua lista. Você desliga quando quiser.</p>
-                  <button class="botao-ativar-aviso" id="btnAtivarAviso" type="button">Ativar aviso</button>
-                  <button class="link-desfazer" id="btnDesligarAviso" type="button" hidden>Desligar aviso</button>
-                  <p class="ja-pedi-nota" id="notaAviso" role="status"></p>
-                </div>
                 <div id="blocoLembrete" hidden>
                   <p class="lembrar-titulo">Quer um lembrete no calendário?</p>
                   <div class="lembrar-opcoes">
@@ -568,8 +562,8 @@
   <button class="fechar" id="btnFecharFaixa" aria-label="Fechar aviso">&times;</button>
 </div>
 
-<script src="script.js?v=20261105b"></script>
-<script src="contagem.js?v=20261105b"></script>
+<script src="script.js?v=20261106a"></script>
+<script src="contagem.js?v=20261106a"></script>
 
 </body>
 </html>

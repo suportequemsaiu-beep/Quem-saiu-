@@ -26,7 +26,7 @@ with sync_playwright() as p:
     v = json.loads(pg.evaluate("localStorage.getItem('quemsaiu_pedido')"))
     ok(list(v.keys()) == ["data"], "4 guarda só a data | %r" % list(v.keys()))
     ok(pg.is_visible("#jaPediFeito") and "Anotado" in pg.inner_text("#jaPediFeito"), "5 mostra 'Anotado' e as opções de lembrete")
-    ok(not pg.is_visible("#avisoVolta"), "6 logo depois de tocar o aviso de volta não aparece")
+    ok("Quando o Instagram avisar por e-mail, volte aqui" in pg.inner_text("#jaPediFeito") and "aviso no celular" not in pg.inner_text("#jaPediFeito"), "6 depois de tocar, só aparece 'Anotado. Quando o Instagram avisar por e-mail, volte aqui.' (sem oferta de aviso)")
 
     # download do lembrete
     with pg.expect_download() as d:
@@ -42,18 +42,13 @@ with sync_playwright() as p:
 
     # voltar ao site
     pg.reload(); pg.wait_for_timeout(400)
-    ok(pg.is_visible("#ferramenta") and pg.is_visible("#avisoVolta"), "12 ao voltar a ferramenta abre sozinha com o aviso")
-    ok("Baixou o arquivo?" in pg.inner_text("#avisoVolta") and "Você pediu o arquivo em" in pg.inner_text("#avisoVolta"), "13 aviso: 'Baixou o arquivo?' e a data do pedido")
-    with pg.expect_file_chooser(timeout=3000):
-        pg.click("#btnAvisoVolta")
-    ok(True, "14 tocar no aviso abre o seletor de arquivos")
-    pg.click("#btnAindaNaoChegou"); pg.wait_for_timeout(200)
-    ok(not pg.is_visible("#avisoVolta") and pg.evaluate("localStorage.getItem('quemsaiu_pedido')") is not None, "15 'Ainda não chegou' esconde o aviso e mantém o pedido")
+    ok(pg.is_visible("#ferramenta") and pg.query_selector("#avisoVolta") is None and "Baixou o arquivo?" not in pg.inner_text("body"), "12 ao voltar a ferramenta abre sozinha, sem a caixa 'Baixou o arquivo?'")
+    ok(pg.evaluate("localStorage.getItem('quemsaiu_pedido')") is not None, "13 o pedido continua guardado ao voltar")
 
     # enviar a primeira lista
     pg.reload(); pg.wait_for_timeout(300)
     pg.set_input_files("#inputArquivo", Z + "instagram-a-2026-10-01-x.zip"); pg.wait_for_timeout(1500)
-    ok(pg.evaluate("localStorage.getItem('quemsaiu_pedido')") is None and not pg.is_visible("#avisoVolta"), "16 ao enviar a lista o pedido é apagado")
+    ok(pg.evaluate("localStorage.getItem('quemsaiu_pedido')") is None, "16 ao enviar a lista o pedido é apagado")
     ok(pg.is_visible("#pontoPartida") and "Ponto de partida salvo" in pg.inner_text("#pontoPartida") and "quem deixou de te seguir" in pg.inner_text("#pontoPartida"), "17 aparece 'Ponto de partida salvo' com a explicação")
     ok("Ponto de partida salvo" in pg.inner_text("#tituloResultado"), "18 título do resultado também")
     pg.set_input_files("#inputArquivo", Z + "instagram-a-2026-10-14-y.zip"); pg.wait_for_timeout(1500)
