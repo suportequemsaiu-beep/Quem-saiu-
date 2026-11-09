@@ -167,6 +167,29 @@ with sync_playwright() as p:
     ok(pg.evaluate("window.__subs") == 1 and pg.is_visible("#btnDesligarAviso"), "25e permissão dada depois de tocar em Começar: o aviso liga na hora")
     ctx.close()
 
+    # 25f. a pessoa ignorou o pedido ao abrir o site: ao tocar em Começar pedimos de novo
+    ctx, ch = novo_contexto(br); pg = ctx.new_page(); pg.add_init_script("window.__perm = 'default'")
+    pg.goto(U); pg.wait_for_timeout(500)
+    ok(pg.evaluate("window.__permPedidos") == 1, "25f ao abrir o site o pedido aparece uma vez")
+    pg.evaluate("window.__perm = 'granted'")
+    abrir_ferramenta(pg); pg.wait_for_timeout(700)
+    ok(pg.evaluate("window.__permPedidos") >= 2 and pg.evaluate("window.__subs") == 1 and pg.is_visible("#btnDesligarAviso"), "25g pedido ignorado: ao tocar em 'Começar agora' pergunta de novo e, se permitir, o aviso liga")
+    ctx.close()
+
+    # 25h. a pessoa NEGOU: o navegador não deixa perguntar de novo, então só explicamos como liberar
+    ctx, ch = novo_contexto(br); pg = ctx.new_page(); pg.add_init_script("window.__perm = 'denied'")
+    pg.goto(U); pg.wait_for_timeout(500); abrir_ferramenta(pg); pg.wait_for_timeout(500)
+    ok(pg.evaluate("window.__permPedidos") == 1 and "libere as notificações" in pg.inner_text("#notaAviso") and pg.evaluate("window.__subs") == 0, "25h permissão negada: não pergunta de novo ao tocar em 'Começar agora' e explica como liberar")
+    ctx.close()
+
+    # 25i. pedido ignorado de novo: não insiste mais de uma vez por visita
+    ctx, ch = novo_contexto(br); pg = ctx.new_page(); pg.add_init_script("window.__perm = 'default'")
+    pg.goto(U); pg.wait_for_timeout(500); abrir_ferramenta(pg); pg.wait_for_timeout(400)
+    pg.click("#btnVoltarInicio") if pg.query_selector("#btnVoltarInicio") else None
+    pg.evaluate("document.getElementById('btnComecar').click()"); pg.wait_for_timeout(400)
+    ok(pg.evaluate("window.__permPedidos") == 2, "25i ignorou de novo: no máximo um pedido a mais por visita | %s" % pg.evaluate("window.__permPedidos"))
+    ctx.close()
+
     # 26. servidor com erro ao religar o aviso já com pedido feito
     ctx, ch = novo_contexto(br); pg = ctx.new_page()
     pg.goto(U); pg.wait_for_timeout(500); abrir_guia(pg); pg.wait_for_timeout(300); pg.click("#btnJaPedi"); pg.wait_for_timeout(600)

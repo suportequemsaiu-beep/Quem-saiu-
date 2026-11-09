@@ -812,3 +812,8 @@ Vem da ESPECIFICAÇÃO PARA O CLAUDE CODE (sessão de estratégia). Tudo atrás 
 - Ao tocar em "Começar agora" (ou ao abrir o site já com lista/pedido guardado), se a permissão está dada, o aviso liga neste aparelho (`ativarAvisoAoComecar`). Isso não fala com o servidor; ele só fica sabendo no "Já pedi".
 - Quem toca em "Desligar aviso" fica com a marca `quemsaiu_aviso_desligado` e **não** é religado sozinho; "Ativar aviso" ou "Apagar meus dados" limpam a marca.
 - A política de privacidade nova (servidor/RASCUNHO-politica.md) precisa dizer que o pedido de permissão aparece ao abrir o site.
+
+## Pedir de novo ao tocar em "Começar agora"
+- Se a pessoa **ignorou** o pedido do navegador (permissão ainda "default"), ao tocar em "Começar agora" o site pergunta de novo (no máximo uma vez por visita). Se permitir, o aviso liga.
+- Se a pessoa **negou**, o navegador não deixa perguntar outra vez: o site só mostra "Sem a permissão do navegador… libere as notificações deste site nas configurações do navegador" e mantém o botão "Ativar aviso".
+- Quem tocou em "Desligar aviso" continua sem ser perguntado nem religado sozinho.

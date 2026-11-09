@@ -119,7 +119,7 @@ document.getElementById("btnComecar").addEventListener("click", function () {
   var f = document.getElementById("ferramenta");
   f.style.display = "block";
   setTimeout(function () { f.scrollIntoView({ behavior: "smooth", block: "start" }); }, 60);
-  ativarAvisoAoComecar();
+  ativarAvisoAoComecar(true);
 });
 
 /* ===== passo a passo expansível ===== */
@@ -1072,7 +1072,7 @@ async function ativarAviso() {
   try {
     var perm = await Notification.requestPermission();
     if (perm !== "granted") {
-      nota.textContent = "Sem a permissão do navegador não consigo avisar. Se mudar de ideia, libere as notificações deste site nas configurações do navegador.";
+      nota.textContent = TEXTO_PERMISSAO_NEGADA;
       return;
     }
     reg = await navigator.serviceWorker.ready;
@@ -1101,11 +1101,27 @@ function apagarRegistroAviso() {
 var CHAVE_AVISO_DESLIGADO = "quemsaiu_aviso_desligado";
 var CHAVE_PERMISSAO_PEDIDA = "quemsaiu_permissao_pedida";
 var comecou = false;
-function ativarAvisoAoComecar() {
+var pedidoPendente = false;      /* o pedido feito ao abrir o site ainda não foi respondido */
+var repediuNestaVisita = false;  /* ao tocar em "Começar agora" só pedimos de novo uma vez por visita */
+var TEXTO_PERMISSAO_NEGADA = "Sem a permissão do navegador não consigo avisar. Se mudar de ideia, libere as notificações deste site nas configurações do navegador.";
+/* clique = true quando veio de um toque em "Começar agora". Se a pessoa tinha ignorado o pedido (permissão ainda "default"),
+   pedimos de novo; se tinha negado, o navegador não deixa perguntar outra vez: só explicamos como liberar. */
+function ativarAvisoAoComecar(clique) {
   comecou = true;
-  if (!avisosLigados() || !avisosSuportado() || Notification.permission !== "granted" || lerAviso()) return;
+  if (!avisosLigados() || !avisosSuportado() || lerAviso()) return;
   try { if (localStorage.getItem(CHAVE_AVISO_DESLIGADO)) return; } catch (e) {}
-  ativarAviso();
+  var perm = Notification.permission;
+  if (perm === "granted") { ativarAviso(); return; }
+  if (!clique || pedidoPendente) return;
+  if (perm === "denied") { document.getElementById("notaAviso").textContent = TEXTO_PERMISSAO_NEGADA; return; }
+  if (repediuNestaVisita) return;
+  repediuNestaVisita = true;
+  try {
+    Promise.resolve(Notification.requestPermission()).then(function (p) {
+      if (p === "granted") ativarAviso();
+      else if (p === "denied") document.getElementById("notaAviso").textContent = TEXTO_PERMISSAO_NEGADA;
+    }).catch(function () {});
+  } catch (e) {}
 }
 function pedirPermissaoAoAbrir() {
   if (!avisosLigados() || !avisosSuportado() || Notification.permission !== "default") return;
@@ -1113,11 +1129,13 @@ function pedirPermissaoAoAbrir() {
     if (localStorage.getItem(CHAVE_PERMISSAO_PEDIDA)) return;
     localStorage.setItem(CHAVE_PERMISSAO_PEDIDA, "1");
   } catch (e) { return; }
+  pedidoPendente = true;
   try {
     Promise.resolve(Notification.requestPermission()).then(function (perm) {
+      pedidoPendente = false;
       if (perm === "granted" && comecou) ativarAvisoAoComecar();
-    }).catch(function () {});
-  } catch (e) {}
+    }).catch(function () { pedidoPendente = false; });
+  } catch (e) { pedidoPendente = false; }
 }
 /* desliga o aviso: apaga o registro no servidor e cancela a inscrição neste navegador */
 async function desligarAviso() {
