@@ -806,3 +806,9 @@ Vem da ESPECIFICAÇÃO PARA O CLAUDE CODE (sessão de estratégia). Tudo atrás 
 - Depois de "Já pedi" a tela mostra só: "Anotado. Quando o Instagram avisar por e-mail, volte aqui."
 - Mandar a lista ou "Desfazer" apagam só o registro no servidor; o aviso continua ligado para o próximo pedido. "Desligar aviso" e "Apagar meus dados" desligam tudo.
 - A caixa "Baixou o arquivo? / Ainda não chegou" foi removida.
+
+## Permissão ao abrir o site; aviso liga ao tocar em "Começar agora"
+- Com os avisos ligados (`AVISOS_ATIVO` ou modo de teste), o site pede a permissão de notificação **uma vez** ao abrir (`pedirPermissaoAoAbrir`, marca `quemsaiu_permissao_pedida`). O Chrome pode silenciar ou esconder pedidos que aparecem sozinhos; se a pessoa ignorar ou negar, o botão "Ativar aviso" continua na tela "Sua lista".
+- Ao tocar em "Começar agora" (ou ao abrir o site já com lista/pedido guardado), se a permissão está dada, o aviso liga neste aparelho (`ativarAvisoAoComecar`). Isso não fala com o servidor; ele só fica sabendo no "Já pedi".
+- Quem toca em "Desligar aviso" fica com a marca `quemsaiu_aviso_desligado` e **não** é religado sozinho; "Ativar aviso" ou "Apagar meus dados" limpam a marca.
+- A política de privacidade nova (servidor/RASCUNHO-politica.md) precisa dizer que o pedido de permissão aparece ao abrir o site.

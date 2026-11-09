@@ -119,6 +119,7 @@ document.getElementById("btnComecar").addEventListener("click", function () {
   var f = document.getElementById("ferramenta");
   f.style.display = "block";
   setTimeout(function () { f.scrollIntoView({ behavior: "smooth", block: "start" }); }, 60);
+  ativarAvisoAoComecar();
 });
 
 /* ===== passo a passo expansível ===== */
@@ -428,7 +429,7 @@ function gravarDados(v) {
 }
 function apagarDadosLocais() {
   try { desligarAviso(); } catch (e) {}
-  try { localStorage.removeItem(CHAVE); localStorage.removeItem(CHAVE_IGNORADAS); localStorage.removeItem(CHAVE_PEDIDO); } catch (e) {}
+  try { localStorage.removeItem(CHAVE); localStorage.removeItem(CHAVE_IGNORADAS); localStorage.removeItem(CHAVE_PEDIDO); localStorage.removeItem("quemsaiu_aviso_desligado"); } catch (e) {}
   delete memoria[CHAVE];
   delete memoria[CHAVE_IGNORADAS];
 }
@@ -1036,7 +1037,8 @@ function atualizarAviso() {
   document.getElementById("btnAtivarAviso").hidden = ligado;
   document.getElementById("textoAviso").hidden = ligado;
   document.getElementById("btnDesligarAviso").hidden = !ligado;
-  if (ligado) document.getElementById("notaAviso").textContent = "Aviso ligado neste aparelho. Depois que você tocar em “Já pedi”, ele avisa até 4 vezes e para sozinho quando você mandar a lista.";
+  document.getElementById("tituloAviso").textContent = ligado ? "Aviso no celular" : "Quer um aviso no celular?";
+  if (ligado) document.getElementById("notaAviso").textContent = "Aviso ligado neste aparelho. Depois que você tocar em “Já pedi”, posso te avisar até 4 vezes nas duas semanas seguintes, sempre entre 9h e 20h. Guardo só o endereço do aviso deste aparelho e a data do pedido, nunca a sua lista. Ele para sozinho quando você mandar a lista.";
 }
 function fusoDoAparelho() {
   var fuso = "America/Sao_Paulo";
@@ -1093,6 +1095,29 @@ function apagarRegistroAviso() {
   if (!a) return;
   try { localStorage.setItem(CHAVE_AVISO, JSON.stringify({ aparelho: a.aparelho })); } catch (e) {}
   try { avisarServidor("/apagar", { aparelho: a.aparelho }).catch(function () {}); } catch (e) {}
+}
+/* A permissão do navegador é pedida uma vez, ao abrir o site; o aviso só é ligado de verdade ao tocar em "Começar agora".
+   Quem desliga o aviso por conta própria não é ligado de novo sozinho (CHAVE_AVISO_DESLIGADO). */
+var CHAVE_AVISO_DESLIGADO = "quemsaiu_aviso_desligado";
+var CHAVE_PERMISSAO_PEDIDA = "quemsaiu_permissao_pedida";
+var comecou = false;
+function ativarAvisoAoComecar() {
+  comecou = true;
+  if (!avisosLigados() || !avisosSuportado() || Notification.permission !== "granted" || lerAviso()) return;
+  try { if (localStorage.getItem(CHAVE_AVISO_DESLIGADO)) return; } catch (e) {}
+  ativarAviso();
+}
+function pedirPermissaoAoAbrir() {
+  if (!avisosLigados() || !avisosSuportado() || Notification.permission !== "default") return;
+  try {
+    if (localStorage.getItem(CHAVE_PERMISSAO_PEDIDA)) return;
+    localStorage.setItem(CHAVE_PERMISSAO_PEDIDA, "1");
+  } catch (e) { return; }
+  try {
+    Promise.resolve(Notification.requestPermission()).then(function (perm) {
+      if (perm === "granted" && comecou) ativarAvisoAoComecar();
+    }).catch(function () {});
+  } catch (e) {}
 }
 /* desliga o aviso: apaga o registro no servidor e cancela a inscrição neste navegador */
 async function desligarAviso() {
@@ -1158,13 +1183,20 @@ function baixarLembrete(tipo) {
 }
 document.getElementById("btnJaPedi").addEventListener("click", function () { gravarPedido(); atualizarPedido(); contarFunil("pediu"); sincronizarAviso(); });
 document.getElementById("btnDesfazerPedido").addEventListener("click", function () { limparPedido(); apagarRegistroAviso(); atualizarPedido(); });
-document.getElementById("btnAtivarAviso").addEventListener("click", function () { ativarAviso(); });
-document.getElementById("btnDesligarAviso").addEventListener("click", function () { desligarAviso(); });
+document.getElementById("btnAtivarAviso").addEventListener("click", function () {
+  try { localStorage.removeItem(CHAVE_AVISO_DESLIGADO); } catch (e) {}
+  ativarAviso();
+});
+document.getElementById("btnDesligarAviso").addEventListener("click", function () {
+  try { localStorage.setItem(CHAVE_AVISO_DESLIGADO, "1"); } catch (e) {}
+  desligarAviso();
+});
 document.querySelectorAll("[data-lembrar]").forEach(function (b) {
   b.addEventListener("click", function () { baixarLembrete(b.dataset.lembrar); });
 });
 atualizarPedido();
 sincronizarAviso();
+if (document.readyState === "complete") pedirPermissaoAoAbrir(); else window.addEventListener("load", pedirPermissaoAoAbrir);
 /* "voltou": abriu o site com um pedido já anotado (conta uma vez por sessão; o contador carrega depois deste arquivo) */
 if (lerPedido()) window.addEventListener("load", function () { contarFunil("voltou", true); });
 
@@ -1231,9 +1263,10 @@ document.getElementById("btnApagar").addEventListener("click", function () {
   cardResultado.style.display = "none";
 });
 
-/* se já houver dados salvos, abre a ferramenta direto */
+/* se já houver dados salvos, abre a ferramenta direto (e o aviso, se já foi permitido, liga igual ao "Começar agora") */
 if (lerDados().length > 0 || lerPedido()) {
   document.getElementById("ferramenta").style.display = "block";
+  ativarAvisoAoComecar();
 }
 atualizarStatus();
 renderizarResultado();
@@ -1327,6 +1360,7 @@ async function verificarArquivoCompartilhado() {
 
   history.replaceState(null, "", location.pathname);
   document.getElementById("ferramenta").style.display = "block";
+  ativarAvisoAoComecar();
 
   if (marca === "erro" || marca === "vazio") {
     mostrarErro("Não consegui receber o arquivo compartilhado. Tente pelo botão de importar.");
