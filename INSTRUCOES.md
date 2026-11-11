@@ -817,3 +817,9 @@ Vem da ESPECIFICAÇÃO PARA O CLAUDE CODE (sessão de estratégia). Tudo atrás 
 - Se a pessoa **ignorou** o pedido do navegador (permissão ainda "default"), ao tocar em "Começar agora" o site pergunta de novo (no máximo uma vez por visita). Se permitir, o aviso liga.
 - Se a pessoa **negou**, o navegador não deixa perguntar outra vez: o site só mostra "Sem a permissão do navegador… libere as notificações deste site nas configurações do navegador" e mantém o botão "Ativar aviso".
 - Quem tocou em "Desligar aviso" continua sem ser perguntado nem religado sozinho.
+
+## Ajustes de UX (leis de Fitts, Hick, Zeigarnik, Jakob, Von Restorff)
+- Alvos de toque de 44 px sem mudar o visual: abas do topo (borda transparente de 7 px), "Compartilhar" e o × (área extra com `::after`), nome do perfil (linha de 48 px). Teste: `tests/areas_de_toque.py`.
+- "Ativar aviso" virou botão em contorno para não competir com "Mandar lista".
+- A explicação acima da lista de resultados começa curta ("Estavam na lista anterior e não estão na atual. O arquivo não diz o motivo.") e o resto fica atrás de "Saiba mais".
+- Não aplicado (precisa de decisão): trocar o texto "Mandar lista", agrupar os 12 passos em fases e mostrar "Etapa X de 3" na tela "Sua lista".

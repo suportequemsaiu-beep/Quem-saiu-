@@ -965,13 +965,15 @@ function renderizarResultado() {
     aviso.textContent = "Lista pronta. " + rotuloAtivo + ".";
   }
 
-  var explicaAba = "";
+  var explicaAba = "", explicaMais = "";
   if (abaAtual === "saiu") {
     renderizarLista(saiu, "saiu", seguindoSet, "Ninguém deixou de te seguir entre as duas listas.");
-    explicaAba = "Estavam na lista anterior e não estão na atual. O arquivo não diz o motivo: a pessoa pode ter deixado de seguir, desativado ou excluído a conta, ou trocado de nome de usuário (nesse caso o nome novo aparece em \"Começaram a te seguir\").";
+    explicaAba = "Estavam na lista anterior e não estão na atual. O arquivo não diz o motivo.";
+    explicaMais = "A pessoa pode ter deixado de seguir, desativado ou excluído a conta, ou trocado de nome de usuário (nesse caso o nome novo aparece em \"Começaram a te seguir\").";
   } else if (abaAtual === "entrou") {
     renderizarLista(entrou, "entrou", seguindoSet, "Nenhum seguidor novo entre as duas listas.");
-    explicaAba = "Estão na lista atual e não estavam na anterior (pode ser uma conta nova ou alguém que trocou de nome de usuário).";
+    explicaAba = "Estão na lista atual e não estavam na anterior.";
+    explicaMais = "Pode ser uma conta nova ou alguém que trocou de nome de usuário.";
   } else {
     renderizarLista(naoSeguemVolta, "naoSegue", null, "Todo mundo que você segue também te segue.");
     explicaAba = "Quem você segue e não te segue de volta.";
@@ -980,7 +982,18 @@ function renderizarResultado() {
     dica.innerHTML = 'Toque no nome para abrir o perfil. Se abrir uma página em branco, a conta não existe mais — use o <b>&times;</b> para escondê-la desta lista.';
     listaResultado.appendChild(dica);
   }
-  listaResultado.insertAdjacentHTML("afterbegin", '<p class="explica-aba">' + explicaAba + "</p>");
+  /* a explicação começa curta; o resto fica atrás de "Saiba mais" para os nomes aparecerem mais perto */
+  listaResultado.insertAdjacentHTML("afterbegin",
+    '<p class="explica-aba">' + explicaAba +
+    (explicaMais ? ' <button type="button" class="saiba-mais" aria-expanded="false" aria-controls="explicaMais">Saiba mais</button>' : "") + "</p>" +
+    (explicaMais ? '<p class="explica-aba" id="explicaMais" hidden>' + explicaMais + "</p>" : ""));
+  var btnMais = listaResultado.querySelector(".saiba-mais");
+  if (btnMais) btnMais.addEventListener("click", function () {
+    var mais = document.getElementById("explicaMais"), abrir = mais.hidden;
+    mais.hidden = !abrir;
+    btnMais.setAttribute("aria-expanded", abrir ? "true" : "false");
+    btnMais.textContent = abrir ? "Mostrar menos" : "Saiba mais";
+  });
 }
 
 /* ===== "Já pedi", aviso ao voltar e lembrete no calendário ===== */
