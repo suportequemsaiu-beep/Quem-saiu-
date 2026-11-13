@@ -39,8 +39,8 @@ with sync_playwright() as p:
     ok("cdnjs" not in cru,"N1 index.html não chama mais o CDN")
     ok("jszip.min.js" in cru,"N1 JSZip vem do próprio site")
     for frase in ["Preciso informar minha senha do Instagram?","Quantas listas ficam guardadas?","O Quem Saiu acessa a minha conta do Instagram?","E se o Instagram mudar o formato do arquivo?",
-                  "No Chrome do Android","verifique a sua <b>caixa de entrada</b> ou o <b>spam</b>",
-                  "Remove as listas guardadas e as contas escondidas","Peça uma nova lista ao Instagram","Toque em <b>Notificar</b>","está apagado. O que faço?"]:
+                  "No Chrome do Android","olhe também o <b>spam</b>",
+                  "Só neste navegador. Não dá para desfazer.","Viu o número mudar? Mande de novo","Toque em <b>Notificar</b>","está apagado. O que faço?"]:
         ok(frase in cru,"N1 HTML cru contém: "+frase)
     ok("adamsandler" not in cru and "adamsandler" not in open(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),"script.js"),encoding="utf-8").read().lower(),"N1 @adamsandler removido")
 

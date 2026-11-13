@@ -228,7 +228,6 @@
 
     <div class="revelado" id="revelado">
 
-      <p class="rotulo-secao">Uma amostra do que te espera</p>
       <div class="prova">
         <span class="etiqueta-exemplo">Exemplo</span>
         <div class="abas-prova">
@@ -246,22 +245,19 @@
         <div class="etapa">
           <span class="marca-num">1</span>
           <div>
-            <h3>Marque seu ponto de partida</h3>
-            <p>Você manda a sua lista pela primeira vez.</p>
+            <h3>Mande sua lista</h3>
           </div>
         </div>
         <div class="etapa">
           <span class="marca-num">2</span>
           <div>
-            <h3>Viu o número mudar?</h3>
-            <p>Perdeu um seguidor e ficou naquela dúvida? <span class="destaque">É a hora de voltar aqui.</span> Peça uma nova lista ao Instagram e mande, igual na primeira vez.</p>
+            <h3>Viu o número mudar? Mande de novo</h3>
           </div>
         </div>
         <div class="etapa">
           <span class="marca-num">3</span>
           <div>
             <h3>Descubra quem foi</h3>
-            <p>O Quem Saiu compara as duas listas e te conta exatamente o que você quer saber.</p>
           </div>
         </div>
       </div>
@@ -285,16 +281,14 @@
       </div>
 
       <h2>Deixe o Quem Saiu<br>no seu celular</h2>
-      <p class="desc-app">Instale em segundos e ele fica ali, junto dos seus apps — pronto para quando bater aquela dúvida.</p>
 
       <div class="vantagens">
         <div class="vantagem"><span class="tick">&check;</span><span><b>Abra com um clique</b></span></div>
-        <div class="vantagem"><span class="tick">&check;</span><span><b>Mais facilidade para ver e enviar a sua lista</b></span></div>
-        <div class="vantagem"><span class="tick">&check;</span><span><b>A mesma privacidade com muito mais praticidade</b></span></div>
+        <div class="vantagem"><span class="tick">&check;</span><span><b>Enviar a lista fica mais fácil</b></span></div>
       </div>
 
       <button class="btn-instalar-grande" id="btnInstalar">Instalar o Quem Saiu</button>
-      <p class="nota-loja">Sem loja de aplicativo · não ocupa nada · remova quando quiser</p>
+      <p class="nota-loja">Sem loja · remova quando quiser</p>
 
       <button class="link-sem-instalar" id="btnDispensar">Prefiro usar sem instalar</button>
     </div>
@@ -307,7 +301,7 @@
         <button class="botao-importar" id="btnImportar">Mandar lista</button>
         <button class="botao-secundario desativado" id="btnComparar" aria-disabled="true">Ver a comparação</button>
         <input type="file" id="inputArquivo" multiple style="display:none" aria-label="Escolher o arquivo do Instagram" />
-        <p class="dica-arquivo">Procure em <b>Recentes</b> ou <b>Downloads</b> — o nome começa com <b>instagram-</b> e é o arquivo mais novo. Não precisa descompactar.</p>
+        <p class="dica-arquivo">Em <b>Downloads</b>, o arquivo mais novo que começa com <b>instagram-</b>.</p>
         <div class="progresso" id="progresso">
           <div class="progresso-trilho"><div class="progresso-barra" id="progressoBarra"></div></div>
           <p class="progresso-texto" id="progressoTexto">Abrindo o arquivo…</p>
@@ -318,7 +312,7 @@
 
         <div id="blocoAviso" hidden>
           <p class="aviso-titulo" id="tituloAviso">Quer um aviso no celular?</p>
-          <p class="aviso-texto" id="textoAviso">Depois que você pedir o arquivo ao Instagram, posso te avisar até 4 vezes nas duas semanas seguintes, sempre entre 9h e 20h, para você lembrar de voltar. Para isso guardo só o endereço do aviso deste aparelho e a data do pedido, nunca a sua lista. Você desliga quando quiser.</p>
+          <p class="aviso-texto" id="textoAviso">Até 4 avisos em 2 semanas, entre 9h e 20h. Guardo só o endereço do aviso e a data do pedido, nunca a sua lista.</p>
           <button class="botao-ativar-aviso" id="btnAtivarAviso" type="button">Ativar aviso</button>
           <button class="link-desligar-aviso" id="btnDesligarAviso" type="button" hidden>Desligar aviso</button>
           <p class="aviso-nota" id="notaAviso" role="status"></p>
@@ -333,15 +327,15 @@
             <ol class="etapas" id="listaEtapas">
               <li class="passo-etapa" data-fase="pedir" data-tela="perfil">
                 <h3>Abra o menu</h3>
-                <p>No Instagram, abra o seu perfil e toque no menu <b>☰</b>, no canto de cima à direita. Vai abrir a tela <b>Configurações e atividade</b>.</p>
+                <p>No seu perfil, toque no menu <b>☰</b> (canto de cima, à direita).</p>
               </li>
               <li class="passo-etapa" data-fase="pedir" data-tela="menu">
                 <h3>Conta Meta</h3>
-                <p>Na tela que abrir, toque em <b>Conta Meta</b>, logo no começo da lista. Em alguns celulares ela aparece como <b>Central de Contas</b>.</p>
+                <p>Toque em <b>Conta Meta</b> (ou <b>Central de Contas</b>).</p>
               </li>
               <li class="passo-etapa" data-fase="pedir" data-tela="central">
                 <h3>Suas informações e permissões</h3>
-                <p>Dentro da Conta Meta, toque em <b>Suas informações e permissões</b>.</p>
+                <p>Toque em <b>Suas informações e permissões</b>.</p>
               </li>
               <li class="passo-etapa" data-fase="pedir" data-tela="exportar">
                 <h3>Exportar suas informações</h3>
@@ -349,41 +343,40 @@
               </li>
               <li class="passo-etapa" data-fase="pedir" data-tela="criar">
                 <h3>Criar exportação</h3>
-                <p>Toque em <b>Criar exportação</b> e escolha a sua conta.</p>
+                <p>Toque em <b>Criar exportação</b> e escolha sua conta.</p>
               </li>
               <li class="passo-etapa" data-fase="pedir" data-tela="destino">
                 <h3>Exportar para o aparelho</h3>
-                <p>Escolha <b>Exportar para dispositivo</b> — e não "serviço externo".</p>
+                <p>Escolha <b>Exportar para dispositivo</b>.</p>
               </li>
               <li class="passo-etapa" data-fase="pedir" data-tela="notificar">
                 <h3>Notificar</h3>
-                <p>Toque em <b>Notificar</b> e escolha uma forma de aviso, de preferência o <b>e-mail</b>.</p>
-                <p class="etapa-nota">Sem isso, o botão "Iniciar exportação" fica apagado.</p>
+                <p>Toque em <b>Notificar</b> e escolha <b>e-mail</b>.</p>
               </li>
               <li class="passo-etapa" data-fase="pedir" data-tela="formato">
                 <h3>Formato JSON</h3>
-                <p>Em <b>Formato</b>, escolha <b>JSON</b>, salve e volte.</p>
+                <p>Em <b>Formato</b>, escolha <b>JSON</b>.</p>
               </li>
               <li class="passo-etapa" data-fase="pedir" data-tela="iniciar">
                 <h3>Iniciar a exportação</h3>
-                <p>Toque em <b>Iniciar exportação</b>. Agora é só esperar.</p>
+                <p>Toque em <b>Iniciar exportação</b>.</p>
               </li>
               <li class="passo-etapa" data-fase="esperar" data-tela="email">
                 <h3>Espere o e-mail</h3>
-                <p>O Instagram manda um <b>e-mail</b> quando o arquivo fica pronto — verifique a sua <b>caixa de entrada</b> ou o <b>spam</b>, às vezes ele chega lá.</p>
+                <p>Chega por <b>e-mail</b> (olhe também o <b>spam</b>).</p>
               </li>
               <li class="passo-etapa" data-fase="enviar" data-tela="baixar">
                 <h3>Baixe o arquivo</h3>
-                <p>Abra o e-mail e baixe o arquivo pelo link.</p>
+                <p>Abra o e-mail e baixe pelo link.</p>
               </li>
               <li class="passo-etapa so-celular" data-fase="enviar" data-tela="compartilhar">
                 <h3>Mande para o Quem Saiu</h3>
                 <p>No Chrome do Android: <b>⋮</b> → <b>Transferências</b> → <b>três pontinhos</b> do arquivo → <b>Compartilhar</b> → <b>Quem Saiu</b>.</p>
-                <p class="etapa-nota">Precisa do Quem Saiu instalado e só existe no Android. Sem ele, use o botão <b>Mandar lista</b> aqui em cima e escolha o arquivo em Downloads.</p>
+                <p class="etapa-nota">Sem o Quem Saiu instalado, use o botão <b>Mandar lista</b> aqui em cima.</p>
               </li>
               <li class="passo-etapa so-computador" data-fase="enviar" data-tela="pc">
                 <h3>Escolha o arquivo aqui</h3>
-                <p>Volte para esta página, clique em <b>Mandar lista</b> e escolha o arquivo na pasta <b>Downloads</b> — o nome começa com <b>instagram-</b>.</p>
+                <p>Clique em <b>Mandar lista</b> e escolha o arquivo em <b>Downloads</b>.</p>
               </li>
             </ol>
             <div class="ja-pedi" id="jaPedi">
@@ -397,7 +390,7 @@
                     <button type="button" data-lembrar="noite" id="btnLembrarNoite">Esta noite</button>
                     <button type="button" data-lembrar="manha">Amanhã</button>
                   </div>
-                  <p class="ja-pedi-nota" id="notaLembrete">O lembrete é só um aviso: o Instagram não garante quando o arquivo fica pronto.</p>
+                  <p class="ja-pedi-nota" id="notaLembrete">O Instagram não garante o prazo.</p>
                 </div>
                 <button class="link-desfazer" id="btnDesfazerPedido" type="button">Desfazer</button>
               </div>
@@ -408,22 +401,21 @@
 
       <div class="card" id="cardResultado" style="display:none;">
         <h3 id="tituloResultado">Resultado</h3>
-        <p class="ponto-partida" id="pontoPartida" hidden><b>Ponto de partida salvo.</b> Na próxima vez que você enviar uma lista nova, o Quem Saiu mostra quem deixou de te seguir.</p>
+        <p class="ponto-partida" id="pontoPartida" hidden><b>Ponto de partida salvo.</b> Mande outra lista depois para ver quem deixou de te seguir.</p>
         <div class="abas-resultado" id="abasResultado"></div>
         <div id="listaResultado"></div>
 
         <div class="convite-pos" id="convitePos">
           <span class="mini-icone" aria-hidden="true"></span>
           <div>
-            <h3>Gostou? Deixe à mão para a próxima</h3>
-            <p>Instale o Quem Saiu e volte com um toque quando notar mudança nos seguidores.</p>
+            <h3>Gostou? Deixe à mão</h3>
             <button class="bt" id="btnInstalarPos">Instalar</button>
             <button class="depois" id="btnDispensarPos">Depois</button>
           </div>
         </div>
 
         <button class="apagar" id="btnApagar">Apagar meus dados deste navegador</button>
-        <p class="nota-apagar">Remove as listas guardadas e as contas escondidas, só neste navegador. Não dá para desfazer.</p>
+        <p class="nota-apagar">Só neste navegador. Não dá para desfazer.</p>
       </div>
     </div>
   </section>

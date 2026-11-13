@@ -1051,7 +1051,7 @@ function atualizarAviso() {
   document.getElementById("textoAviso").hidden = ligado;
   document.getElementById("btnDesligarAviso").hidden = !ligado;
   document.getElementById("tituloAviso").textContent = ligado ? "Aviso no celular" : "Quer um aviso no celular?";
-  if (ligado) document.getElementById("notaAviso").textContent = "Aviso ligado neste aparelho. Depois que você tocar em “Já pedi”, posso te avisar até 4 vezes nas duas semanas seguintes, sempre entre 9h e 20h. Guardo só o endereço do aviso deste aparelho e a data do pedido, nunca a sua lista. Ele para sozinho quando você mandar a lista.";
+  if (ligado) document.getElementById("notaAviso").textContent = "Aviso ligado. Depois do “Já pedi”, até 4 vezes em 2 semanas, entre 9h e 20h. Guardo só o endereço do aviso e a data do pedido, nunca a sua lista. Para sozinho quando você mandar a lista.";
 }
 function fusoDoAparelho() {
   var fuso = "America/Sao_Paulo";
