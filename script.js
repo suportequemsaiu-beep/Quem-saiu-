@@ -796,6 +796,7 @@ function guardarNova(nova) {
 
 function atualizarStatus() {
   var dados = lerDados();
+  atualizarDica();
   if (dados.length === 0) {
     statusImport.textContent = "Você ainda não enviou nenhuma lista.";
     marcarVerLista(false);
@@ -1166,8 +1167,15 @@ async function desligarAviso() {
   atualizarAviso();
 }
 function diaMes(iso) { return new Date(iso).toLocaleDateString("pt-BR", { day: "numeric", month: "long" }); }
+/* a dica "Recentes ou Downloads" só aparece quando a pessoa já tem uma lista para mandar:
+   depois do "Já pedi" ou quando já existe uma lista guardada (voltou com o arquivo novo) */
+function atualizarDica() {
+  var d = document.getElementById("dicaArquivo");
+  if (d) d.hidden = !(lerPedido() || lerDados().length > 0);
+}
 function atualizarPedido() {
   var p = lerPedido();
+  atualizarDica();
   var btn = document.getElementById("btnJaPedi");
   document.getElementById("jaPediFeito").hidden = !p;
   btn.hidden = !!p;

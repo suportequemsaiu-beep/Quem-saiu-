@@ -356,3 +356,4 @@
   .card-lista .botao-ativar-aviso { margin-top: 12px; }
   .card-lista .link-desligar-aviso { margin-left: -8px; }
   .card-lista .expansivel { margin-top: 16px; }
+  .dica-arquivo[hidden] { display: none; }
