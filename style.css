@@ -357,3 +357,4 @@
   .card-lista .link-desligar-aviso { margin-left: -8px; }
   .card-lista .expansivel { margin-top: 16px; }
   .dica-arquivo[hidden] { display: none; }
+  .card-lista .dica-arquivo { text-align: left; font-size: 13.5px; margin: 16px 2px 0; }
