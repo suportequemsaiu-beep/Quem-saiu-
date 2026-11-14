@@ -347,3 +347,12 @@
     .cta-principal:hover { background: #0284c7; transform: translateY(-1px); }
     .cta-final:hover, .botao-importar:hover, .btn-instalar-grande:hover { background: #0284c7; }
 }
+
+  /* ===== "Sua lista" mais leve: texto à esquerda, menos caixas, o botão principal manda ===== */
+  .card-lista .status-import { text-align: left; font-size: 13.5px; line-height: 1.5; margin: 16px 2px 0; }
+  .card-lista #blocoAviso { margin-top: 16px; padding: 14px 0 0; background: none; border: none; border-top: 1px solid #2f3447; border-radius: 0; text-align: left; }
+  .card-lista #blocoAviso .aviso-titulo { font-size: 15px; }
+  .card-lista #blocoAviso .aviso-texto, .card-lista #blocoAviso .aviso-nota { font-size: 13.5px; margin: 6px 0 0; }
+  .card-lista .botao-ativar-aviso { margin-top: 12px; }
+  .card-lista .link-desligar-aviso { margin-left: -8px; }
+  .card-lista .expansivel { margin-top: 16px; }

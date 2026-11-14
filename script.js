@@ -797,7 +797,7 @@ function guardarNova(nova) {
 function atualizarStatus() {
   var dados = lerDados();
   if (dados.length === 0) {
-    statusImport.textContent = "Você ainda não enviou nenhuma lista. Para descobrir quem saiu, primeiro envie a lista mais recente do Instagram.";
+    statusImport.textContent = "Você ainda não enviou nenhuma lista.";
     marcarVerLista(false);
     return;
   }
@@ -1116,7 +1116,7 @@ var CHAVE_PERMISSAO_PEDIDA = "quemsaiu_permissao_pedida";
 var comecou = false;
 var pedidoPendente = false;      /* o pedido feito ao abrir o site ainda não foi respondido */
 var repediuNestaVisita = false;  /* ao tocar em "Começar agora" só pedimos de novo uma vez por visita */
-var TEXTO_PERMISSAO_NEGADA = "Sem a permissão do navegador não consigo avisar. Se mudar de ideia, libere as notificações deste site nas configurações do navegador.";
+var TEXTO_PERMISSAO_NEGADA = "Sem a permissão não consigo avisar. Para mudar, libere as notificações deste site no navegador.";
 /* clique = true quando veio de um toque em "Começar agora". Se a pessoa tinha ignorado o pedido (permissão ainda "default"),
    pedimos de novo; se tinha negado, o navegador não deixa perguntar outra vez: só explicamos como liberar. */
 function ativarAvisoAoComecar(clique) {

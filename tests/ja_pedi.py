@@ -20,7 +20,7 @@ with sync_playwright() as p:
     pg.goto(U); pg.wait_for_timeout(300)
     abrir_guia(pg)
     ok(pg.is_visible("#btnJaPedi") and "Já pedi" in pg.inner_text("#btnJaPedi"), "1 o guia tem o botão 'Já pedi o arquivo ao Instagram'")
-    ok("ainda não enviou nenhuma lista" in pg.inner_text("#statusImport") and "mais recente do Instagram" in pg.inner_text("#statusImport"), "2 estado vazio com o texto novo | %r" % pg.inner_text("#statusImport")[:90])
+    ok("ainda não enviou nenhuma lista" in pg.inner_text("#statusImport"), "2 estado vazio com o texto novo | %r" % pg.inner_text("#statusImport")[:90])
     ok(pg.evaluate("localStorage.getItem('quemsaiu_pedido')") is None, "3 antes de tocar nada foi guardado")
     pg.click("#btnJaPedi"); pg.wait_for_timeout(300)
     v = json.loads(pg.evaluate("localStorage.getItem('quemsaiu_pedido')"))
