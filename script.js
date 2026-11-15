@@ -119,7 +119,6 @@ document.getElementById("btnComecar").addEventListener("click", function () {
   var f = document.getElementById("ferramenta");
   f.style.display = "block";
   setTimeout(function () { f.scrollIntoView({ behavior: "smooth", block: "start" }); }, 60);
-  ativarAvisoAoComecar(true);
 });
 
 /* ===== passo a passo expansível ===== */
@@ -1110,47 +1109,9 @@ function apagarRegistroAviso() {
   try { localStorage.setItem(CHAVE_AVISO, JSON.stringify({ aparelho: a.aparelho })); } catch (e) {}
   try { avisarServidor("/apagar", { aparelho: a.aparelho }).catch(function () {}); } catch (e) {}
 }
-/* A permissão do navegador é pedida uma vez, ao abrir o site; o aviso só é ligado de verdade ao tocar em "Começar agora".
-   Quem desliga o aviso por conta própria não é ligado de novo sozinho (CHAVE_AVISO_DESLIGADO). */
-var CHAVE_AVISO_DESLIGADO = "quemsaiu_aviso_desligado";
-var CHAVE_PERMISSAO_PEDIDA = "quemsaiu_permissao_pedida";
-var comecou = false;
-var pedidoPendente = false;      /* o pedido feito ao abrir o site ainda não foi respondido */
-var repediuNestaVisita = false;  /* ao tocar em "Começar agora" só pedimos de novo uma vez por visita */
+/* A permissão do navegador só é pedida quando a pessoa toca em "Ativar aviso", depois de tocar em "Já pedi"
+   (no fim do passo a passo, quando ela já sabe para que serve). */
 var TEXTO_PERMISSAO_NEGADA = "Sem a permissão não consigo avisar. Para mudar, libere as notificações deste site no navegador.";
-/* clique = true quando veio de um toque em "Começar agora". Se a pessoa tinha ignorado o pedido (permissão ainda "default"),
-   pedimos de novo; se tinha negado, o navegador não deixa perguntar outra vez: só explicamos como liberar. */
-function ativarAvisoAoComecar(clique) {
-  comecou = true;
-  if (!avisosLigados() || !avisosSuportado() || lerAviso()) return;
-  try { if (localStorage.getItem(CHAVE_AVISO_DESLIGADO)) return; } catch (e) {}
-  var perm = Notification.permission;
-  if (perm === "granted") { ativarAviso(); return; }
-  if (!clique || pedidoPendente) return;
-  if (perm === "denied") { document.getElementById("notaAviso").textContent = TEXTO_PERMISSAO_NEGADA; return; }
-  if (repediuNestaVisita) return;
-  repediuNestaVisita = true;
-  try {
-    Promise.resolve(Notification.requestPermission()).then(function (p) {
-      if (p === "granted") ativarAviso();
-      else if (p === "denied") document.getElementById("notaAviso").textContent = TEXTO_PERMISSAO_NEGADA;
-    }).catch(function () {});
-  } catch (e) {}
-}
-function pedirPermissaoAoAbrir() {
-  if (!avisosLigados() || !avisosSuportado() || Notification.permission !== "default") return;
-  try {
-    if (localStorage.getItem(CHAVE_PERMISSAO_PEDIDA)) return;
-    localStorage.setItem(CHAVE_PERMISSAO_PEDIDA, "1");
-  } catch (e) { return; }
-  pedidoPendente = true;
-  try {
-    Promise.resolve(Notification.requestPermission()).then(function (perm) {
-      pedidoPendente = false;
-      if (perm === "granted" && comecou) ativarAvisoAoComecar();
-    }).catch(function () { pedidoPendente = false; });
-  } catch (e) { pedidoPendente = false; }
-}
 /* desliga o aviso: apaga o registro no servidor e cancela a inscrição neste navegador */
 async function desligarAviso() {
   var a = lerAviso();
@@ -1223,11 +1184,9 @@ function baixarLembrete(tipo) {
 document.getElementById("btnJaPedi").addEventListener("click", function () { gravarPedido(); atualizarPedido(); contarFunil("pediu"); sincronizarAviso(); });
 document.getElementById("btnDesfazerPedido").addEventListener("click", function () { limparPedido(); apagarRegistroAviso(); atualizarPedido(); });
 document.getElementById("btnAtivarAviso").addEventListener("click", function () {
-  try { localStorage.removeItem(CHAVE_AVISO_DESLIGADO); } catch (e) {}
   ativarAviso();
 });
 document.getElementById("btnDesligarAviso").addEventListener("click", function () {
-  try { localStorage.setItem(CHAVE_AVISO_DESLIGADO, "1"); } catch (e) {}
   desligarAviso();
 });
 document.querySelectorAll("[data-lembrar]").forEach(function (b) {
@@ -1235,7 +1194,6 @@ document.querySelectorAll("[data-lembrar]").forEach(function (b) {
 });
 atualizarPedido();
 sincronizarAviso();
-if (document.readyState === "complete") pedirPermissaoAoAbrir(); else window.addEventListener("load", pedirPermissaoAoAbrir);
 /* "voltou": abriu o site com um pedido já anotado (conta uma vez por sessão; o contador carrega depois deste arquivo) */
 if (lerPedido()) window.addEventListener("load", function () { contarFunil("voltou", true); });
 
@@ -1302,10 +1260,9 @@ document.getElementById("btnApagar").addEventListener("click", function () {
   cardResultado.style.display = "none";
 });
 
-/* se já houver dados salvos, abre a ferramenta direto (e o aviso, se já foi permitido, liga igual ao "Começar agora") */
+/* se já houver dados salvos, abre a ferramenta direto */
 if (lerDados().length > 0 || lerPedido()) {
   document.getElementById("ferramenta").style.display = "block";
-  ativarAvisoAoComecar();
 }
 atualizarStatus();
 renderizarResultado();
@@ -1399,7 +1356,6 @@ async function verificarArquivoCompartilhado() {
 
   history.replaceState(null, "", location.pathname);
   document.getElementById("ferramenta").style.display = "block";
-  ativarAvisoAoComecar();
 
   if (marca === "erro" || marca === "vazio") {
     mostrarErro("Não consegui receber o arquivo compartilhado. Tente pelo botão de importar.");

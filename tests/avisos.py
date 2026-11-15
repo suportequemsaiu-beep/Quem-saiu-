@@ -86,49 +86,54 @@ with sync_playwright() as p:
     ok(ch["registrar"] == [] and ch["apagar"] == [] and "pediu.txt" not in ch["m"] and pg.evaluate("window.__permPedidos") == 0, "2 sem a chave ligada, nada é enviado ao servidor, nada é contado e a permissão não é pedida")
     ctx.close()
 
-    # 3. fluxo normal: a permissão é pedida ao abrir o site e o aviso liga ao tocar em "Começar agora"
+    # 3. fluxo normal: nada é pedido ao abrir nem ao tocar em "Começar agora"; o aviso é oferecido depois de "Já pedi"
     ctx, ch = novo_contexto(br); pg = ctx.new_page(); errs = []
     pg.on("pageerror", lambda e: errs.append(str(e))); pg.on("dialog", lambda d: d.accept())
     pg.goto(U); pg.wait_for_timeout(500)
-    ok(pg.evaluate("window.__permPedidos") == 1, "3 ao abrir o site o navegador é perguntado uma vez sobre notificações")
-    ok(pg.evaluate("window.__subs") == 0 and ch["registrar"] == [] and pg.evaluate("localStorage.getItem('quemsaiu_aviso')") is None, "4 só abrir o site não liga nada: sem inscrição, sem servidor")
-    abrir_ferramenta(pg); pg.wait_for_timeout(500)
-    ok(pg.evaluate("window.__subs") == 1 and ch["registrar"] == [], "5 ao tocar em 'Começar agora' o aviso liga neste aparelho, sem falar com o servidor")
-    guardado = json.loads(pg.evaluate("localStorage.getItem('quemsaiu_aviso')") or "{}")
-    ok(list(guardado.keys()) == ["aparelho"], "6 no aparelho fica só o número do aparelho | %r" % list(guardado.keys()))
-    ok(pg.is_visible("#btnDesligarAviso") and not pg.is_visible("#btnAtivarAviso") and "Aviso ligado" in pg.inner_text("#notaAviso") and "nunca a sua lista" in pg.inner_text("#notaAviso") and "até 4 vezes" in pg.inner_text("#notaAviso"), "7 mostra 'Aviso ligado', explica o que guarda e oferece desligar")
-    abrir_guia(pg); pg.click("#btnJaPedi"); pg.wait_for_timeout(800)
-    ok(len(ch["registrar"]) == 1, "8 só ao tocar em 'Já pedi' o servidor é avisado")
+    ok(pg.evaluate("window.__permPedidos") == 0, "3 ao abrir o site o navegador NÃO é perguntado sobre notificações")
+    abrir_ferramenta(pg); pg.wait_for_timeout(400)
+    ok(pg.evaluate("window.__permPedidos") == 0 and not pg.is_visible("#blocoAviso") and pg.evaluate("window.__subs") == 0, "4 em 'Sua lista' não aparece oferta de aviso e nada é pedido")
+    pg.click("#togglePasso"); pg.wait_for_timeout(300)
+    ok(not pg.is_visible("#blocoAviso"), "4b com os passos abertos, antes de 'Já pedi', o aviso ainda não aparece")
+    pg.click("#btnJaPedi"); pg.wait_for_timeout(500)
+    ok(pg.is_visible("#blocoAviso") and pg.is_visible("#btnAtivarAviso") and "arquivo do Instagram estiver pronto" in pg.inner_text("#textoAviso"), "5 depois de 'Já pedi' aparece a oferta: avisamos quando o arquivo estiver pronto")
+    ok(pg.evaluate("window.__permPedidos") == 0 and pg.evaluate("window.__subs") == 0 and ch["registrar"] == [], "6 a oferta só aparece: ainda não pede permissão, não liga e não fala com o servidor")
+    pg.click("#btnAtivarAviso"); pg.wait_for_timeout(800)
+    ok(pg.evaluate("window.__permPedidos") == 1 and pg.evaluate("window.__subs") == 1, "7 ao tocar em 'Ativar aviso' o navegador pede a permissão e o aviso liga")
+    ok(len(ch["registrar"]) == 1, "8 como o pedido já foi feito, o servidor é avisado na hora")
     r = ch["registrar"][0] if ch["registrar"] else {}
     ok(sorted(r.keys()) == ["aparelho", "endpoint", "fuso", "pedido_em"], "9 envia só aparelho, endpoint, fuso e data do pedido | %r" % sorted(r.keys()))
     ok(r.get("endpoint", "").startswith("https://fcm.googleapis.com/") and len(r.get("aparelho", "")) == 36 and "T" in r.get("pedido_em", ""), "10 valores no formato esperado")
     o = pg.evaluate("window.__subOpts") or {}
     ok(o.get("userVisibleOnly") is True and o.get("len") == 65 and o.get("primeiro") == 4, "11 inscrição pede aviso visível e usa a chave pública de 65 bytes | %r" % o)
-    ok("aviso no celular" not in pg.inner_text("#jaPediFeito") and "volte aqui" in pg.inner_text("#jaPediFeito"), "12 depois de 'Já pedi' só aparece o 'Anotado… volte aqui'")
+    ok(pg.is_visible("#btnDesligarAviso") and not pg.is_visible("#btnAtivarAviso") and "Aviso ligado" in pg.inner_text("#notaAviso") and "nunca a sua lista" in pg.inner_text("#notaAviso") and "até 4 vezes" in pg.inner_text("#notaAviso"), "12 mostra 'Aviso ligado' com o que é guardado e quantos avisos")
     ok(ch["m"].count("pediu.txt") == 1, "13 conta o evento anônimo 'pediu' uma vez | %r" % ch["m"])
     pg.reload(); pg.wait_for_timeout(600)
     ok(len(ch["registrar"]) == 1 and ch["m"].count("voltou.txt") == 1 and pg.evaluate("window.__permPedidos") == 0, "14 ao reabrir não registra de novo, não pergunta de novo e conta 'voltou' uma vez | %r" % ch["m"])
 
     # 15. desligar
+    garantir_guia(pg)
     pg.click("#btnDesligarAviso"); pg.wait_for_timeout(800)
     ok(len(ch["apagar"]) == 1 and ch["apagar"][0] == {"aparelho": r.get("aparelho")}, "15 desligar apaga o registro no servidor")
     ok(pg.evaluate("localStorage.getItem('quemsaiu_aviso')") is None and pg.evaluate("window.__unsubs") == 1 and pg.is_visible("#btnAtivarAviso"), "16 desligar cancela a inscrição, apaga o número do aparelho e dá para ativar de novo")
     pg.reload(); pg.wait_for_timeout(600)
-    ok(pg.evaluate("localStorage.getItem('quemsaiu_aviso')") is None and pg.evaluate("window.__subs") == 0 and pg.is_visible("#btnAtivarAviso"), "16b quem desligou o aviso não é ligado de novo sozinho ao reabrir")
+    ok(pg.evaluate("localStorage.getItem('quemsaiu_aviso')") is None and pg.evaluate("window.__subs") == 0, "16b quem desligou o aviso não é ligado de novo sozinho ao reabrir")
 
     # 17. com o pedido já feito, ativar registra na hora
+    garantir_guia(pg)
     pg.click("#btnAtivarAviso"); pg.wait_for_timeout(800)
-    ok(len(ch["registrar"]) == 2 and pg.evaluate("localStorage.getItem('quemsaiu_aviso_desligado')") is None, "17 ativar com pedido já feito registra na hora e tira a marca de 'desligado'")
+    ok(len(ch["registrar"]) == 2, "17 ativar com pedido já feito registra na hora")
 
-    # 18. mandar a lista para os lembretes, mas o aviso continua ligado para o próximo pedido
+    # 18. mandar a lista: o aviso continua ligado para o próximo pedido
     pg.set_input_files("#inputArquivo", Z + "instagram-a-2026-10-01-x.zip"); pg.wait_for_timeout(1800)
     guardado = json.loads(pg.evaluate("localStorage.getItem('quemsaiu_aviso')") or "{}")
     ok(len(ch["apagar"]) == 2 and list(guardado.keys()) == ["aparelho"], "18 mandar a lista apaga o registro no servidor e mantém o aviso ligado | %r" % list(guardado.keys()))
     ok(pg.evaluate("localStorage.getItem('quemsaiu_pedido')") is None and ch["m"].count("mandou-lista.txt") == 1, "19 apaga o pedido e conta 'mandou lista'")
 
-    # 20. novo pedido registra de novo; Desfazer apaga o registro e mantém o aviso
+    # 20. novo pedido com o aviso já ligado: registra de novo sem pedir permissão outra vez; Desfazer apaga o registro e mantém o aviso
+    permAntes = pg.evaluate("window.__permPedidos")
     garantir_guia(pg); pg.click("#btnJaPedi"); pg.wait_for_timeout(800)
-    ok(len(ch["registrar"]) == 3, "20 um novo 'Já pedi' registra de novo")
+    ok(len(ch["registrar"]) == 3 and pg.evaluate("window.__permPedidos") == permAntes and pg.is_visible("#btnDesligarAviso"), "20 um novo 'Já pedi' com o aviso ligado registra de novo, sem pedir permissão outra vez")
     antes = len(ch["apagar"])
     pg.click("#btnDesfazerPedido"); pg.wait_for_timeout(800)
     guardado = json.loads(pg.evaluate("localStorage.getItem('quemsaiu_aviso')") or "{}")
@@ -139,72 +144,41 @@ with sync_playwright() as p:
     antes = len(ch["apagar"])
     pg.click("#btnApagar"); pg.wait_for_timeout(800)
     ok(len(ch["apagar"]) == antes + 1 and pg.evaluate("localStorage.getItem('quemsaiu_aviso')") is None, "22 'Apagar meus dados' desliga o aviso e apaga o registro")
-    ok(pg.evaluate("localStorage.getItem('quemsaiu_aviso_desligado')") is None, "22b 'Apagar meus dados' também limpa a escolha de desligar")
     ok(errs == [], "23 sem erros de JS | %s" % errs)
     ctx.close()
 
-    # 24. permissão negada ao abrir o site
+    # 24. permissão negada: explica como liberar, não liga nada e o botão continua disponível
     ctx, ch = novo_contexto(br); pg = ctx.new_page(); pg.add_init_script("window.__perm = 'denied'")
-    pg.goto(U); pg.wait_for_timeout(500); abrir_ferramenta(pg); pg.wait_for_timeout(400)
-    ok(pg.evaluate("window.__subs") == 0 and ch["registrar"] == [] and pg.evaluate("localStorage.getItem('quemsaiu_aviso')") is None, "24 permissão negada: o aviso não liga e nada vai ao servidor")
+    pg.goto(U); pg.wait_for_timeout(500); abrir_guia(pg); pg.click("#btnJaPedi"); pg.wait_for_timeout(400)
     pg.click("#btnAtivarAviso"); pg.wait_for_timeout(500)
-    ok("Sem a permissão" in pg.inner_text("#notaAviso") and pg.is_visible("#btnAtivarAviso") and not pg.is_disabled("#btnAtivarAviso"), "25 permissão negada: o botão explica como liberar e continua disponível")
+    ok(pg.evaluate("window.__subs") == 0 and ch["registrar"] == [] and pg.evaluate("localStorage.getItem('quemsaiu_aviso')") is None, "24 permissão negada: o aviso não liga e nada vai ao servidor")
+    ok("Sem a permissão" in pg.inner_text("#notaAviso") and "libere as notificações" in pg.inner_text("#notaAviso") and pg.is_visible("#btnAtivarAviso") and not pg.is_disabled("#btnAtivarAviso"), "25 permissão negada: explica como liberar e o botão continua disponível")
     ctx.close()
 
-    # 25b. a pessoa ignorou o pedido do navegador: dá para ativar depois pelo botão
+    # 25b. a pessoa ignorou o pedido do navegador: dá para tentar de novo pelo mesmo botão
     ctx, ch = novo_contexto(br); pg = ctx.new_page(); pg.add_init_script("window.__perm = 'default'")
-    pg.goto(U); pg.wait_for_timeout(500); abrir_ferramenta(pg); pg.wait_for_timeout(300)
+    pg.goto(U); pg.wait_for_timeout(500); abrir_guia(pg); pg.click("#btnJaPedi"); pg.wait_for_timeout(400)
     ok(pg.evaluate("window.__subs") == 0 and pg.is_visible("#btnAtivarAviso"), "25b pedido ignorado: nada liga sozinho e o botão aparece")
     pg.evaluate("window.__perm = 'granted'"); pg.click("#btnAtivarAviso"); pg.wait_for_timeout(600)
     ok(pg.evaluate("window.__subs") == 1 and pg.is_visible("#btnDesligarAviso"), "25c ao ativar pelo botão o aviso liga")
     ctx.close()
 
-    # 25d. a permissão é dada só depois de tocar em Começar: liga na hora
-    ctx, ch = novo_contexto(br); pg = ctx.new_page(); pg.add_init_script("window.__permEspera = true")
-    pg.goto(U); pg.wait_for_timeout(500); abrir_ferramenta(pg); pg.wait_for_timeout(300)
-    ok(pg.evaluate("window.__subs") == 0, "25d pedido ainda sem resposta: nada liga")
-    pg.evaluate("window.__resolverPerm()"); pg.wait_for_timeout(800)
-    ok(pg.evaluate("window.__subs") == 1 and pg.is_visible("#btnDesligarAviso"), "25e permissão dada depois de tocar em Começar: o aviso liga na hora")
-    ctx.close()
-
-    # 25f. a pessoa ignorou o pedido ao abrir o site: ao tocar em Começar pedimos de novo
-    ctx, ch = novo_contexto(br); pg = ctx.new_page(); pg.add_init_script("window.__perm = 'default'")
-    pg.goto(U); pg.wait_for_timeout(500)
-    ok(pg.evaluate("window.__permPedidos") == 1, "25f ao abrir o site o pedido aparece uma vez")
-    pg.evaluate("window.__perm = 'granted'")
-    abrir_ferramenta(pg); pg.wait_for_timeout(700)
-    ok(pg.evaluate("window.__permPedidos") >= 2 and pg.evaluate("window.__subs") == 1 and pg.is_visible("#btnDesligarAviso"), "25g pedido ignorado: ao tocar em 'Começar agora' pergunta de novo e, se permitir, o aviso liga")
-    ctx.close()
-
-    # 25h. a pessoa NEGOU: o navegador não deixa perguntar de novo, então só explicamos como liberar
-    ctx, ch = novo_contexto(br); pg = ctx.new_page(); pg.add_init_script("window.__perm = 'denied'")
-    pg.goto(U); pg.wait_for_timeout(500); abrir_ferramenta(pg); pg.wait_for_timeout(500)
-    ok(pg.evaluate("window.__permPedidos") == 1 and "libere as notificações" in pg.inner_text("#notaAviso") and pg.evaluate("window.__subs") == 0, "25h permissão negada: não pergunta de novo ao tocar em 'Começar agora' e explica como liberar")
-    ctx.close()
-
-    # 25i. pedido ignorado de novo: não insiste mais de uma vez por visita
-    ctx, ch = novo_contexto(br); pg = ctx.new_page(); pg.add_init_script("window.__perm = 'default'")
-    pg.goto(U); pg.wait_for_timeout(500); abrir_ferramenta(pg); pg.wait_for_timeout(400)
-    pg.click("#btnVoltarInicio") if pg.query_selector("#btnVoltarInicio") else None
-    pg.evaluate("document.getElementById('btnComecar').click()"); pg.wait_for_timeout(400)
-    ok(pg.evaluate("window.__permPedidos") == 2, "25i ignorou de novo: no máximo um pedido a mais por visita | %s" % pg.evaluate("window.__permPedidos"))
-    ctx.close()
-
-    # 26. servidor com erro ao religar o aviso já com pedido feito
-    ctx, ch = novo_contexto(br); pg = ctx.new_page()
-    pg.goto(U); pg.wait_for_timeout(500); abrir_guia(pg); pg.wait_for_timeout(300); pg.click("#btnJaPedi"); pg.wait_for_timeout(600)
-    pg.click("#btnDesligarAviso"); pg.wait_for_timeout(600); ch["status"] = 500
+    # 26. servidor com erro ao ativar o aviso já com pedido feito
+    ctx, ch = novo_contexto(br); pg = ctx.new_page(); ch["status"] = 500
+    pg.goto(U); pg.wait_for_timeout(500); abrir_guia(pg); pg.click("#btnJaPedi"); pg.wait_for_timeout(500)
     pg.click("#btnAtivarAviso"); pg.wait_for_timeout(800)
-    ok("Não consegui ligar" in pg.inner_text("#notaAviso") and pg.evaluate("window.__unsubs") == 2 and pg.evaluate("localStorage.getItem('quemsaiu_aviso')") is None, "26 servidor com erro: avisa, desfaz a inscrição e não guarda nada")
+    ok("Não consegui ligar" in pg.inner_text("#notaAviso") and pg.evaluate("window.__unsubs") == 1 and pg.evaluate("localStorage.getItem('quemsaiu_aviso')") is None, "26 servidor com erro: avisa, desfaz a inscrição e não guarda nada")
     ok(pg.is_visible("#btnJaPedi") is False and pg.is_visible("#jaPediFeito"), "27 o 'Já pedi' continua valendo mesmo sem aviso")
     ctx.close()
 
-    # 28. servidor fora do ar no 'Já pedi': tenta de novo na próxima vez que o site abrir
+    # 28. servidor fora do ar no 'Já pedi' (aviso já ligado): tenta de novo na próxima vez que o site abrir
     ctx, ch = novo_contexto(br); pg = ctx.new_page()
-    pg.goto(U); pg.wait_for_timeout(500); abrir_ferramenta(pg); pg.wait_for_timeout(800)
+    pg.goto(U); pg.wait_for_timeout(500); abrir_guia(pg); pg.click("#btnJaPedi"); pg.wait_for_timeout(400)
+    pg.click("#btnAtivarAviso"); pg.wait_for_timeout(800)
+    pg.click("#btnDesfazerPedido"); pg.wait_for_timeout(600)
     ch["status"] = 500
-    abrir_guia(pg); pg.click("#btnJaPedi"); pg.wait_for_timeout(800)
-    ok(json.loads(pg.evaluate("localStorage.getItem('quemsaiu_aviso')")) == {"aparelho": json.loads(pg.evaluate("localStorage.getItem('quemsaiu_aviso')"))["aparelho"]} and pg.is_visible("#btnDesligarAviso"), "28 servidor fora do ar no 'Já pedi': o aviso continua ligado, ainda sem registro")
+    garantir_guia(pg); pg.click("#btnJaPedi"); pg.wait_for_timeout(800)
+    ok(json.loads(pg.evaluate("localStorage.getItem('quemsaiu_aviso')")) == {"aparelho": json.loads(pg.evaluate("localStorage.getItem('quemsaiu_aviso')"))["aparelho"]} and pg.is_visible("#btnDesligarAviso"), "28 servidor fora do ar no 'Já pedi': o aviso continua ligado e o registro fica para depois")
     ch["status"] = 200; pg.reload(); pg.wait_for_timeout(800)
     guardado = json.loads(pg.evaluate("localStorage.getItem('quemsaiu_aviso')") or "{}")
     ok("registrado" in guardado, "29 ao reabrir o site o registro é refeito sozinho | %r" % guardado)
@@ -236,8 +210,8 @@ with sync_playwright() as p:
     ctx, ch = novo_contexto(br, com_flag=False); pg = ctx.new_page()
     pg.goto(U + "?avisos=teste"); pg.wait_for_timeout(400)
     ok("avisos=" not in pg.url, "32 o endereço secreto some da barra depois de usado | %s" % pg.url)
-    abrir_ferramenta(pg)
-    ok(pg.is_visible("#blocoAviso"), "33 com ?avisos=teste o bloco de aviso aparece neste aparelho")
+    abrir_guia(pg); pg.click("#btnJaPedi"); pg.wait_for_timeout(300)
+    ok(pg.is_visible("#blocoAviso"), "33 com ?avisos=teste o bloco de aviso aparece neste aparelho (depois de 'Já pedi')")
     ok("pediu.txt" not in ch["m"], "34 no modo de teste o funil anônimo não é contado")
     pg.goto(U); pg.wait_for_timeout(400)
     ok(pg.evaluate("localStorage.getItem('quemsaiu_avisos_teste')") == "1", "35 o modo de teste continua ligado ao reabrir sem o parâmetro")
