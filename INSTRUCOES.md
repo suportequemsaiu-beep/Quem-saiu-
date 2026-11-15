@@ -823,3 +823,13 @@ Vem da ESPECIFICAÇÃO PARA O CLAUDE CODE (sessão de estratégia). Tudo atrás 
 - "Ativar aviso" virou botão em contorno para não competir com "Mandar lista".
 - A explicação acima da lista de resultados começa curta ("Estavam na lista anterior e não estão na atual. O arquivo não diz o motivo.") e o resto fica atrás de "Saiba mais".
 - Não aplicado (precisa de decisão): trocar o texto "Mandar lista", agrupar os 12 passos em fases e mostrar "Etapa X de 3" na tela "Sua lista".
+
+## Aviso no fim do passo a passo (branch menos-texto, ainda não publicada)
+
+- Substitui "pedir permissão ao abrir o site" e "ligar ao tocar em Começar agora". Agora **nada é pedido ao abrir nem em "Sua lista"**.
+- Depois que a pessoa toca em "Já pedi", aparece a oferta ("Quer um aviso no celular?") dentro do "Anotado". Só ao tocar em **Ativar aviso** o navegador pede a permissão, o aviso liga e o servidor é avisado na hora (o pedido já existe).
+- Se a permissão for negada: texto explicando como liberar nas configurações do navegador. Se ignorar: dá para tocar de novo no botão.
+- Com o aviso já ligado de um pedido anterior, um novo "Já pedi" registra de novo sozinho, sem pedir permissão outra vez.
+- Desfazer / mandar a lista apagam o registro no servidor e mantêm o aviso ligado; "Desligar aviso" e "Apagar meus dados" desligam tudo.
+- Continua atrás de `AVISOS_ATIVO = false` (só aparece no modo de teste `?avisos=teste`).
+- A política de privacidade (servidor/RASCUNHO-politica.md) não precisa mais citar o pedido ao abrir o site.

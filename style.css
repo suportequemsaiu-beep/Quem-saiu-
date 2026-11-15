@@ -358,3 +358,9 @@
   .card-lista .expansivel { margin-top: 16px; }
   .dica-arquivo[hidden] { display: none; }
   .card-lista .dica-arquivo { text-align: left; font-size: 13.5px; margin: 16px 2px 0; }
+  /* O aviso agora fica no fim do passo a passo (fundo claro): cores próprias, botão principal da tela */
+  .ja-pedi-feito #blocoAviso { margin: 16px 0 0; padding: 16px 0 0; background: none; border: none; border-top: 1px solid #e2e8f0; border-radius: 0; text-align: center; }
+  .ja-pedi-feito #blocoAviso .aviso-titulo { font-size: 15px; font-weight: 700; color: #0f172a; }
+  .ja-pedi-feito #blocoAviso .aviso-texto, .ja-pedi-feito #blocoAviso .aviso-nota { margin: 6px 0 0; font-size: 13.5px; line-height: 1.5; color: #475569; }
+  .ja-pedi-feito .botao-ativar-aviso { margin-top: 12px; border: none; background: #0f172a; color: #f8fafc; font-weight: 700; }
+  .ja-pedi-feito .link-desligar-aviso { color: #64748b; margin-left: 0; }
