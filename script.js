@@ -1043,15 +1043,12 @@ function avisarServidor(rota, corpo) {
     credentials: "omit", referrerPolicy: "no-referrer", keepalive: true
   });
 }
+/* A oferta só aparece enquanto o aviso NÃO está ligado; depois de ligado o bloco some e volta o "Anotado…" */
 function atualizarAviso() {
   var bloco = document.getElementById("blocoAviso");
-  bloco.hidden = !(avisosLigados() && avisosSuportado());
-  document.getElementById("textoAnotado").hidden = !bloco.hidden; /* com a oferta de aviso, a pergunta substitui o "Anotado…" */
   var ligado = !!lerAviso();
-  document.getElementById("btnAtivarAviso").hidden = ligado;
-  document.getElementById("btnDesligarAviso").hidden = !ligado;
-  document.getElementById("tituloAviso").textContent = ligado ? "Pronto, vamos te avisar." : "Quer ser avisado quando estiver pronto?";
-  if (ligado) document.getElementById("notaAviso").textContent = "Notificação ligada. Guardo só o endereço do aviso e a data do pedido, nunca a sua lista.";
+  bloco.hidden = !(avisosLigados() && avisosSuportado()) || ligado;
+  document.getElementById("textoAnotado").hidden = !bloco.hidden; /* com a pergunta na tela, ela substitui o "Anotado…" */
 }
 function fusoDoAparelho() {
   var fuso = "America/Sao_Paulo";
@@ -1185,9 +1182,6 @@ document.getElementById("btnJaPedi").addEventListener("click", function () { gra
 document.getElementById("btnDesfazerPedido").addEventListener("click", function () { limparPedido(); apagarRegistroAviso(); atualizarPedido(); });
 document.getElementById("btnAtivarAviso").addEventListener("click", function () {
   ativarAviso();
-});
-document.getElementById("btnDesligarAviso").addEventListener("click", function () {
-  desligarAviso();
 });
 document.querySelectorAll("[data-lembrar]").forEach(function (b) {
   b.addEventListener("click", function () { baixarLembrete(b.dataset.lembrar); });

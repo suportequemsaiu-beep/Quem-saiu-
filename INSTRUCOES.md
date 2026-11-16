@@ -833,3 +833,4 @@ Vem da ESPECIFICAÇÃO PARA O CLAUDE CODE (sessão de estratégia). Tudo atrás 
 - Desfazer / mandar a lista apagam o registro no servidor e mantêm o aviso ligado; "Desligar notificação" e "Apagar meus dados" desligam tudo.
 - Continua atrás de `AVISOS_ATIVO = false` (só aparece no modo de teste `?avisos=teste`).
 - A política de privacidade (servidor/RASCUNHO-politica.md) não precisa mais citar o pedido ao abrir o site.
+- Depois de tocar em "Ativar notificação" o bloco some e volta o "Anotado… volte aqui" (não há tela de "ligado" nem botão de desligar). Quem quiser parar de receber: configurações do navegador, ou "Apagar meus dados" (desliga o aviso e apaga o registro no servidor).

@@ -273,8 +273,6 @@
   #blocoAviso .aviso-texto { margin: 8px 2px 0; font-size: 12.5px; line-height: 1.55; color: #94a3b8; }
   #blocoAviso .aviso-nota { margin: 8px 2px 0; font-size: 12.5px; line-height: 1.5; color: #94a3b8; }
   #blocoAviso .aviso-nota:empty { display: none; }
-  .link-desligar-aviso { background: none; border: none; color: #94a3b8; font-size: 12.5px; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; margin-top: 6px; padding: 6px 8px; }
-  .link-desligar-aviso[hidden] { display: none; }
   .ja-pedi-feito p { margin: 0 0 6px; font-size: 13.5px; color: #1e293b; line-height: 1.5; }
   .ja-pedi-feito .lembrar-titulo { margin-top: 12px; font-weight: 700; }
   .lembrar-opcoes { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 6px; }
@@ -353,7 +351,6 @@
   .card-lista #blocoAviso .aviso-titulo { font-size: 15px; }
   .card-lista #blocoAviso .aviso-texto, .card-lista #blocoAviso .aviso-nota { font-size: 13.5px; margin: 6px 0 0; }
   .card-lista .botao-ativar-aviso { margin-top: 12px; }
-  .card-lista .link-desligar-aviso { margin-left: -8px; }
   .card-lista .expansivel { margin-top: 16px; }
   .dica-arquivo[hidden] { display: none; }
   .card-lista .dica-arquivo { text-align: left; font-size: 13.5px; margin: 16px 2px 0; }
@@ -362,7 +359,6 @@
   .ja-pedi-feito #blocoAviso .aviso-titulo { font-size: 15px; font-weight: 700; color: #0f172a; }
   .ja-pedi-feito #blocoAviso .aviso-texto, .ja-pedi-feito #blocoAviso .aviso-nota { margin: 6px 0 0; font-size: 13.5px; line-height: 1.5; color: #475569; }
   .ja-pedi-feito .botao-ativar-aviso { margin-top: 12px; border: none; background: #0f172a; color: #f8fafc; font-weight: 700; }
-  .ja-pedi-feito .link-desligar-aviso { color: #64748b; margin-left: 0; }
   /* depois do "Já pedi": só a pergunta + botão; "Desfazer" virou um × no canto de cima */
   .ja-pedi-feito { position: relative; padding: 6px 0 0; }
   .fechar-pedido { position: absolute; top: -10px; right: -10px; width: 44px; height: 44px; border: none; background: none; color: #64748b; font-size: 26px; line-height: 1; cursor: pointer; border-radius: 50%; }
