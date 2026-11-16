@@ -101,6 +101,9 @@ with sync_playwright() as p:
     pg.click("#btnAtivarAviso"); pg.wait_for_timeout(800)
     ok(pg.evaluate("window.__permPedidos") == 1 and pg.evaluate("window.__subs") == 1, "7 ao tocar em 'Ativar notificação' o navegador pede a permissão e o aviso liga")
     ok(len(ch["registrar"]) == 1, "8 como o pedido já foi feito, o servidor é avisado na hora")
+    ok(pg.evaluate("document.getElementById('avisoRapido').classList.contains('visivel')") and "ativada" in pg.inner_text("#avisoRapido"), "8b depois de ativar aparece só um aviso pequeno ('Notificação ativada')")
+    pg.wait_for_timeout(3000)
+    ok(not pg.evaluate("document.getElementById('avisoRapido').classList.contains('visivel')"), "8c o aviso pequeno some sozinho em poucos segundos")
     r = ch["registrar"][0] if ch["registrar"] else {}
     ok(sorted(r.keys()) == ["aparelho", "endpoint", "fuso", "pedido_em"], "9 envia só aparelho, endpoint, fuso e data do pedido | %r" % sorted(r.keys()))
     ok(r.get("endpoint", "").startswith("https://fcm.googleapis.com/") and len(r.get("aparelho", "")) == 36 and "T" in r.get("pedido_em", ""), "10 valores no formato esperado")

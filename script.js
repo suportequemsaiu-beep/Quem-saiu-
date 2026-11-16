@@ -1078,7 +1078,7 @@ async function ativarAviso() {
   var nota = document.getElementById("notaAviso");
   var botao = document.getElementById("btnAtivarAviso");
   botao.disabled = true; nota.textContent = "";
-  var reg = null;
+  var reg = null, ligou = false;
   try {
     var perm = await Notification.requestPermission();
     if (perm !== "granted") {
@@ -1092,11 +1092,14 @@ async function ativarAviso() {
     var pedido = lerPedido();
     if (pedido) await registrarNoServidor(aparelho, sub, pedido);
     else { try { localStorage.setItem(CHAVE_AVISO, JSON.stringify({ aparelho: aparelho })); } catch (e) {} }
+    ligou = true;
   } catch (e) {
     try { var s2 = reg && (await reg.pushManager.getSubscription()); if (s2) await s2.unsubscribe(); } catch (e2) {}
     nota.textContent = "Não consegui ligar o aviso agora. Tente de novo mais tarde; o resto do Quem Saiu funciona normalmente.";
   } finally {
     botao.disabled = false; atualizarAviso();
+    /* nenhuma tela nova: só um aviso pequeno de ~2 s (texto definido: "Notificação ativada") */
+    if (ligou) avisoRapido(TEXTO_NOTIFICACAO_ATIVADA);
   }
 }
 /* o pedido acabou (a lista chegou ou a pessoa desfez): apaga só o registro no servidor; o aviso continua ligado para o próximo pedido */
@@ -1108,6 +1111,7 @@ function apagarRegistroAviso() {
 }
 /* A permissão do navegador só é pedida quando a pessoa toca em "Ativar notificação", depois de tocar em "Já pedi"
    (no fim do passo a passo, quando ela já sabe para que serve). */
+var TEXTO_NOTIFICACAO_ATIVADA = "Notificação ativada";
 var TEXTO_PERMISSAO_NEGADA = "Sem a permissão não consigo avisar. Para mudar, libere as notificações deste site no navegador.";
 /* desliga o aviso: apaga o registro no servidor e cancela a inscrição neste navegador */
 async function desligarAviso() {
