@@ -377,12 +377,12 @@
             <div class="ja-pedi" id="jaPedi">
               <button class="botao-ja-pedi" id="btnJaPedi" type="button">Já pedi o arquivo ao Instagram</button>
               <div class="ja-pedi-feito" id="jaPediFeito" hidden>
-                <p><b>Anotado.</b> Quando o Instagram avisar por e-mail, volte aqui.</p>
+                <button class="fechar-pedido" id="btnDesfazerPedido" type="button" aria-label="Desfazer o pedido" title="Desfazer">&times;</button>
+                <p id="textoAnotado"><b>Anotado.</b> Quando o Instagram avisar por e-mail, volte aqui.</p>
                 <div id="blocoAviso" hidden>
-                  <p class="aviso-titulo" id="tituloAviso">Quer um aviso no celular?</p>
-                  <p class="aviso-texto" id="textoAviso">Avisamos quando o arquivo do Instagram estiver pronto: até 4 avisos em 2 semanas. Guardo só o endereço do aviso e a data, nunca a sua lista.</p>
-                  <button class="botao-ativar-aviso" id="btnAtivarAviso" type="button">Ativar aviso</button>
-                  <button class="link-desligar-aviso" id="btnDesligarAviso" type="button" hidden>Desligar aviso</button>
+                  <p class="aviso-titulo" id="tituloAviso">Quer ser avisado quando estiver pronto?</p>
+                  <button class="botao-ativar-aviso" id="btnAtivarAviso" type="button">Ativar notificação</button>
+                  <button class="link-desligar-aviso" id="btnDesligarAviso" type="button" hidden>Desligar notificação</button>
                   <p class="aviso-nota" id="notaAviso" role="status"></p>
                 </div>
                 <div id="blocoLembrete" hidden>
@@ -394,7 +394,6 @@
                   </div>
                   <p class="ja-pedi-nota" id="notaLembrete">O Instagram não garante o prazo.</p>
                 </div>
-                <button class="link-desfazer" id="btnDesfazerPedido" type="button">Desfazer</button>
               </div>
             </div>
           </div>

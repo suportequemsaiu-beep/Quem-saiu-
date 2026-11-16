@@ -1046,12 +1046,12 @@ function avisarServidor(rota, corpo) {
 function atualizarAviso() {
   var bloco = document.getElementById("blocoAviso");
   bloco.hidden = !(avisosLigados() && avisosSuportado());
+  document.getElementById("textoAnotado").hidden = !bloco.hidden; /* com a oferta de aviso, a pergunta substitui o "Anotado…" */
   var ligado = !!lerAviso();
   document.getElementById("btnAtivarAviso").hidden = ligado;
-  document.getElementById("textoAviso").hidden = ligado;
   document.getElementById("btnDesligarAviso").hidden = !ligado;
-  document.getElementById("tituloAviso").textContent = ligado ? "Aviso no celular" : "Quer um aviso no celular?";
-  if (ligado) document.getElementById("notaAviso").textContent = "Aviso ligado. Depois do “Já pedi”, até 4 vezes em 2 semanas, entre 9h e 20h. Guardo só o endereço do aviso e a data do pedido, nunca a sua lista. Para sozinho quando você mandar a lista.";
+  document.getElementById("tituloAviso").textContent = ligado ? "Pronto, vamos te avisar." : "Quer ser avisado quando estiver pronto?";
+  if (ligado) document.getElementById("notaAviso").textContent = "Notificação ligada. Guardo só o endereço do aviso e a data do pedido, nunca a sua lista.";
 }
 function fusoDoAparelho() {
   var fuso = "America/Sao_Paulo";
@@ -1072,7 +1072,7 @@ async function sincronizarAviso() {
   try {
     var reg = await navigator.serviceWorker.ready;
     var sub = await reg.pushManager.getSubscription();
-    if (!sub) { try { localStorage.removeItem(CHAVE_AVISO); } catch (e) {} atualizarAviso(); return; }
+    if (!sub) { try { localStorage.removeItem(CHAVE_AVISO); } catch (e) {} document.getElementById("notaAviso").textContent = ""; atualizarAviso(); return; }
     await registrarNoServidor(a.aparelho, sub, p);
   } catch (e) { /* tenta de novo na próxima vez que o site abrir */ }
   finally { sincronizando = false; }
@@ -1109,7 +1109,7 @@ function apagarRegistroAviso() {
   try { localStorage.setItem(CHAVE_AVISO, JSON.stringify({ aparelho: a.aparelho })); } catch (e) {}
   try { avisarServidor("/apagar", { aparelho: a.aparelho }).catch(function () {}); } catch (e) {}
 }
-/* A permissão do navegador só é pedida quando a pessoa toca em "Ativar aviso", depois de tocar em "Já pedi"
+/* A permissão do navegador só é pedida quando a pessoa toca em "Ativar notificação", depois de tocar em "Já pedi"
    (no fim do passo a passo, quando ela já sabe para que serve). */
 var TEXTO_PERMISSAO_NEGADA = "Sem a permissão não consigo avisar. Para mudar, libere as notificações deste site no navegador.";
 /* desliga o aviso: apaga o registro no servidor e cancela a inscrição neste navegador */

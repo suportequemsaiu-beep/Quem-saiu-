@@ -827,9 +827,9 @@ Vem da ESPECIFICAÇÃO PARA O CLAUDE CODE (sessão de estratégia). Tudo atrás 
 ## Aviso no fim do passo a passo (branch menos-texto, ainda não publicada)
 
 - Substitui "pedir permissão ao abrir o site" e "ligar ao tocar em Começar agora". Agora **nada é pedido ao abrir nem em "Sua lista"**.
-- Depois que a pessoa toca em "Já pedi", aparece a oferta ("Quer um aviso no celular?") dentro do "Anotado". Só ao tocar em **Ativar aviso** o navegador pede a permissão, o aviso liga e o servidor é avisado na hora (o pedido já existe).
+- Depois que a pessoa toca em "Já pedi", aparece a oferta ("Quer ser avisado quando estiver pronto?", só a pergunta e o botão; sem subtítulo; o "Desfazer" virou um × no canto) dentro do "Anotado". Só ao tocar em **Ativar notificação** o navegador pede a permissão, o aviso liga e o servidor é avisado na hora (o pedido já existe).
 - Se a permissão for negada: texto explicando como liberar nas configurações do navegador. Se ignorar: dá para tocar de novo no botão.
 - Com o aviso já ligado de um pedido anterior, um novo "Já pedi" registra de novo sozinho, sem pedir permissão outra vez.
-- Desfazer / mandar a lista apagam o registro no servidor e mantêm o aviso ligado; "Desligar aviso" e "Apagar meus dados" desligam tudo.
+- Desfazer / mandar a lista apagam o registro no servidor e mantêm o aviso ligado; "Desligar notificação" e "Apagar meus dados" desligam tudo.
 - Continua atrás de `AVISOS_ATIVO = false` (só aparece no modo de teste `?avisos=teste`).
 - A política de privacidade (servidor/RASCUNHO-politica.md) não precisa mais citar o pedido ao abrir o site.
