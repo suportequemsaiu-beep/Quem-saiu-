@@ -18,6 +18,9 @@ with sync_playwright() as p:
     ok(not pg.is_visible("#dicaArquivo"), "1 sem lista e sem pedido: a dica 'Recentes ou Downloads' não aparece")
     # 2) depois do "Já pedi" ela aparece, com o texto completo
     pg.click("#togglePasso"); pg.wait_for_timeout(300)
+    for _ in range(12):
+        if pg.is_visible("#btnJaPedi"): break
+        pg.click(".passo-proximo"); pg.wait_for_timeout(120)
     pg.click("#btnJaPedi"); pg.wait_for_timeout(300)
     t = pg.inner_text("#dicaArquivo") if pg.is_visible("#dicaArquivo") else ""
     ok("Recentes" in t and "Downloads" in t and "instagram-" in t and "descompactar" in t, "2 depois do 'Já pedi' a dica aparece | %r" % t[:60])

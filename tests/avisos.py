@@ -66,14 +66,23 @@ def abrir_ferramenta(pg):
     pg.click("#btnDescobrir"); pg.wait_for_timeout(300)
     pg.click("#btnComecar"); pg.wait_for_timeout(300)
 
-def garantir_guia(pg):
-    if not pg.is_visible("#btnJaPedi"):
+
+def chegar_em_ja_pedi(pg):
+    """abre o passo a passo e avança até o passo em que o 'Já pedi' aparece"""
+    if not pg.is_visible("#corpoPasso"):
         pg.click("#togglePasso"); pg.wait_for_timeout(300)
+    for _ in range(12):
+        if pg.is_visible("#btnJaPedi") or pg.is_visible("#jaPediFeito"): break
+        pg.click(".passo-proximo"); pg.wait_for_timeout(120)
+
+def garantir_guia(pg):
+    if not pg.is_visible("#btnJaPedi") and not pg.is_visible("#jaPediFeito"):
+        chegar_em_ja_pedi(pg)
 
 def abrir_guia(pg):
     pg.click("#btnDescobrir"); pg.wait_for_timeout(300)
     pg.click("#btnComecar"); pg.wait_for_timeout(300)
-    pg.click("#togglePasso"); pg.wait_for_timeout(300)
+    chegar_em_ja_pedi(pg)
 
 with sync_playwright() as p:
     br = p.chromium.launch()
@@ -94,6 +103,8 @@ with sync_playwright() as p:
     abrir_ferramenta(pg); pg.wait_for_timeout(400)
     ok(pg.evaluate("window.__permPedidos") == 0 and not pg.is_visible("#blocoAviso") and pg.evaluate("window.__subs") == 0, "4 em 'Sua lista' não aparece oferta de aviso e nada é pedido")
     pg.click("#togglePasso"); pg.wait_for_timeout(300)
+    ok(not pg.is_visible("#btnJaPedi"), "4a no primeiro passo ainda não existe o botão 'Já pedi'")
+    chegar_em_ja_pedi(pg)
     ok(not pg.is_visible("#blocoAviso"), "4b com os passos abertos, antes de 'Já pedi', o aviso ainda não aparece")
     pg.click("#btnJaPedi"); pg.wait_for_timeout(500)
     ok(pg.is_visible("#blocoAviso") and pg.is_visible("#btnAtivarAviso") and "Quer ser avisado quando estiver pronto?" in pg.inner_text("#tituloAviso") and not pg.is_visible("#textoAnotado") and pg.is_visible("#btnDesfazerPedido"), "5 depois de 'Já pedi' aparece só a pergunta 'Quer ser avisado quando estiver pronto?', com o botão e o × de desfazer")

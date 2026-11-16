@@ -12,6 +12,9 @@ def abrir_guia(pg):
     pg.click("#btnDescobrir"); pg.wait_for_timeout(300)
     pg.click("#btnComecar"); pg.wait_for_timeout(300)
     pg.click("#togglePasso"); pg.wait_for_timeout(300)
+    for _ in range(12):
+        if pg.is_visible("#btnJaPedi") or pg.is_visible("#jaPediFeito"): break
+        pg.click(".passo-proximo"); pg.wait_for_timeout(120)
 
 with sync_playwright() as p:
     br = p.chromium.launch()
@@ -26,7 +29,7 @@ with sync_playwright() as p:
     v = json.loads(pg.evaluate("localStorage.getItem('quemsaiu_pedido')"))
     ok(list(v.keys()) == ["data"], "4 guarda só a data | %r" % list(v.keys()))
     ok(pg.is_visible("#jaPediFeito") and "Anotado" not in pg.inner_text("#jaPediFeito"), "5 depois de 'Já pedi' não diz 'Anotado'")
-    ok("Quando o Instagram avisar por e-mail, volte aqui" in pg.inner_text("#jaPediFeito") and "aviso no celular" not in pg.inner_text("#jaPediFeito"), "6 depois de tocar, só aparece 'Anotado. Quando o Instagram avisar por e-mail, volte aqui.' (sem oferta de aviso)")
+    ok("Quando receber a mensagem no e-mail, volte aqui" in pg.inner_text("#jaPediFeito") and "aviso no celular" not in pg.inner_text("#jaPediFeito"), "6 depois de tocar, só aparece 'Anotado. Quando o Instagram avisar por e-mail, volte aqui.' (sem oferta de aviso)")
 
     # download do lembrete
     with pg.expect_download() as d:

@@ -25,7 +25,11 @@ with sync_playwright() as p:
     ok(pg.evaluate("document.documentElement.scrollWidth") <= 390, "3 a página não ganhou rolagem horizontal")
     pg.evaluate("d=>localStorage.setItem('quemsaiu_exportacoes',JSON.stringify(d))", dados); pg.reload(); pg.wait_for_timeout(400)
     pg.click("#btnDescobrir"); pg.wait_for_timeout(300); pg.click("#btnComecar"); pg.wait_for_timeout(400)
-    pg.click("#togglePasso"); pg.wait_for_timeout(300); pg.click("#btnJaPedi"); pg.wait_for_timeout(400)
+    pg.click("#togglePasso"); pg.wait_for_timeout(300)
+    for _ in range(12):
+        if pg.is_visible("#btnJaPedi"): break
+        pg.click(".passo-proximo"); pg.wait_for_timeout(120)
+    pg.click("#btnJaPedi"); pg.wait_for_timeout(400)
     ok(pg.is_visible("#btnAtivarAviso") and "Ativar notificação" in pg.inner_text("#btnAtivarAviso"), "4 o aviso é oferecido depois de 'Já pedi'")
     fundo = pg.evaluate("getComputedStyle(document.getElementById('btnAtivarAviso')).backgroundColor")
     ok(fundo != "rgb(0, 107, 161)" and pg.evaluate("document.getElementById('btnAtivarAviso').getBoundingClientRect().height") >= 44, "5 'Ativar notificação' não é mais azul cheio (concorria com 'Mandar lista') e tem 44 px | %s" % fundo)

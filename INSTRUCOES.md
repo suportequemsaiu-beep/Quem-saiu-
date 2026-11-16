@@ -803,7 +803,7 @@ Vem da ESPECIFICAÇÃO PARA O CLAUDE CODE (sessão de estratégia). Tudo atrás 
 
 ## Aviso no celular agora é oferecido ao tocar em "Começar agora"
 - O bloco "Quer um aviso no celular?" fica na tela "Sua lista" (logo abaixo do estado das listas), não mais dentro do "Já pedi". Ativar liga a permissão e a inscrição neste aparelho, **sem falar com o servidor**. O servidor só fica sabendo do aparelho quando a pessoa toca em "Já pedi" (aí vai a data do pedido). Se o servidor estiver fora do ar naquela hora, o site tenta de novo na próxima abertura (`sincronizarAviso`).
-- Depois de "Já pedi" a tela mostra só: "Quando o Instagram avisar por e-mail, volte aqui." (sem a palavra "Anotado")
+- Depois de "Já pedi" a tela mostra só: "Quando receber a mensagem no e-mail, volte aqui." (sem a palavra "Anotado")
 - Mandar a lista ou "Desfazer" apagam só o registro no servidor; o aviso continua ligado para o próximo pedido. "Desligar aviso" e "Apagar meus dados" desligam tudo.
 - A caixa "Baixou o arquivo? / Ainda não chegou" foi removida.
 
@@ -834,3 +834,4 @@ Vem da ESPECIFICAÇÃO PARA O CLAUDE CODE (sessão de estratégia). Tudo atrás 
 - Continua atrás de `AVISOS_ATIVO = false` (só aparece no modo de teste `?avisos=teste`).
 - A política de privacidade (servidor/RASCUNHO-politica.md) não precisa mais citar o pedido ao abrir o site.
 - Depois de tocar em "Ativar notificação" não aparece tela nova: só um aviso pequeno de ~2,4 s com o texto "Notificação ativada"; o bloco some e volta o "Anotado… volte aqui" (sem tela de "ligado" nem botão de desligar). Quem quiser parar de receber: configurações do navegador, ou "Apagar meus dados" (desliga o aviso e apaga o registro no servidor).
+- O botão "Já pedi" (e a oferta de notificação) só aparecem a partir do passo 9 ("Iniciar a exportação"), quando o pedido já foi feito; nos passos 1–8 não existem. A marca é `data-ja-pedi` no passo.

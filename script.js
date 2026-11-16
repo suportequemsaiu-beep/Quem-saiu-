@@ -355,6 +355,9 @@ document.getElementById("togglePasso").addEventListener("click", function () {
       trilha.setAttribute("aria-valuenow", String(pos + 1));
       voltar.hidden = pos === 0;
       prox.textContent = pos === v.length - 1 ? "Já tenho o arquivo" : "Próximo";
+      /* "Já pedi" (e a oferta de notificação) só aparecem a partir do passo "Iniciar a exportação", quando o pedido já foi feito */
+      var jp = document.getElementById("jaPedi");
+      if (jp) jp.hidden = pos < v.findIndex(function (x) { return x.hasAttribute("data-ja-pedi"); });
       var h = li.querySelector("h3");
       aviso.textContent = "Passo " + (pos + 1) + " de " + v.length + (h ? ": " + h.textContent : "");
     };
