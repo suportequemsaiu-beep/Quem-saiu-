@@ -834,4 +834,4 @@ Vem da ESPECIFICAÇÃO PARA O CLAUDE CODE (sessão de estratégia). Tudo atrás 
 - Continua atrás de `AVISOS_ATIVO = false` (só aparece no modo de teste `?avisos=teste`).
 - A política de privacidade (servidor/RASCUNHO-politica.md) não precisa mais citar o pedido ao abrir o site.
 - Depois de tocar em "Ativar notificação" não aparece tela nova: só um aviso pequeno de ~2,4 s com o texto "Notificação ativada"; o bloco some e volta o "Anotado… volte aqui" (sem tela de "ligado" nem botão de desligar). Quem quiser parar de receber: configurações do navegador, ou "Apagar meus dados" (desliga o aviso e apaga o registro no servidor).
-- O botão "Já pedi" (e a oferta de notificação) só aparecem a partir do passo 9 ("Iniciar a exportação"), quando o pedido já foi feito; nos passos 1–8 não existem. A marca é `data-ja-pedi` no passo.
+- O botão "Já pedi" (e a oferta de notificação) só aparecem a partir do passo 10 ("Espere o e-mail"), quando o pedido já foi feito; nos passos 1–9 não existem. A marca é `data-ja-pedi` no passo.
