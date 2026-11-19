@@ -1,4 +1,4 @@
-# Quem Saiu — avisos (Fase 1). Ainda NÃO implantado. Veja o README.md desta pasta.
+# Quem Saiu — avisos (Fase 1). Já implantado no Cloudflare (Worker quemsaiu-avisos). Veja o README.md desta pasta.
 name = "quemsaiu-avisos"
 main = "src/index.js"
 compatibility_date = "2025-09-01"
