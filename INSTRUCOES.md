@@ -835,3 +835,9 @@ Vem da ESPECIFICAÇÃO PARA O CLAUDE CODE (sessão de estratégia). Tudo atrás 
 - A política de privacidade (servidor/RASCUNHO-politica.md) não precisa mais citar o pedido ao abrir o site.
 - Depois de tocar em "Ativar notificação" não aparece tela nova: só um aviso pequeno de ~2,4 s com o texto "Notificação ativada"; o bloco some e volta o "Anotado… volte aqui" (sem tela de "ligado" nem botão de desligar). Quem quiser parar de receber: configurações do navegador, ou "Apagar meus dados" (desliga o aviso e apaga o registro no servidor).
 - O botão "Já pedi" (e a oferta de notificação) só aparecem a partir do passo 10 ("Espere o e-mail"), quando o pedido já foi feito; nos passos 1–9 não existem. A marca é `data-ja-pedi` no passo.
+
+## Nomes na lista em telas estreitas (21/nov/2026)
+
+- Problema (visto no celular da Janaína, 360 px): nas abas "Deixaram de te seguir" e "Começaram a te seguir" o nome ficava cortado ("@p…") porque a etiqueta ("Você não segue", "Você segue de volta") ocupava quase toda a linha.
+- Correção: a linha que tem etiqueta ganha a classe `com-selo` (definida em `renderizarLista`): avatar à esquerda, **nome em cima, etiqueta embaixo**, × à direita. Essa linha tem cerca de 56 px (antes 48); a linha sem etiqueta (aba "Não te seguem de volta") continua com 48 px. O nome mantém a área de toque de 44 px (padding com margem negativa no link).
+- Teste novo: `tests/nomes_visiveis.py` (largura de 360 px). `?v=` atual: `20261121b`.
