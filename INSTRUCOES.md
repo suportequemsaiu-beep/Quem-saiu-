@@ -450,7 +450,7 @@ de um servidor, que ainda não existe. (Hospedagem já está na Cloudflare.)
   `atualizarStatus`). A classe dos passos é `passo-etapa` (não usar `.etapa`: é da lista "Como funciona"
   da tela inicial e a mistura deixou aquela lista com letra escura). "Prefiro usar sem instalar" é um link branco (#fff, não areia
   nem azul) (nem botão, nem quase invisível) — ajustado em 21/nov/2026, junto com a retirada da frase
-  "Sem loja · remova quando quiser" do cartão. Em 22/nov/2026 voltaram o subtítulo ("Instale em segundos…") e as 3 vantagens da versão de 31/out (Abra com um clique / Mais facilidade para ver e enviar a sua lista / A mesma privacidade com muito mais praticidade), a pedido dela; a frase "Sem loja" continua fora; títulos das vantagens: "Abra com um clique", "Atalho para o Instagram", "Mantenha
+  "Sem loja · remova quando quiser" do cartão. Em 22/nov/2026 voltaram o subtítulo ("Instale em segundos…") e as 3 vantagens da versão de 31/out (Abra com um clique / Mais facilidade para ver e enviar a sua lista / A mesma privacidade com muito mais praticidade), a pedido dela; a frase embaixo do botão voltou na versão longa ("Sem loja de aplicativo · não ocupa nada · remova quando quiser"), a pedido dela ("deixe como estava antes de tirar"); só o link "Prefiro usar sem instalar" ficou branco; títulos das vantagens: "Abra com um clique", "Atalho para o Instagram", "Mantenha
   a mesma privacidade com muito mais facilidade". `?v=` atual: `20261029c`.
 - **Cartão da "Sua lista" e passo do e-mail (29/out/2026):** o cartão da tela "Sua lista" é cinza-grafite
   (não azul), para não ficar tudo igual no site; o passo "Espere o e-mail" manda olhar a caixa de entrada

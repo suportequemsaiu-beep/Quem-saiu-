@@ -260,6 +260,7 @@
   .vantagem b { color:#f1f5f9; }
   .btn-instalar-grande { position:relative; width:100%; border:none; border-radius:14px; padding:16px; background:#0369a1; color:#fff; font-size:15px; font-weight:800; cursor:pointer; }
   .btn-instalar-grande:active { transform:scale(.97); }
+  .nota-loja { position:relative; font-size:11.5px; color:#94a3b8; margin:13px 0 0; line-height:1.55; }
   .ja-pedi { margin: 28px 0 2px; padding-top: 22px; border-top: 1px solid #e2e8f0; text-align: center; }
   .botao-ja-pedi { width: 100%; border: none; border-radius: 999px; padding: 13px; background: #0f172a; color: #f8fafc; font-size: 14px; font-weight: 700; cursor: pointer; }
   .ja-pedi-nota { margin: 8px 4px 0; font-size: 11.5px; line-height: 1.5; color: #64748b; }
@@ -279,7 +280,7 @@
   .lembrar-opcoes button:disabled { opacity: .4; cursor: default; }
   .ponto-partida { margin: 0 0 12px; padding: 10px 12px; border-radius: 12px; background: #ecfdf5; border: 1px solid #a7f3d0; color: #065f46; font-size: 13px; line-height: 1.45; }
   .ponto-partida[hidden] { display: none; }
-  .link-sem-instalar { position:relative; display:inline-block; margin-top:14px; padding:10px 14px; background:none; border:none; color:#fff; font-size:14px; font-weight:600; text-decoration:underline; text-underline-offset:3px; cursor:pointer; }
+  .link-sem-instalar { position:relative; display:inline-block; margin-top:12px; padding:10px 14px; background:none; border:none; color:#fff; font-size:14px; font-weight:600; text-decoration:underline; text-underline-offset:3px; cursor:pointer; }
 
   /* ===== faixa fixa de instalação ===== */
   .faixa-app { display:none; position:fixed; left:0; right:0; bottom:0; z-index:60; background:rgba(15,23,42,.97); backdrop-filter:blur(10px); border-top:1px solid #1e3a5f; padding:8px 14px; align-items:center; gap:10px; }
