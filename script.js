@@ -417,12 +417,25 @@ function gravarPedido() {
 function limparPedido() {
   try { localStorage.removeItem(CHAVE_PEDIDO); } catch (e) {}
 }
+/* A ordem de envio não vale: quem manda primeiro a lista nova e depois a antiga trocaria as saídas e as entradas.
+   Ordem pela melhor pista do próprio arquivo: 1) a data no nome do .zip; 2) o seguidor mais recente da lista
+   (uma lista tirada depois nunca tem o seguidor mais recente mais antigo, salvo se ele deixou de seguir);
+   3) o momento do envio. */
+function ordemCronologica(a, b) {
+  if (a.dataArquivo && b.dataArquivo && a.dataArquivo !== b.dataArquivo) return a.dataArquivo < b.dataArquivo ? -1 : 1;
+  if (a.ultimoSeguidor && b.ultimoSeguidor && a.ultimoSeguidor !== b.ultimoSeguidor) return a.ultimoSeguidor - b.ultimoSeguidor;
+  return Date.parse(a.data) - Date.parse(b.data);
+}
 function lerDados() {
-  if (memoria[CHAVE]) return memoria[CHAVE];
-  try {
-    var v = JSON.parse(localStorage.getItem(CHAVE));
-    return Array.isArray(v) ? v.filter(listaValida) : [];
-  } catch (e) { return []; }
+  var bruto = [];
+  if (memoria[CHAVE]) bruto = memoria[CHAVE];
+  else {
+    try {
+      var v = JSON.parse(localStorage.getItem(CHAVE));
+      bruto = Array.isArray(v) ? v.filter(listaValida) : [];
+    } catch (e) { bruto = []; }
+  }
+  return bruto.slice().sort(ordemCronologica);
 }
 /* devolve true se gravou no aparelho; false se só ficou na memória desta página */
 function gravarDados(v) {
@@ -468,6 +481,14 @@ var listaResultado = document.getElementById("listaResultado");
 
 var abaAtual = "saiu";
 
+/* no título: a data do nome do arquivo, se houver; senão o dia e a hora em que a lista foi enviada */
+function rotuloData(l) {
+  if (l.dataArquivo) {
+    var p = l.dataArquivo.split("-");
+    return new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2])).toLocaleDateString("pt-BR", { day: "numeric", month: "short" });
+  }
+  return formatarData(l.data);
+}
 function formatarData(iso) {
   return new Date(iso).toLocaleString("pt-BR", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
 }
@@ -531,12 +552,13 @@ function extrairUsuarios(json, nome) {
       itens = json[vazias[0]];
     }
   }
-  var usuarios = [];
+  var usuarios = [], maisRecente = 0;
   itens.forEach(function (item) {
     var sld = item && item.string_list_data;
     if (Array.isArray(sld) && sld.length > 0) {
       sld.forEach(function (s) {
         if (!s) return;
+        if (typeof s.timestamp === "number" && s.timestamp > 1262304000 && s.timestamp < Date.now() / 1000 + 86400 && s.timestamp > maisRecente) maisRecente = s.timestamp;
         if (s.value) { usuarios.push(String(s.value)); return; }
         if (item.title) { usuarios.push(String(item.title)); return; }
         if (s.href) {
@@ -555,6 +577,7 @@ function extrairUsuarios(json, nome) {
   if (itens.length > 0 && usuarios.length === 0) throw formatoDiferente(nome);
   var validos = usuarios.filter(function (u) { return /^[A-Za-z0-9._]{1,30}$/.test(u); }).length;
   if (usuarios.length > 0 && validos < usuarios.length * 0.9) throw formatoDiferente(nome);
+  usuarios.ultimoTs = maisRecente;
   return usuarios;
 }
 
@@ -571,7 +594,12 @@ async function pareceZip(arquivo) {
 }
 
 async function processarArquivos(arquivos) {
-  var seguidores = [], seguindo = [], achouAlgo = false, temHtml = false, dataArquivo = null;
+  var seguidores = [], seguindo = [], achouAlgo = false, temHtml = false, dataArquivo = null, ultimoTs = 0;
+  function lerSeguidores(json, n) {
+    var r = extrairUsuarios(json, n);
+    if (r.ultimoTs > ultimoTs) ultimoTs = r.ultimoTs;
+    return r;
+  }
 
   /* misturar dois .zip, ou o mesmo arquivo duas vezes, juntaria listas de datas diferentes numa só e
      mostraria um resultado falso: só vale um .zip sozinho, ou arquivos .json de nomes diferentes */
@@ -620,7 +648,7 @@ async function processarArquivos(arquivos) {
         if (ehArquivoSeguidores(base)) {
           mostrarProgresso(45, "Lendo seus seguidores…");
           var t1 = await entradas[e].ler();
-          seguidores = seguidores.concat(extrairUsuarios(JSON.parse(t1), base));
+          seguidores = seguidores.concat(lerSeguidores(JSON.parse(t1), base));
           achouAlgo = true;
         } else if (ehArquivoSeguindo(base)) {
           mostrarProgresso(75, "Lendo quem você segue…");
@@ -635,7 +663,7 @@ async function processarArquivos(arquivos) {
       var texto = await arquivo.text();
       var b = nome.split("/").pop();
       if (ehArquivoSeguidores(b)) {
-        seguidores = seguidores.concat(extrairUsuarios(JSON.parse(texto), b));
+        seguidores = seguidores.concat(lerSeguidores(JSON.parse(texto), b));
         achouAlgo = true;
       } else if (ehArquivoSeguindo(b)) {
         seguindo = seguindo.concat(extrairUsuarios(JSON.parse(texto), b));
@@ -657,6 +685,7 @@ async function processarArquivos(arquivos) {
   }
   var nova = { v: VERSAO_DADOS, data: new Date().toISOString(), seguidores: unicos(seguidores), seguindo: unicos(seguindo) };
   if (dataArquivo) nova.dataArquivo = dataArquivo;
+  if (ultimoTs) nova.ultimoSeguidor = ultimoTs;
   return nova;
 }
 
@@ -769,11 +798,6 @@ function guardarNova(nova) {
     mostrarAviso(aviso);
     return true;
   }
-  if (ultima && ultima.dataArquivo && nova.dataArquivo && nova.dataArquivo < ultima.dataArquivo) {
-    var okData = window.confirm("Este arquivo parece mais antigo (" + dataBr(nova.dataArquivo) + ") do que a última lista guardada (" + dataBr(ultima.dataArquivo) +
-      "). Se você guardar assim, as saídas e as entradas aparecem trocadas.\n\nGuardar assim mesmo?");
-    if (!okData) return false;
-  }
   if (ultima && ultima.seguidores && ultima.seguidores.length >= 20 &&
       nova.seguidores.length < ultima.seguidores.length * 0.5) {
     var ok = window.confirm("Esta lista tem " + nova.seguidores.length + " seguidores e a anterior tinha " + ultima.seguidores.length +
@@ -781,6 +805,7 @@ function guardarNova(nova) {
     if (!ok) return false;
   }
   dados.push(nova);
+  dados.sort(ordemCronologica);
   /* o navegador deixa guardar só uns 5 milhões de caracteres: se não couberem 10 listas,
      descarta as mais antigas, mas mantém sempre as 2 mais recentes (as que são comparadas) */
   var cheio = dados.slice(-10), cabe = cheio, gravou = false;
@@ -806,7 +831,7 @@ function atualizarStatus() {
   }
   var u = dados[dados.length - 1];
   statusImport.textContent = dados.length + (dados.length === 1 ? " lista guardada" : " listas guardadas") +
-    " · última: " + formatarData(u.data) + " (" + u.seguidores.length + " seguidores)" +
+    " · última: " + rotuloData(u) + " (" + u.seguidores.length + " seguidores)" +
     (dados.length === 1 ? " · importe um arquivo mais novo para comparar" : "") +
     (memoria[CHAVE] ? " · só enquanto esta página estiver aberta" : "");
   marcarVerLista(true);
@@ -916,7 +941,7 @@ function renderizarResultado() {
   if (dados.length === 0) { cardResultado.style.display = "none"; return; }
 
   var atual = dados[dados.length - 1];
-  var anterior = dados.length >= 2 ? dados[dados.length - 2] : null;
+  var anterior = dados.length >= 2 ? dados[0] : null; /* a mais antiga; as do meio não entram na comparação */
   if (pontoPartida) pontoPartida.hidden = !!anterior;
   var seguindoSet = new Set(atual.seguindo || []);
   var seguidoresSet = new Set(atual.seguidores || []);
@@ -944,7 +969,7 @@ function renderizarResultado() {
     tituloResultado.textContent = "Ponto de partida salvo";
     if (abaAtual === "saiu" || abaAtual === "entrou") abaAtual = "naoSegue";
   } else {
-    tituloResultado.textContent = "Comparando " + formatarData(anterior.data) + " → " + formatarData(atual.data);
+    tituloResultado.textContent = "Comparando " + rotuloData(anterior) + " → " + rotuloData(atual);
   }
   var existe = abas.some(function (x) { return x.id === abaAtual; });
   if (abas.length > 0 && !existe) abaAtual = abas[0].id;
