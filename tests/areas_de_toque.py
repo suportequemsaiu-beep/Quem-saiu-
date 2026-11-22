@@ -43,7 +43,7 @@ with sync_playwright() as p:
     b = pg.evaluate("(()=>{const e=document.querySelector('.btn-ignorar').getBoundingClientRect();return [e.left,e.top,e.width,e.height]})()")
     ok(dentro(pg, b[0] - 6, b[1] - 7, ".btn-ignorar") and dentro(pg, b[0] + b[2] + 6, b[1] + b[3] + 7, ".btn-ignorar"), "10 o × aceita toque até 8 px ao redor (área de 44 px)")
     alt = pg.evaluate("[document.querySelector('.usuario-nome a').getBoundingClientRect().height, document.querySelector('.item-usuario').getBoundingClientRect().height]")
-    ok(alt[0] >= 44 and alt[1] <= 49, "11 o nome tem 44 px de toque e a linha continua com 48 px | %s" % alt)
+    ok(alt[0] >= 44 and alt[1] <= 60, "11 o nome tem 44 px de toque e a linha com etiqueta tem até 60 px | %s" % alt)
     n = pg.evaluate("document.querySelectorAll('.btn-ignorar').length")
     pg.evaluate("document.querySelector('.btn-ignorar').click()"); pg.wait_for_timeout(500)
     ok(pg.evaluate("document.querySelectorAll('.btn-ignorar').length") == n - 1, "12 esconder uma conta continua funcionando")

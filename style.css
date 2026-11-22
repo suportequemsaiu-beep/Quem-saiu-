@@ -213,6 +213,13 @@
   .btn-ignorar::after { content: ""; position: absolute; inset: -9px -8px; }
   .btn-ignorar:active { background: #7c3aed; border-color: #7c3aed; color: #fff; transform: scale(.9); }
   .item-usuario.saindo { opacity: 0; transform: translateX(14px); transition: opacity .18s ease, transform .18s ease; }
+  /* Linha com etiqueta (Você segue / Você não segue...): o nome fica em cima e a etiqueta embaixo, para o nome não sumir em telas de 360 px */
+  .item-usuario.com-selo { display: grid; grid-template-columns: 30px minmax(0, 1fr) auto; grid-template-rows: auto auto; column-gap: 10px; row-gap: 0; align-items: center; padding: 7px 10px; min-height: 56px; }
+  .item-usuario.com-selo .avatar { grid-column: 1; grid-row: 1 / span 2; }
+  .item-usuario.com-selo .usuario-nome { grid-column: 2; grid-row: 1; align-self: end; overflow: visible; }
+  .item-usuario.com-selo .usuario-nome a { line-height: 22px; padding: 11px 0; margin: -11px 0; }
+  .item-usuario.com-selo .selo { grid-column: 2; grid-row: 2; justify-self: start; align-self: start; }
+  .item-usuario.com-selo .btn-ignorar { grid-column: 3; grid-row: 1 / span 2; }
   .rodape-lista { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-top: 10px; font-size: 11px; color: #475569; }
   .link-escondidas { background: none; border: none; color: #64748b; font-size: 11px; font-weight: 600; cursor: pointer; padding: 0; text-decoration: underline; }
   .link-restaurar { background: none; border: none; color: #0369a1; font-size: 11px; text-decoration: underline; cursor: pointer; padding: 0; }
