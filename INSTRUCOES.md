@@ -842,3 +842,16 @@ Vem da ESPECIFICAÇÃO PARA O CLAUDE CODE (sessão de estratégia). Tudo atrás 
 - Problema (visto no celular da Janaína, 360 px): nas abas "Deixaram de te seguir" e "Começaram a te seguir" o nome ficava cortado ("@p…") porque a etiqueta ("Você não segue", "Você segue de volta") ocupava quase toda a linha.
 - Correção: a linha que tem etiqueta ganha a classe `com-selo` (definida em `renderizarLista`): avatar à esquerda, **nome em cima, etiqueta embaixo**, × à direita. Essa linha tem cerca de 56 px (antes 48); a linha sem etiqueta (aba "Não te seguem de volta") continua com 48 px. O nome mantém a área de toque de 44 px (padding com margem negativa no link).
 - Teste novo: `tests/nomes_visiveis.py` (largura de 360 px). `?v=` atual: `20261121b`.
+
+## Ordem das listas pela data real (21/nov/2026)
+
+- Problema (relatado pela Janaína): os números de "deixaram de te seguir" e "começaram a te seguir" não faziam sentido. O site tratava a **última lista enviada** como a mais nova e o título mostrava só a hora do envio ("21 de nov., 19:29 → 19:30"). Quem enviou a lista nova antes da antiga (ou tinha uma terceira lista guardada) via saídas e entradas trocadas.
+- Agora cada lista guarda duas pistas do próprio arquivo: `dataArquivo` (data no nome do .zip, como antes) e `ultimoSeguidor` (o `timestamp` do seguidor mais recente no followers_1.json). `lerDados()` devolve sempre em ordem cronológica (`ordemCronologica`: 1º a data do nome do .zip; 2º o seguidor mais recente; 3º o momento do envio). Listas já guardadas sem nenhuma pista seguem pela ordem de envio.
+- A pergunta "Este arquivo parece mais antigo…" saiu: a lista entra no lugar certo sozinha.
+- O resultado compara a **mais antiga com a mais nova** (as do meio não entram); o título mostra a data do nome do arquivo (ex.: "1 de out. → 20 de nov."), ou o dia e a hora do envio se o arquivo não trouxe data. A linha "última:" do status usa o mesmo rótulo.
+- Limite conhecido: o "seguidor mais recente" é só uma pista; se esse seguidor deixou de seguir, a lista pode parecer mais antiga do que é. Por isso a data do nome do arquivo tem prioridade.
+- Teste novo: `tests/ordem_das_listas.py`. `?v=` atual: `20261121c`.
+
+## Versão publicada junto (22/nov/2026)
+
+- As três mudanças de 21/nov (cartão de instalar, nomes na lista, ordem das listas) foram publicadas juntas. `?v=` atual: `20261122a`.
