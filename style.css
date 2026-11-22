@@ -279,7 +279,7 @@
   .lembrar-opcoes button:disabled { opacity: .4; cursor: default; }
   .ponto-partida { margin: 0 0 12px; padding: 10px 12px; border-radius: 12px; background: #ecfdf5; border: 1px solid #a7f3d0; color: #065f46; font-size: 13px; line-height: 1.45; }
   .ponto-partida[hidden] { display: none; }
-  .link-sem-instalar { position:relative; display:inline-block; margin-top:14px; padding:10px 14px; background:none; border:none; color:#cbd5e1; font-size:14px; font-weight:600; text-decoration:underline; text-underline-offset:3px; cursor:pointer; }
+  .link-sem-instalar { position:relative; display:inline-block; margin-top:14px; padding:10px 14px; background:none; border:none; color:#fff; font-size:14px; font-weight:600; text-decoration:underline; text-underline-offset:3px; cursor:pointer; }
 
   /* ===== faixa fixa de instalação ===== */
   .faixa-app { display:none; position:fixed; left:0; right:0; bottom:0; z-index:60; background:rgba(15,23,42,.97); backdrop-filter:blur(10px); border-top:1px solid #1e3a5f; padding:8px 14px; align-items:center; gap:10px; }
