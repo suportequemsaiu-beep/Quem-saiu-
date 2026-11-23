@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex"><title>Teste de pasta</title>
+<style>
+body{font:16px/1.5 system-ui,sans-serif;background:#0b1220;color:#e8edf3;margin:0;padding:20px 16px}
+main{max-width:520px;margin:0 auto}h1{font-size:1.2rem}
+button{font:inherit;font-weight:700;background:#0369a1;color:#fff;border:0;border-radius:12px;padding:14px 18px;width:100%;margin:8px 0}
+pre{white-space:pre-wrap;word-break:break-word;background:#131c2e;border-radius:10px;padding:12px;font-size:14px}
+</style></head><body><main>
+<h1>Teste de pasta (só leitura)</h1>
+<p>Nada sai do seu celular. A página só lista nomes de arquivos .zip da pasta que você escolher.</p>
+<button id="b">Escolher pasta</button>
+<pre id="o">Aguardando…</pre>
+<script>
+var o=document.getElementById('o');
+function log(t){o.textContent+='\n'+t}
+o.textContent='showDirectoryPicker disponível: '+('showDirectoryPicker' in window);
+document.getElementById('b').onclick=async function(){
+  try{
+    var d=await window.showDirectoryPicker({mode:'read'});
+    log('OK, pasta aceita: '+d.name);
+    var lista=[];
+    for await (var e of d.values()){
+      if(e.kind==='file'&&/\.zip$/i.test(e.name)){var f=await e.getFile();lista.push({n:e.name,t:f.lastModified,s:f.size})}
+    }
+    lista.sort(function(a,b){return b.t-a.t});
+    log('Arquivos .zip encontrados: '+lista.length);
+    lista.slice(0,5).forEach(function(x){log('- '+x.n+' · '+new Date(x.t).toLocaleString('pt-BR')+' · '+Math.round(x.s/1024)+' KB')});
+  }catch(err){log('ERRO: '+err.name+' — '+err.message)}
+};
+</script></main></body></html>
